@@ -1,3 +1,6 @@
 from django.contrib import admin
+from .models import RuleSystem
+from .models import ExperiencePointsReceived
 
-# Register your models here.
+admin.site.register(RuleSystem)
+admin.site.register(ExperiencePointsReceived)
