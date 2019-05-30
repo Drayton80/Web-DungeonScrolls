@@ -3,11 +3,12 @@
 
 {% block content %}
     <form id="form_system"
-          method="GET"
-          class="form-inline">
+            method="GET"
+            class="form-inline"
+            data-rule-system="{{ request.GET.rule_system }}">
         <div class="form-group">
-            <label for="system_selected">Sistema de Regras</label>
-
+            <label>Sistema de Regras</label>
+            {% render_field form.rule_system title="Sistema de Regras" class="form-control" %}
         </div>
 
     </form>
