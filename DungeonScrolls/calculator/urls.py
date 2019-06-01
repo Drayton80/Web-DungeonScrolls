@@ -1,6 +1,6 @@
 from django.urls import path, include
-from . import views
+from .views import ExperienceCalculatorView
 
 urlpatterns = [
-    path('experience-points', views.experience_points, name='experience_points'),
+    path('experience-points', ExperienceCalculatorView.as_view(), name='experience_points'),
 ]

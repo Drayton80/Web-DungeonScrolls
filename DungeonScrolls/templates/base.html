@@ -1,22 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-     {% if title %}
-        <title>Dungeon Scrolls - {{ title }}</title>
-    {% else %}
-        <title>Dungeon Scrolls</title>
-    {% endif %}
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        {% if title %}
+            <title>Dungeon Scrolls - {{ title }}</title>
+        {% else %}
+            <title>Dungeon Scrolls</title>
+        {% endif %}
 
-   </head>
-  <body>
-    <header class="site-header">
-        <nav class="navbar navbar-expand-lg navbar-dark bg-secondary fixed-top">
+    </head>
+    <body>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-secondary navbar-fixed-top">
               <div class="container">
 
                  <a class="navbar-brand text-white h1 mb-0">Dungeon Scrolls</a>
@@ -60,11 +59,10 @@
 
                  </div>
 
-               </div>
-        </nav>
-    </header>
+           </div>
+    </nav>
 
-     <div class="container mt-5">
+     <div class="container mt-3">
         {% block content %} {% endblock content %}
     </div>
 

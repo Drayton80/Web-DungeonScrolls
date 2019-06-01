@@ -1,15 +1,22 @@
 {% extends "base.html" %}
-{% load widget_tweaks %}
+{% load crispy_forms_tags %}
 
 {% block content %}
-    <form id="form_system"
-            method="GET"
-            class="form-inline"
-            data-rule-system="{{ request.GET.rule_system }}">
+    <head>
+        {% load staticfiles %}
+        <script src="{% static 'calculator/experience_calculator_systems.js' %}"></script>
+    </head>
+
+    <!-- RPG Rule System - Dropdown Choice Form -->
+    <form method="post">
         <div class="form-group">
-            <label>Sistema de Regras</label>
-
+            {% csrf_token %}
+            {{ form|crispy }}
         </div>
-
     </form>
+
+    <!-- Formulary generated based on Rule System selected -->
+    <div id="experience_calculator_formulary">
+    </div>
+
 {% endblock content %}
