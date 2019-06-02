@@ -1,5 +1,5 @@
 from django import forms
-from .models import RuleSystem
+from .models import RuleSystem, ExperiencePointsReceived
 
 
 class SelectRuleSystemForm(forms.Form):
@@ -8,5 +8,14 @@ class SelectRuleSystemForm(forms.Form):
         label="RPG Rule System",
         empty_label="Choose one of the systems below",
         required=False,
-        widget=forms.Select(attrs={"onChange": 'test()'})
+        widget=forms.Select(attrs={"id": "rule_system",
+                                   "onChange": "generate_experience_calculator_formulary(this.id, 'experience_calculator_formulary')"})
+    )
+
+
+class ExperiencePointsCalculatorForm(forms.Form):
+    experience_points_calculator = forms.CharField(
+        label="TEst",
+        initial="0",
+        required=False
     )

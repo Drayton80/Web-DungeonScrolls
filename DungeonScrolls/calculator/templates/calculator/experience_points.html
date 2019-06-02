@@ -4,19 +4,28 @@
 {% block content %}
     <head>
         {% load staticfiles %}
-        <script src="{% static 'calculator/experience_calculator_systems.js' %}"></script>
+        <script src="{% static 'calculator/js/experience_calculator_systems.js' %}"></script>
     </head>
 
     <!-- RPG Rule System - Dropdown Choice Form -->
     <form method="post">
         <div class="form-group">
             {% csrf_token %}
-            {{ form|crispy }}
+            {{ model_choice_form|crispy }}
         </div>
     </form>
 
     <!-- Formulary generated based on Rule System selected -->
     <div id="experience_calculator_formulary">
+        <form method="post">
+            <div class="form-group">
+                {% if text %}
+                    <h1>text</h1>
+                {% else %}
+                    <h1>nothig</h1>
+                {% endif %}
+            </div>
+        </form>
     </div>
 
 {% endblock content %}
