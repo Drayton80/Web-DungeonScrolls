@@ -9,7 +9,7 @@ class SelectRuleSystemForm(forms.Form):
         empty_label="Choose one of the systems below",
         required=False,
         widget=forms.Select(attrs={"id": "rule_system",
-                                   "onChange": "generate_experience_calculator_formulary(this.id, 'experience_calculator_formulary')"})
+                                   "onChange": "generate_experience_calculator_formulary(this.id)"})
     )
 
 
