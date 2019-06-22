@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "webpack --mode development ./DungeonScrolls/frontend/src/index.js --output ./DungeonScrolls/frontend/static/frontend/main.js",
+    "dev": "webpack --mode development --watch ./DungeonScrolls/frontend/src/index.js --output ./DungeonScrolls/frontend/static/frontend/main.js",
     "build": "webpack --mode production ./DungeonScrolls/frontend/src/index.js --output ./DungeonScrolls/frontend/static/frontend/main.js"
   },
   "repository": {
