@@ -82,7 +82,6 @@ class ExperienceCalculatorView(SingleObjectTemplateResponseMixin, BaseDetailView
                                                                                          character_level=character_level)
                         number_of_enemies = float(corrected_data[difficulty_level])
                         amount_of_experience += float(experience_information.values_list('experience_received')[0][0]) * number_of_enemies
-                        print(float(experience_information.values_list('experience_received')[0][0]), number_of_enemies)
 
                     amount_of_experience = amount_of_experience/float(data['calculator_formulary_data[number_of_characters]'])
                     experience_points_per_level[character_level] = int(amount_of_experience)

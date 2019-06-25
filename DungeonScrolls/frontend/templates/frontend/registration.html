@@ -1,0 +1,36 @@
+{% load crispy_forms_tags %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Dungeon Scrolls</title>
+
+    {% load static %}
+    <!-- JS - JQuery -->
+    <script src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
+    <!-- JS - Popper -->
+    <script src="{% static 'js/popper.min.js' %}"></script>
+    <!-- JS - Bootstrap -->
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+
+    <!-- CSS - Bootstrap -->
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+</head>
+
+<body>
+    <div id="app"></div>
+    <div class="col">
+        <form method="post">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <button class="btn btn-primary" type="submit">Sign up</button>
+        </form>
+    </div>
+
+    {% load static %}
+    <script src="{% static 'frontend/main.js' %}"></script>
+</body>
+
+</html>
