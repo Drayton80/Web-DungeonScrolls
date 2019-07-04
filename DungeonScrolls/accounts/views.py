@@ -12,11 +12,8 @@ def registration(request):
             form.save()
 
             return redirect('/calculator/experience-points')
-        else:
-            response_data = json.dumps({'useless': 12})
-            return HttpResponse(response_data, content_type='application/json') 
     
     else: 
-        args = {'form': RegistrationForm()}
+        form = RegistrationForm()
 
-        return render(request, 'frontend/registration.html', args)
+    return render(request, 'frontend/base.html', {'form': form})
