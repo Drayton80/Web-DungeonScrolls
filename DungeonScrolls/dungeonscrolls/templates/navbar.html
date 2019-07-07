@@ -1,0 +1,66 @@
+{% load crispy_forms_tags %}
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary navbar-fixed-top">
+    <div class="container">
+
+        <a class="navbar-brand text-white h1 mb-0">Dungeon Scrolls</a>
+
+        <!-- Botão Lateral de Expansão -->
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSite">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Itens do Navbar -->
+        <div class="collapse navbar-collapse">
+
+            <ul class="navbar-nav mr-auto">
+
+                <li class="nav-item">
+                    <a class="nav-link" href="">Mini-Projeto I</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="">Mini-Projeto II</a>
+                </li>
+
+            </ul>
+
+            <div class="dropdown show ">
+                <a class="dropdown-toggle" href="" role="button" id="dropdownMenuLink" data-toggle="dropdown">
+                    Login
+                </a>
+
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                    <form class="mt-5 mb-5 mr-3 ml-3" method="post">
+                        {% csrf_token %}
+                        {{ form|crispy }}
+                        <button class="mt-3 w-100 align-self-center btn btn-primary" type="submit">Sign
+                            up</button>
+                    </form>
+                </div>
+            </div>
+
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <div class="dropdown show">
+                        <a class="dropdown-toggle" href="" role="button" id="dropdownMenuLink" data-toggle="dropdown">
+                            Login
+                        </a>
+
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                            <form class="mt-5 mb-5 mr-3 ml-3" method="post">
+                                {% csrf_token %}
+                                {{ form|crispy }}
+                                <button class="mt-3 w-100 align-self-center btn btn-primary" type="submit">Sign
+                                    up</button>
+                            </form>
+                        </div>
+                    </div>
+                </li>
+
+            </ul>
+
+        </div>
+
+    </div>
+</nav>

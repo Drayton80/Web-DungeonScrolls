@@ -1,0 +1,57 @@
+{% load crispy_forms_tags %}
+{% load i18n %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  {% load static %}
+  <!-- JS - JQuery -->
+  <script src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
+  <!-- JS - Popper -->
+  <script src="{% static 'js/popper.min.js' %}"></script>
+  <!-- JS - Bootstrap -->
+  <script src="{% static 'js/bootstrap.min.js' %}"></script>
+
+  <!-- CSS - Bootstrap -->
+  <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+  <!-- CSS - W3 -->
+  <link rel="stylesheet" href="{% static 'css/w3.css' %}">
+
+  {% if title %}
+  <title>Dungeon Scrolls - {{ title }}</title>
+  {% else %}
+  <title>Dungeon Scrolls</title>
+  {% endif %}
+
+</head>
+
+<body>
+  {% include 'navbar.html' %}
+
+  <div id="header" class="container">
+    {% block header %}
+
+    {% endblock %}
+  </div>
+
+  <div id="content" class="container">
+    <h1 class="mb-3">{% block title %}{% endblock %}</h1>
+    {% block content %}
+
+    {% endblock content %}
+  </div>
+
+  <div id="footer" class="container">
+    {% block footer %}
+
+    {% endblock %}
+  </div>
+
+</body>
+
+</html>

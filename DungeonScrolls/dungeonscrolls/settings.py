@@ -32,17 +32,30 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'django.contrib.admin',
+    'django.contrib.sites',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    #External Apps:
     'crispy_forms',
+    'registration',
+    #Dungeon Scrolls Apps:
     'frontend',
     'calculator'
 ]
 
+# Crispy Forms Settings:
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+# Django Registration Redux Settings:
+ACCOUNT_ACTIVATION_DAYS = 7
+REGISTRATION_AUTO_LOGIN = True
+
+# Django Site Settings:
+SITE_ID = 1
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -127,3 +140,4 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static")
 ]
+
