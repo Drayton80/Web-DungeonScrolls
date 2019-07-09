@@ -52,6 +52,7 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 # Django Registration Redux Settings:
 ACCOUNT_ACTIVATION_DAYS = 7
 REGISTRATION_AUTO_LOGIN = True
+LOGIN_REDIRECT_URL = '/home/'
 
 # Django Site Settings:
 SITE_ID = 1
