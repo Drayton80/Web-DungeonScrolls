@@ -1,12 +1,5 @@
 from django.db import models
-
-
-class RuleSystem(models.Model):
-    name = models.CharField(max_length=50)
-    description = models.TextField()
-
-    def __str__(self):
-        return self.name
+from rule_system.models import RuleSystem
 
 class ExperiencePointsReceived(models.Model):
     rule_system = models.ForeignKey(RuleSystem, on_delete=models.CASCADE)

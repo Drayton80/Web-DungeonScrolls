@@ -43,7 +43,10 @@ INSTALLED_APPS = [
     'registration',
     #Dungeon Scrolls Apps:
     'frontend',
-    'calculator'
+    'sharing',
+    'calculator',
+    'rule_system',
+    'bestiary'
 ]
 
 # Crispy Forms Settings:

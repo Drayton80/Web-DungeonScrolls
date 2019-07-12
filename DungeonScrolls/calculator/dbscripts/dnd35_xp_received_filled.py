@@ -1,4 +1,5 @@
-from calculator.models import ExperiencePointsReceived, RuleSystem
+from calculator.models import ExperiencePointsReceived
+from rule_system.models import RuleSystem
 import pandas as pd
 
 xp_received_table = pd.read_csv("tables/dnd35_dungeonmasterguide_table26.csv", low_memory=False)
