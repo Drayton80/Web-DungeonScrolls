@@ -46,7 +46,7 @@ INSTALLED_APPS = [
     'sharing',
     'calculator',
     'rule_system',
-    'bestiary'
+    'sheets'
 ]
 
 # Crispy Forms Settings:
