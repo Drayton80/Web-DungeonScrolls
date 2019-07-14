@@ -9,6 +9,7 @@ urlpatterns = [
     path('home/', index, name='home'),
     path('', include('frontend.urls')),
     path('calculator/', include('calculator.urls')),
+    path('sheets/', include('sheets.urls')),
     url(r'^accounts/', include('registration.backends.default.urls'))
     #path('accounts/', include('accounts.urls'))
 ]
