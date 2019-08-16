@@ -255,12 +255,10 @@ class Sheet_DnD35(Shareable):
     battle_grapple_others = models.IntegerField(blank=True, null=True, default=None)
     battle_attacks = models.TextField(blank=True, null=True, default=None)
     battle_special_attacks = models.TextField(blank=True, null=True, default=None)
-    battle_equipments = models.TextField(blank=True, null=True, default=None)
-
-    inventory_riches = models.TextField(blank=True, null=True, default=None)
-    inventory_supplies = models.TextField(blank=True, null=True, default=None)
+    
+    inventory_equipments = models.TextField(blank=True, null=True, default=None)
     inventory_possessions = models.TextField(blank=True, null=True, default=None)
-    inventory_weight_total = models.IntegerField(blank=True, null=True, default=None)
+    inventory_weight_current = models.IntegerField(blank=True, null=True, default=None)
     inventory_weight_light = models.IntegerField(blank=True, null=True, default=None)
     inventory_weight_medium = models.IntegerField(blank=True, null=True, default=None)
     inventory_weight_heavy = models.IntegerField(blank=True, null=True, default=None)
@@ -292,13 +290,31 @@ class Sheet_DnD35(Shareable):
     ancestral = models.ForeignKey('self', null=True, blank=True, default=None, related_name='creature', on_delete=models.SET_NULL)
         
     
-    separator = '|;|\n'
+    separator = '|;|'
 
     
     def __str__(self):
         return str(self.name)
     
-    def get_ability_modifier(self, ability_name: str):
+    def update_inventory_weight_current(self):
+        inventory_equipments_list = self.field_text_list_to_list(getattr(self, 'inventory_equipments'))
+        inventory_possessions_list = self.field_text_list_to_list(getattr(self, 'inventory_possessions'))
+
+        weight_current = 0
+
+        for equipment in inventory_equipments_list:
+            weight_current += equipment['weight']
+
+        for possession in inventory_possessions_list:
+            weight_current += possession['weight']
+
+        self.inventory_weight_current = weight_current
+        self.save()
+
+    def get_ability_modifier_by_formula(self, ability_total):
+        return int(ability_total/2)-5
+    
+    def get_ability_modifier_by_name(self, ability_name: str):
         if ability_name.lower() in ['str', 'strength']:
             ability_modifier = getattr(self, 'ability_strength_modifier')
 
@@ -325,7 +341,7 @@ class Sheet_DnD35(Shareable):
         else:
             return 0
 
-    def list_to_field_text_list(self, proper_list: list):
+    def field_text_list_from_list(self, proper_list: list):
         first_element = True
         
         for item in proper_list:
@@ -336,6 +352,17 @@ class Sheet_DnD35(Shareable):
                 custom_text_separate += self.separator + str(item)
 
         return custom_text_separate
+
+    def field_text_list_to_list(self, field_text_list: str):
+        proper_list = []
+
+        for element_as_string in field_text_list.split(self.separator):
+            # Transforma uma string no formato de um dicionário em um dict do python:
+            element_as_dict = ast.literal_eval(element_as_string)
+
+            proper_list.append(element_as_dict)
+
+        return proper_list
 
     def field_text_list_add(self, field_text_list, new_element, index='append'):
         if field_text_list == None or field_text_list == '':
@@ -350,7 +377,7 @@ class Sheet_DnD35(Shareable):
         elif isinstance(index, int):
             proper_list.insert(index, new_element)
 
-        modified_field_text_list = self.list_to_field_text_list(proper_list)
+        modified_field_text_list = self.field_text_list_from_list(proper_list)
 
         return modified_field_text_list
 
@@ -365,11 +392,11 @@ class Sheet_DnD35(Shareable):
         elif isinstance(index, int):
             proper_list.pop(index)
 
-        modified_field_text_list = self.list_to_field_text_list(proper_list)
+        modified_field_text_list = self.field_text_list_from_list(proper_list)
 
         return modified_field_text_list
 
-    def field_text_list_update(self, index, field_text_list, update_element):
+    def field_text_list_update(self, field_text_list, update_element, index):
         if isinstance(field_text_list, str) and not field_text_list == '':
             proper_list = field_text_list.split(self.separator)
         else:
@@ -378,15 +405,34 @@ class Sheet_DnD35(Shareable):
         if isinstance(index, int) and 0 <= index and index < len(proper_list):
             proper_list[index] = update_element
 
-        modified_field_text_list = self.list_to_field_text_list(proper_list)
+        modified_field_text_list = self.field_text_list_from_list(proper_list)
 
         return modified_field_text_list            
 
 
-    def skill_add(self, name, class_skill, key_ability_name, points_ranks, points_others_modifiers, index='append'):
-        ability_modifier = self.get_ability_modifier(key_ability_name)
+    def talents_skill_add(self, name, class_skill, key_ability_name, points_ranks, points_others_modifiers, index='append'):
+        ability_modifier = self.get_ability_modifier_by_name(key_ability_name)
         
-        new_skill = {
+        skill = {
+            'name': name,
+            'key_ability_name': key_ability_name,
+            'class_skill': class_skill,
+            'points_total': int(ability_modifier) + int(points_ranks) + int(points_others_modifiers),
+            'points_ranks': points_ranks,
+            'points_others_modifiers': points_others_modifiers
+        }
+
+        self.talents_skills = self.field_text_list_add(self.talents_skills, skill, index=index)
+        self.save()
+
+    def talents_skill_pop(self, index='first'):
+        self.talents_skills = self.field_text_list_pop(self.talents_skills, index=index)
+        self.save()
+
+    def talents_skill_update(self, name, class_skill, key_ability_name, points_ranks, points_others_modifiers, index):
+        ability_modifier = self.get_ability_modifier_by_name(key_ability_name)
+        
+        skill = {
             'name': name,
             'key_ability_name': key_ability_name,
             'class_skill': class_skill,
@@ -395,30 +441,172 @@ class Sheet_DnD35(Shareable):
             'points_others_modifiers': points_others_modifiers
         }
 
-        self.talents_skills = self.field_text_list_add(self.talents_skills, new_skill, index=index)
+        self.talents_skills = self.field_text_list_update(self.talents_skills, skill, index)
         self.save()
 
-    def skill_refresh_all(self):
-        field_text_list = getattr(self, 'talents_skills')
-        first_element = True
+    def talents_skill_refresh_all(self):
+        skill_list = self.field_text_list_to_list(getattr(self, 'talents_skills'))
 
-        for skill_as_text in field_text_list.split(self.separator):
-            skill_as_dict = ast.literal_eval(skill_as_text)
+        for i in range(len(skill_list)):
+            ability_modifier = self.get_ability_modifier_by_name(skill_list[i]['key_ability_name'])
 
-            ability_modifier = self.get_ability_modifier(skill_as_dict['key_ability_name'])
-
-            skill_as_dict['points_total'] = ability_modifier + int(skill_as_dict['points_ranks']) + int(skill_as_dict['points_others_modifiers'])
-            
-            if first_element:
-                custom_text_separate = str(skill_as_dict)
-                first_element = False
-            else:
-                custom_text_separate += self.separator + str(skill_as_dict)
+            skill_list[i]['points_total'] = int(ability_modifier) + int(skill_list[i]['points_ranks']) + int(skill_list[i]['points_others_modifiers'])
         
-        self.talents_skills = custom_text_separate
+        self.talents_skills = self.field_text_list_from_list(skill_list)
         self.save()
 
+
+    def information_classes_add(self, name, levels, hit_dice, source_book, index='append'):        
+        new_class = {
+            'name': name,
+            'levels': levels,
+            'hit_dice': hit_dice,
+            'source_book': source_book
+        }
+
+        self.information_classes = self.field_text_list_add(self.information_classes, new_class, index=index)
+        self.save()
+
+    def information_classes_pop(self, index='first'):
+        self.information_classes = self.field_text_list_pop(self.information_classes, index=index)
+        self.save()
+
+    def information_classes_update(self, name, levels, hit_dice, source_book, index):
+        update_class = {
+            'name': name,
+            'levels': levels,
+            'hit_dice': hit_dice,
+            'source_book': source_book
+        }
+
+        self.information_classes = self.field_text_list_update(self.information_classes, update_class, index)
+        self.save()
+
+
+    def battle_attacks_add(self, name, key_ability_name, bonus_others, damage, critical, attack_type, attack_range, ammunition, notes, index='append'):
+        ability_modifier = self.get_ability_modifier_by_name(key_ability_name)
+        base_attack_bonus = getattr(self, 'battle_base_attack_bonus')
         
+        new_attack = {
+            'name': name,
+            'key_ability_name': key_ability_name,
+            'bonus_total': int(base_attack_bonus) + int(ability_modifier) + int(bonus_others),
+            'bonus_others': bonus_others,
+            'damage': damage,
+            'critical': critical,
+            'attack_type': attack_type,
+            'attack_range': attack_range,
+            'ammunition': ammunition,
+            'notes': notes
+        }
+
+        self.battle_attacks = self.field_text_list_add(self.battle_attacks, new_attack, index=index)
+        self.save()
+
+    def battle_attacks_pop(self, index='first'):
+        self.battle_attacks = self.field_text_list_pop(self.battle_attacks, index=index)
+        self.save()
+
+    def battle_attacks_update(self, name, key_ability_name, bonus_others, damage, critical, attack_type, attack_range, ammunition, notes, index='append'):
+        ability_modifier = self.get_ability_modifier_by_name(key_ability_name)
+        base_attack_bonus = getattr(self, 'battle_base_attack_bonus')
         
+        update_attack = {
+            'name': name,
+            'key_ability_name': key_ability_name,
+            'bonus_total': int(base_attack_bonus) + int(ability_modifier) + int(bonus_others),
+            'bonus_others': bonus_others,
+            'damage': damage,
+            'critical': critical,
+            'attack_type': attack_type,
+            'attack_range': attack_range,
+            'ammunition': ammunition,
+            'notes': notes
+        }
+
+        self.battle_attacks = self.field_text_list_update(self.battle_attacks, update_attack, index)
+        self.save()
+
+    def battle_attacks_refresh_all(self):
+        attack_list = self.field_text_list_to_list(getattr(self, 'battle_attacks'))
+
+        for i in range(len(attack_list)):
+            ability_modifier = self.get_ability_modifier_by_name(attack_list[i]['key_ability_name'])
+            base_attack_bonus = getattr(self, 'battle_base_attack_bonus')
+
+            attack_list[i]['bonus_total'] = int(base_attack_bonus) + int(ability_modifier) + int(attack_list[i]['bonus_others'])
+        
+        self.battle_attacks = self.field_text_list_from_list(attack_list)
+        self.save()
+        
+    
+    def inventory_equipments_add(self, name, description, item_type, armor_class_bonus, max_dexterity, max_speed, check_penalty, spell_failure, weight, price, special_properties, is_using, index='append'):
+        new_equipment = {
+            'name': name, 'description': description, 'item_type': item_type,
+            'armor_class_bonus': armor_class_bonus,
+            'max_dexterity': max_dexterity,
+            'max_speed': max_speed,
+            'check_penalty': check_penalty,
+            'spell_failure': spell_failure,
+            'weight': weight,
+            'price': price,
+            'special_properties': special_properties,
+            'is_using': is_using
+        }
+
+        self.inventory_equipments = self.field_text_list_add(self.inventory_equipments, new_equipment, index=index)
+        self.save()
+        self.update_inventory_weight_current()
+
+    def inventory_equipments_pop(self, index='first'):
+        self.inventory_equipments = self.field_text_list_pop(self.inventory_equipments, index=index)
+        self.save()
+        self.update_inventory_weight_current()
+
+    def inventory_equipments_update(self, name, description, item_type, armor_class_bonus, max_dexterity, max_speed, check_penalty, spell_failure, weight, price, special_properties, is_using, index='append'):
+        update_equipment = {
+            'name': name, 'description': description, 'item_type': item_type,
+            'armor_class_bonus': armor_class_bonus,
+            'max_dexterity': max_dexterity,
+            'max_speed': max_speed,
+            'check_penalty': check_penalty,
+            'spell_failure': spell_failure,
+            'weight': weight,
+            'price': price,
+            'special_properties': special_properties,
+            'is_using': is_using
+        }
+
+        self.inventory_equipments = self.field_text_list_update(self.inventory_equipments, update_equipment, index)
+        self.save()
+        self.update_inventory_weight_current()
+
+
+    def inventory_possessions_add(self, name, group, description, weight, price, index='append'):
+        # Nota: group definirá a que tipo de grupo uma posse pertence, podendo ser riches, supplies ou others
+        possession = {
+            'name': name, 'group': group, 'description': description, 'weight': weight, 'price': price
+        }
+
+        self.inventory_possessions = self.field_text_list_add(self.inventory_possessions, possession, index=index)
+        self.save()
+        self.update_inventory_weight_current()
+
+    def inventory_possessions_pop(self, index='first'):
+        self.inventory_possessions = self.field_text_list_pop(self.inventory_possessions, index=index)
+        self.save()
+        self.update_inventory_weight_current()
+
+    def inventory_possessions_update(self, name, group, description, weight, price, index='append'):
+        # Nota: group definirá a que tipo de grupo uma posse pertence, podendo ser riches, supplies ou others
+        possession = {
+            'name': name, 'group': group, 'description': description, 'weight': weight, 'price': price
+        }
+
+        self.inventory_possessions = self.field_text_list_update(self.inventory_possessions, possession, index)
+        self.save()
+        self.update_inventory_weight_current()
+
+
 
         
