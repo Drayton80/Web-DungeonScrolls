@@ -266,6 +266,7 @@ class Sheet_DnD35(Shareable):
         
     
     separator = '|;|'
+    separator_substitute = '|;.;|'  # Serve para substituir o separator caso ele esteja no texto que será incluido
 
     
     def __str__(self):
@@ -294,6 +295,16 @@ class Sheet_DnD35(Shareable):
         finally:
             return 0
     
+    def check_if_there_is_separator_and_replace(self, value):
+        if isinstance(value, str):
+            value.replace(self.separator, self.separator_substitute)
+        elif isinstance(value, dict):
+            for key in value.keys():
+                if isinstance(value[key], str):
+                    value[key] = value[key].replace(self.separator, self.separator_substitute)
+        
+        return value
+
     # FORMULA:
     # São métodos relativos à fórmulas específicas que são usadas em diversos outros métodos:
     def formula_ability_modifier(self, ability_total):
@@ -705,6 +716,10 @@ class Sheet_DnD35(Shareable):
     # São métodos que lidam com um tipo especial de campo que possuí em seu interior uma estrutura de dados convertida
     # para String, no caso a estrutura aqui é uma lista de dicionários (aqui ficam os métodos mais genéricos que lidam
     # apenas com uma forma abstrata dessa lista, ou seja, não levam em conta a forma específica de cada dicionário)
+    def field_text_list_element_dict_from_str(self, element):
+        # Transforma uma string no formato de um dicionário em um dict do python:
+        return ast.literal_eval(element)
+    
     def field_text_list_from_list(self, proper_list: list):
         first_element = True
         
@@ -721,8 +736,7 @@ class Sheet_DnD35(Shareable):
         proper_list = []
 
         for element_as_string in field_text_list.split(self.separator):
-            # Transforma uma string no formato de um dicionário em um dict do python:
-            element_as_dict = ast.literal_eval(element_as_string)
+            element_as_dict = self.field_text_list_element_dict_from_str(element_as_string)
 
             proper_list.append(element_as_dict)
 
@@ -735,6 +749,8 @@ class Sheet_DnD35(Shareable):
             proper_list = field_text_list.split(self.separator)
         else:
             return field_text_list
+
+        new_element = self.check_if_there_is_separator_and_replace(new_element)
 
         if index == 'append':
             proper_list.append(new_element)
@@ -760,23 +776,39 @@ class Sheet_DnD35(Shareable):
 
         return modified_field_text_list
 
-    def field_text_list_update(self, field_text_list, update_element, index):
+    def field_text_list_replace(self, field_text_list, new_element, index):
         if isinstance(field_text_list, str) and not field_text_list == '':
             proper_list = field_text_list.split(self.separator)
         else:
             return field_text_list
 
         if isinstance(index, int) and 0 <= index and index < len(proper_list):
-            proper_list[index] = update_element
+            new_element = self.check_if_there_is_separator_and_replace(new_element)
+
+            proper_list[index] = new_element
 
         modified_field_text_list = self.field_text_list_from_list(proper_list)
 
-        return modified_field_text_list            
+        return modified_field_text_list    
 
     # FIELD TEXT LIST - SPECIFIC:
     # Aqui ficam os métodos específicos de cada campo que usam os métodos mais genéricos acima, é necessário essa distinção
     # pois cada Field Text List possuí um tipo de dicionário específico relativo ao seu domínio:
-    def field_text_list_talents_skill_add(self, name, class_skill, key_ability_name, points_ranks, points_others_modifiers, index='append'):
+    def field_text_list_talents_skills_get(self):
+        field_text_list = getattr(self, 'talents_skills')
+        
+        if isinstance(field_text_list, str) and not field_text_list == '':
+            proper_list = field_text_list.split(self.separator)
+
+            for i in range(len(proper_list)):
+                if isinstance(proper_list[i], str):
+                    proper_list[i] = proper_list[i].replace(self.separator_substitute, self.separator)
+
+            proper_list[i] = self.field_text_list_element_dict_from_str(proper_list[i])
+
+            return proper_list
+    
+    def field_text_list_talents_skills_add(self, name, class_skill, key_ability_name, points_ranks, points_others_modifiers, index='append'):
         skill = {
             'name': name,
             'key_ability_name': key_ability_name,
@@ -789,11 +821,11 @@ class Sheet_DnD35(Shareable):
         self.talents_skills = self.field_text_list_add(self.talents_skills, skill, index=index)
         self.save()
 
-    def field_text_list_talents_skill_pop(self, index='first'):
+    def field_text_list_talents_skills_pop(self, index='first'):
         self.talents_skills = self.field_text_list_pop(self.talents_skills, index=index)
         self.save()
 
-    def field_text_list_talents_skill_update(self, name, class_skill, key_ability_name, points_ranks, points_others_modifiers, index):
+    def field_text_list_talents_skills_replace(self, name, class_skill, key_ability_name, points_ranks, points_others_modifiers, index):
         skill = {
             'name': name,
             'key_ability_name': key_ability_name,
@@ -803,10 +835,10 @@ class Sheet_DnD35(Shareable):
             'points_others_modifiers': points_others_modifiers
         }
 
-        self.talents_skills = self.field_text_list_update(self.talents_skills, skill, index)
+        self.talents_skills = self.field_text_list_replace(self.talents_skills, skill, index)
         self.save()
 
-    def field_text_list_talents_skill_refresh_all(self):
+    def field_text_list_talents_skills_update_all(self):
         skill_list = self.field_text_list_to_list(getattr(self, 'talents_skills'))
 
         for i in range(len(skill_list)):
@@ -834,7 +866,7 @@ class Sheet_DnD35(Shareable):
         self.information_classes = self.field_text_list_pop(self.information_classes, index=index)
         self.save()
 
-    def field_text_list_information_classes_update(self, name, levels, hit_dice, source_book, index):
+    def field_text_list_information_classes_replace(self, name, levels, hit_dice, source_book, index):
         update_class = {
             'name': name,
             'levels': levels,
@@ -842,7 +874,7 @@ class Sheet_DnD35(Shareable):
             'source_book': source_book
         }
 
-        self.information_classes = self.field_text_list_update(self.information_classes, update_class, index)
+        self.information_classes = self.field_text_list_replace(self.information_classes, update_class, index)
         self.save()
 
     def field_text_list_battle_attacks_add(self, name, key_ability_name, bonus_others, damage, critical, attack_type, attack_range, ammunition, notes, index='append'):      
@@ -866,7 +898,7 @@ class Sheet_DnD35(Shareable):
         self.battle_attacks = self.field_text_list_pop(self.battle_attacks, index=index)
         self.save()
 
-    def field_text_list_battle_attacks_update(self, name, key_ability_name, bonus_others, damage, critical, attack_type, attack_range, ammunition, notes, index='append'):
+    def field_text_list_battle_attacks_replace(self, name, key_ability_name, bonus_others, damage, critical, attack_type, attack_range, ammunition, notes, index='append'):
         update_attack = {
             'name': name,
             'key_ability_name': key_ability_name,
@@ -880,10 +912,10 @@ class Sheet_DnD35(Shareable):
             'notes': notes
         }
 
-        self.battle_attacks = self.field_text_list_update(self.battle_attacks, update_attack, index)
+        self.battle_attacks = self.field_text_list_replace(self.battle_attacks, update_attack, index)
         self.save()
 
-    def field_text_list_battle_attacks_refresh_all(self):
+    def field_text_list_battle_attacks_update_all(self):
         attack_list = self.field_text_list_to_list(getattr(self, 'battle_attacks'))
 
         for i in range(len(attack_list)):
@@ -920,7 +952,7 @@ class Sheet_DnD35(Shareable):
         self.update_inventory_weight_current()
         self.update_battle_ca_equipment_armor()
 
-    def field_text_list_inventory_equipments_update(self, name, description, item_type, armor_class_bonus, max_dexterity, max_speed, check_penalty, spell_failure, weight, price, special_properties, is_using, index='append'):
+    def field_text_list_inventory_equipments_replace(self, name, description, item_type, armor_class_bonus, max_dexterity, max_speed, check_penalty, spell_failure, weight, price, special_properties, is_using, index='append'):
         update_equipment = {
             'name': name, 'description': description, 'item_type': item_type,
             'armor_class_bonus': armor_class_bonus,
@@ -934,7 +966,7 @@ class Sheet_DnD35(Shareable):
             'is_using': is_using
         }
 
-        self.inventory_equipments = self.field_text_list_update(self.inventory_equipments, update_equipment, index)
+        self.inventory_equipments = self.field_text_list_replace(self.inventory_equipments, update_equipment, index)
         self.save()
         self.update_inventory_weight_current()
         self.update_battle_ca_equipment_armor()
@@ -954,13 +986,13 @@ class Sheet_DnD35(Shareable):
         self.save()
         self.update_inventory_weight_current()
 
-    def field_text_list_inventory_possessions_update(self, name, group, description, weight, price, index='append'):
+    def field_text_list_inventory_possessions_replace(self, name, group, description, weight, price, index='append'):
         # Nota: group definirá a que tipo de grupo uma posse pertence, podendo ser riches, supplies ou others
         possession = {
             'name': name, 'group': group, 'description': description, 'weight': weight, 'price': price
         }
 
-        self.inventory_possessions = self.field_text_list_update(self.inventory_possessions, possession, index)
+        self.inventory_possessions = self.field_text_list_replace(self.inventory_possessions, possession, index)
         self.save()
         self.update_inventory_weight_current()
 
