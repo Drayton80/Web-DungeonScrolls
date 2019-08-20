@@ -1009,7 +1009,7 @@ class Sheet_DnD35(Shareable):
     def set_annotations_background(self, annotations_background):
         self.annotations_background = annotations_background
         self.save()
-        
+
     def set_annotations_others(self, annotations_others):
         self.annotations_others = annotations_others
         self.save()
@@ -1328,7 +1328,3 @@ class Sheet_DnD35(Shareable):
         self.inventory_possessions = self.field_text_list_replace(self.inventory_possessions, possession, index)
         self.save()
         self.update_inventory_weight_current()
-
-
-
-        
