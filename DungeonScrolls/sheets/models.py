@@ -161,7 +161,7 @@ class Sheet_DnD35(Shareable):
     # ATTRIBUTES:
     # General:
     name = models.CharField(max_length=50, blank=True)
-    sheet_type = models.CharField(max_length=2, choices=(('CH', 'Character'), ('CR', 'Creature'),))  
+    sheet_type = models.CharField(max_length=3, choices=(('CHA', 'Character'), ('CRB', 'Creature Base'), ('CRI', 'Creature Instance'),))  
     # Specific:
     information_name = models.TextField(blank=True, null=True)
     information_classes = models.TextField(blank=True, null=True)
@@ -170,7 +170,9 @@ class Sheet_DnD35(Shareable):
     information_race = models.TextField(blank=True, null=True)
     information_gender = models.TextField(blank=True, null=True)
     information_size = models.TextField(blank=True, null=True)
-    information_size_modifier = models.IntegerField(blank=True, null=True, default=None)
+    information_size_modifier_ca_and_attack = models.IntegerField(blank=True, null=True, default=None)
+    information_size_modifier_special_attacks = models.IntegerField(blank=True, null=True, default=None)
+    information_size_modifier_hide = models.IntegerField(blank=True, null=True, default=None)
     information_age = models.TextField(blank=True, null=True)
     information_alignment = models.TextField(blank=True, null=True)
     information_deity = models.TextField(blank=True, null=True)
@@ -294,6 +296,12 @@ class Sheet_DnD35(Shareable):
             
         finally:
             return 0
+
+    def checked_value_as_string(self, value):
+        if value == None or value == '':
+            return ''
+        else:
+            return str(value)
     
     def check_if_there_is_separator_and_replace(self, value):
         if isinstance(value, str):
@@ -310,11 +318,6 @@ class Sheet_DnD35(Shareable):
     def formula_ability_modifier(self, ability_total):
         return int(ability_total/2)-5
         
-    def formula_talents_skill_points_total(self, key_ability_name, points_ranks, points_others_modifiers) -> int:
-        ability_modifier = self.get_ability_modifier_by_name(key_ability_name)
-
-        return ability_modifier + self.checked_value_as_integer(points_ranks) + self.checked_value_as_integer(points_others_modifiers)
-
     def formula_battle_initiative_total(self):
         return self.get_ability_dexterity_modifier() + self.get_battle_initiative_others()
     
@@ -330,16 +333,66 @@ class Sheet_DnD35(Shareable):
     def formula_battle_attacks_bonus_total(self, key_ability_name, bonus_others) -> int:
         ability_modifier = self.get_ability_modifier_by_name(key_ability_name)
 
-        return ability_modifier + self.get_battle_base_attack_bonus() + self.checked_value_as_integer(bonus_others) + self.get_information_size_modifier()
+        return ability_modifier + self.get_battle_base_attack_bonus() + self.checked_value_as_integer(bonus_others) + self.get_information_size_modifier_ca_and_attack()
 
+    def formula_battle_grapple_total(self, ability_strength_modifier, information_size_modifier, battle_grapple_others):
+        return ability_strength_modifier + information_size_modifier + battle_grapple_others
+
+    def formula_talents_skill_points_total(self, key_ability_name, points_ranks, points_others_modifiers) -> int:
+        ability_modifier = self.get_ability_modifier_by_name(key_ability_name)
+
+        return ability_modifier + self.checked_value_as_integer(points_ranks) + self.checked_value_as_integer(points_others_modifiers)
     # GET METHODS:
     # Como vários valores inteiros podem ser nulos, o get aqui também serve para checar se o campo possui algum número
     # para retornar 0 caso não tenha, isso é necessário pois muitos dos campos servem de cálculo para outros então
     # para não quebrar esses cálculos isso precisa ser feito
-    def get_information_size_modifier(self) -> int:
-        field_attribute = getattr(self, 'information_size_modifier')
+    def get_information_name(self) -> str:
+        return getattr(self, 'information_name')
+
+    def get_information_level(self) -> int:
+        field_attribute = getattr(self, 'information_level')
 
         return self.checked_value_as_integer(field_attribute)
+
+    def get_information_experience(self) -> int:
+        field_attribute = getattr(self, 'information_experience')
+
+        return self.checked_value_as_integer(field_attribute)
+
+    def get_information_race(self) -> str:
+        return getattr(self, 'information_race')
+
+    def get_information_gender(self) -> str:
+        return getattr(self, 'information_gender')
+
+    def get_information_size(self) -> str:
+        return getattr(self, 'information_size')
+    
+    def get_information_size_modifier_ca_and_attack(self) -> int:
+        field_attribute = getattr(self, 'information_size_modifier_ca_and_attack')
+        return self.checked_value_as_integer(field_attribute)
+
+    def get_information_size_modifier_special_attacks(self) -> int:
+        field_attribute = getattr(self, 'information_size_modifier_special_attacks')
+        return self.checked_value_as_integer(field_attribute)
+
+    def get_information_size_modifier_hide(self) -> int:
+        field_attribute = getattr(self, 'information_size_modifier_hide')
+        return self.checked_value_as_integer(field_attribute)
+
+    def get_information_age(self) -> int:
+        field_attribute = getattr(self, 'information_age')
+
+        return self.checked_value_as_integer(field_attribute)
+
+    def get_information_alignment(self) -> str:
+        return getattr(self, 'information_alignment')
+    
+    def get_information_deity(self) -> str:
+        return getattr(self, 'information_deity')
+    
+    def get_information_languages(self) -> str:
+        return getattr(self, 'information_languages')
 
     def get_ability_strength_base(self) -> int:
         field_attribute = getattr(self, 'ability_strength_base')
@@ -430,55 +483,48 @@ class Sheet_DnD35(Shareable):
 
     def get_saving_throws_fortitude_base(self) -> int:
         field_attribute = getattr(self, 'saving_throws_fortitude_base')
-
         return self.checked_value_as_integer(field_attribute)
     
     def get_saving_throws_fortitude_temporary(self) -> int:
         field_attribute = getattr(self, 'saving_throws_fortitude_temporary')
-
         return self.checked_value_as_integer(field_attribute)
 
     def get_saving_throws_fortitude_others(self) -> int:
         field_attribute = getattr(self, 'saving_throws_fortitude_others')
-
         return self.checked_value_as_integer(field_attribute)
 
     def get_saving_throws_reflex_base(self) -> int:
         field_attribute = getattr(self, 'saving_throws_reflex_base')
-
         return self.checked_value_as_integer(field_attribute)
     
     def get_saving_throws_reflex_temporary(self) -> int:
         field_attribute = getattr(self, 'saving_throws_reflex_temporary')
-
         return self.checked_value_as_integer(field_attribute)
 
     def get_saving_throws_reflex_others(self) -> int:
         field_attribute = getattr(self, 'saving_throws_reflex_others')
-
         return self.checked_value_as_integer(field_attribute)
 
     def get_saving_throws_will_base(self) -> int:
         field_attribute = getattr(self, 'saving_throws_will_base')
-
         return self.checked_value_as_integer(field_attribute)
     
     def get_saving_throws_will_temporary(self) -> int:
         field_attribute = getattr(self, 'saving_throws_will_temporary')
-
         return self.checked_value_as_integer(field_attribute)
 
     def get_saving_throws_will_others(self) -> int:
         field_attribute = getattr(self, 'saving_throws_will_others')
-
         return self.checked_value_as_integer(field_attribute)
 
+    def get_battle_speed(self) -> str:
+        return getattr(self, 'battle_speed')
+    
     def get_battle_initiative_total(self) -> int:
         return getattr(self, 'battle_initiative_total')
 
     def get_battle_initiative_others(self) -> int:
         field_attribute = getattr(self, 'battle_initiative_others')
-
         return self.checked_value_as_integer(field_attribute)
 
     def get_battle_hp_total(self) -> int:
@@ -501,36 +547,156 @@ class Sheet_DnD35(Shareable):
 
     def get_battle_ca_equipment_armor(self) -> int:
         field_attribute = getattr(self, 'battle_ca_equipment_armor')
-
         return self.checked_value_as_integer(field_attribute)
 
     def get_battle_ca_natural_armor(self) -> int:
         field_attribute = getattr(self, 'battle_ca_natural_armor')
-
         return self.checked_value_as_integer(field_attribute)
 
     def get_battle_ca_deflection_modifier(self) -> int:
         field_attribute = getattr(self, 'battle_ca_deflection_modifier')
-
         return self.checked_value_as_integer(field_attribute)
 
     def get_battle_ca_other_modifier(self) -> int:
         field_attribute = getattr(self, 'battle_ca_other_modifier')
-
         return self.checked_value_as_integer(field_attribute)
     
     def get_battle_base_attack_bonus(self) -> int:
         field_attribute = getattr(self, 'battle_base_attack_bonus')
-
         return self.checked_value_as_integer(field_attribute)
+
+    def get_battle_grapple_total(self) -> int:
+        field_attribute = getattr(self, 'grapple_total')
+        return self.checked_value_as_integer(field_attribute)
+
+    def get_battle_grapple_others(self) -> int:
+        field_attribute = getattr(self, 'battle_grapple_others')
+        return self.checked_value_as_integer(field_attribute)
+
+    def get_battle_special_attacks(self) -> str:
+        field_attribute = getattr(self, 'special_attacks')
+        return self.checked_value_as_integer(field_attribute)
+
+    def get_inventory_money(self) -> str:
+        return getattr(self, 'inventory_money')
+
+    def get_inventory_weight_current(self) -> int:
+        field_attribute = getattr(self, 'inventory_weight_current')
+        return self.checked_value_as_integer(field_attribute)
+
+    def get_inventory_weight_light(self) -> int:
+        field_attribute = getattr(self, 'inventory_weight_light')
+        return self.checked_value_as_integer(field_attribute)
+
+    def get_inventory_weight_medium(self) -> int:
+        field_attribute = getattr(self, 'inventory_weight_medium')
+        return self.checked_value_as_integer(field_attribute)
+
+    def get_inventory_weight_heavy(self) -> int:
+        field_attribute = getattr(self, 'inventory_weight_heavy')
+        return self.checked_value_as_integer(field_attribute)
+
+    def get_inventory_weight_maximum(self) -> int:
+        field_attribute = getattr(self, 'inventory_weight_maximum')
+        return self.checked_value_as_integer(field_attribute)
+    
+    def get_talents_feats(self) -> str:
+        return getattr(self, 'talents_feats')
+
+    def get_talents_special_abilities(self) -> str:
+        return getattr(self, 'talents_special_abilities')
+
+    def get_magic_spells(self) -> str:
+        return getattr(self, 'magic_spells')
+
+    def get_magic_slots(self) -> str:
+        return getattr(self, 'magic_slots')
+    
+    def get_magic_spell_save(self) -> int:
+        field_attribute = getattr(self, 'magic_spell_save')
+        return self.checked_value_as_integer(field_attribute)
+    
+    def get_magic_arcane_spell_failure(self) -> int:
+        field_attribute = getattr(self, 'magic_arcane_spell_failure')
+        return self.checked_value_as_integer(field_attribute)
+    
+    def get_annotations_appearance(self) -> str:
+        return getattr(self, 'annotations_appearance')
+    
+    def get_annotations_background(self) -> str:
+        return getattr(self, 'annotations_background')
+    
+    def get_annotations_others(self) -> str:
+        return getattr(self, 'annotations_others')
     
     # UPDATE METHODS:
     # São métodos relativos a atualização de certos campos do Banco de Dados que possuem seus valores dependentes
     # de outros campos ou de partes de outros campos
     # OBS.: Os campos que são atualizados automaticamente baseados em outros (Métodos Update) não podem ser modificados via Método Set
+    def update_information_level(self):
+        information_classes  = self.field_text_list_information_classes_get()
+        information_level = ''
+
+        if isinstance(information_classes, list):
+            information_level = 0
+            
+            for each_class in information_classes:
+                information_level += self.checked_value_as_integer(each_class['levels'])
+
+        self.information_level = information_level
+        self.save()
+
+    def update_information_size_modifiers(self):
+        information_size = self.checked_value_as_string(getattr(self, 'information_size'))
+
+        if information_size.lower() == 'fine':
+            self.information_size_modifier_ca_and_attack = 8
+            self.information_size_modifier_special_attacks = -16
+            self.information_size_modifier_hide = 16
+        elif information_size.lower() == 'diminutive':
+            self.information_size_modifier_ca_and_attack = 4
+            self.information_size_modifier_special_attacks = -12
+            self.information_size_modifier_hide = 12
+        elif information_size.lower() == 'tiny':
+            self.information_size_modifier_ca_and_attack = 2
+            self.information_size_modifier_special_attacks = -8
+            self.information_size_modifier_hide = 8
+        elif information_size.lower() == 'small':
+            self.information_size_modifier_ca_and_attack = 1
+            self.information_size_modifier_special_attacks = -4
+            self.information_size_modifier_hide = 4
+        elif information_size.lower() == 'medium':
+            self.information_size_modifier_ca_and_attack = 0
+            self.information_size_modifier_special_attacks = 0
+            self.information_size_modifier_hide = 0
+        elif information_size.lower() == 'large':
+            self.information_size_modifier_ca_and_attack = -1
+            self.information_size_modifier_special_attacks = 4
+            self.information_size_modifier_hide = -4
+        elif information_size.lower() == 'huge':
+            self.information_size_modifier_ca_and_attack = -2
+            self.information_size_modifier_special_attacks = 8
+            self.information_size_modifier_hide = -8
+        elif information_size.lower() == 'gargantuan':
+            self.information_size_modifier_ca_and_attack = -4
+            self.information_size_modifier_special_attacks = 12
+            self.information_size_modifier_hide = -12
+        elif information_size.lower() in ['colossal', 'colossal+']:
+            self.information_size_modifier_ca_and_attack = -8
+            self.information_size_modifier_special_attacks = 16
+            self.information_size_modifier_hide = -16
+        else:
+            self.information_size_modifier_ca_and_attack = ''
+            self.information_size_modifier_special_attacks = ''
+            self.information_size_modifier_hide = ''
+
+        self.save()
+        self.update_battle_grapple_total()
+    
     def update_ability_strength_modifier(self):
         self.ability_strength_modifier = self.formula_ability_modifier(self.get_ability_strength_base)
         self.save()
+        self.update_battle_grapple_total()
 
     def update_ability_dexterity_modifier(self):
         self.ability_dexterity_modifier = self.formula_ability_modifier(self.get_ability_dexterity_base)
@@ -592,6 +758,14 @@ class Sheet_DnD35(Shareable):
         self.battle_ca_equipment_armor = ca_equipment_armor
         self.save()
     
+    def update_battle_grapple_total(self):
+        ability_strength_modifier = self.checked_value_as_integer(self.get_ability_strength_modifier())
+        battle_grapple_others = self.checked_value_as_integer(self.get_battle_grapple_others())
+        information_size_modifier = self.checked_value_as_integer(self.get_information_size_modifier_special_attacks())
+
+        self.battle_grapple_total = self.formula_battle_grapple_total(ability_strength_modifier, information_size_modifier, battle_grapple_others)
+        self.save()
+        
     def update_inventory_weight_current(self):
         inventory_equipments_list = self.field_text_list_to_list(getattr(self, 'inventory_equipments'))
         inventory_possessions_list = self.field_text_list_to_list(getattr(self, 'inventory_possessions'))
@@ -607,9 +781,59 @@ class Sheet_DnD35(Shareable):
         self.inventory_weight_current = weight_current
         self.save()
 
+    def update_magic_arcane_spell_failure(self):
+        inventory_equipments = self.field_text_list_inventory_equipments_get()
+        magic_arcane_spell_failure = ''
+
+        if isinstance(inventory_equipments, list):
+            magic_arcane_spell_failure = 0
+            
+            for each_equipment in inventory_equipments:
+                magic_arcane_spell_failure += self.checked_value_as_integer(each_equipment['spell_failure'])
+
+        self.magic_arcane_spell_failure = magic_arcane_spell_failure
+        self.save()
+
     # SET METHODS:
     # Os Sets aqui servem para atribuir o novo valor da campo e atualizar todos os campos que dependem dele para terem determinado valor:
     # OBS.: Os campos que são atualizados automaticamente baseados em outros (Métodos Update) não podem ser modificados via Método Set
+    def set_information_name(self, information_name):
+        self.information_name = information_name
+        self.save()
+
+    def set_information_experience(self, information_experience):
+        self.information_experience = information_experience
+        self.save()
+    
+    def set_information_race(self, information_race):
+        self.information_race = information_race
+        self.save()
+    
+    def set_information_gender(self, information_gender):
+        self.information_gender = information_gender
+        self.save()
+    
+    def set_information_size(self, information_size):
+        self.information_size = information_size
+        self.save()
+        self.update_information_size_modifiers()
+    
+    def set_information_age(self, information_age):
+        self.information_age = information_age
+        self.save()
+    
+    def set_information_alignment(self, information_alignment):
+        self.information_alignment = information_alignment
+        self.save()
+    
+    def set_information_deity(self, information_deity):
+        self.information_deity = information_deity
+        self.save()
+
+    def set_information_languages(self, information_languages):
+        self.information_languages = information_languages
+        self.save()
+
     def set_ability_strength_base(self, ability_strength_base):
         self.ability_strength_base = ability_strength_base
         self.save()
@@ -676,6 +900,10 @@ class Sheet_DnD35(Shareable):
         self.saving_throws_will_others = saving_throws_will_others
         self.update_saving_throws_will_total()   
 
+    def set_battle_speed(self, battle_speed):
+        self.battle_speed = battle_speed
+        self.save()
+    
     def set_battle_initiative_others(self, battle_initiative_others):
         self.battle_initiative_others = battle_initiative_others
         self.save()
@@ -712,6 +940,80 @@ class Sheet_DnD35(Shareable):
         self.update_battle_ca_touch()
         self.update_battle_ca_flat_footed()
 
+    def set_battle_damage_reduction(self, battle_damage_reduction):
+        self.battle_damage_reduction = battle_damage_reduction
+        self.save()
+
+    def set_battle_spell_resistance(self, battle_spell_resistance):
+        self.battle_spell_resistance = battle_spell_resistance
+        self.save()
+
+    def set_battle_base_attack_bonus(self, battle_base_attack_bonus):
+        self.battle_base_attack_bonus = battle_base_attack_bonus
+        self.save()
+        self.field_text_list_battle_attacks_update_all()
+
+    def set_battle_grapple_others(self, battle_grapple_others):
+        self.battle_grapple_others = battle_grapple_others
+        self.save()
+        self.update_battle_grapple_total()
+
+    def set_battle_special_attacks(self, battle_special_attacks):
+        self.battle_special_attacks = battle_special_attacks
+        self.save()
+
+    def set_inventory_money(self, inventory_money):
+        self.inventory_money = inventory_money
+        self.save()
+
+    def set_inventory_weight_light(self, inventory_weight_light):
+        self.inventory_weight_light = inventory_weight_light
+        self.save()
+
+    def set_inventory_weight_medium(self, inventory_weight_medium):
+        self.inventory_weight_medium = inventory_weight_medium
+        self.save()
+
+    def set_inventory_weight_heavy(self, inventory_weight_heavy):
+        self.inventory_weight_heavy = inventory_weight_heavy
+        self.save()
+
+    def set_inventory_weight_maximum(self, inventory_weight_maximum):
+        self.inventory_weight_maximum = inventory_weight_maximum
+        self.save()
+
+    def set_talents_feats(self, talents_feats):
+        self.talents_feats = talents_feats
+        self.save()
+
+    def set_talents_special_abilities(self, talents_special_abilities):
+        self.talents_special_abilities = talents_special_abilities
+        self.save()
+
+    def set_magic_spells(self, magic_spells):
+        self.magic_spells = magic_spells
+        self.save()
+
+    def set_magic_slots(self, magic_slots):
+        self.magic_slots = magic_slots
+        self.save()
+
+    def set_magic_spell_save(self, magic_spell_save):
+        self.magic_spell_save = magic_spell_save
+        self.save()
+        
+    def set_annotations_appearance(self, annotations_appearance):
+        self.annotations_appearance = annotations_appearance
+        self.save()
+
+    def set_annotations_background(self, annotations_background):
+        self.annotations_background = annotations_background
+        self.save()
+        
+    def set_annotations_others(self, annotations_others):
+        self.annotations_others = annotations_others
+        self.save()
+    
     # FIELD TEXT LIST - GENERIC:
     # São métodos que lidam com um tipo especial de campo que possuí em seu interior uma estrutura de dados convertida
     # para String, no caso a estrutura aqui é uma lista de dicionários (aqui ficam os métodos mais genéricos que lidam
@@ -742,6 +1044,20 @@ class Sheet_DnD35(Shareable):
 
         return proper_list
 
+    def field_text_list_get(self, field_text_list):
+        if isinstance(field_text_list, str) and not field_text_list == '':
+            proper_list = field_text_list.split(self.separator)
+
+            for i in range(len(proper_list)):
+                if isinstance(proper_list[i], str):
+                    proper_list[i] = proper_list[i].replace(self.separator_substitute, self.separator)
+
+            proper_list[i] = self.field_text_list_element_dict_from_str(proper_list[i])
+
+            return proper_list
+        else:
+            return field_text_list
+    
     def field_text_list_add(self, field_text_list, new_element, index='append'):
         if field_text_list == None or field_text_list == '':
             proper_list = []
@@ -796,17 +1112,8 @@ class Sheet_DnD35(Shareable):
     # pois cada Field Text List possuí um tipo de dicionário específico relativo ao seu domínio:
     def field_text_list_talents_skills_get(self):
         field_text_list = getattr(self, 'talents_skills')
-        
-        if isinstance(field_text_list, str) and not field_text_list == '':
-            proper_list = field_text_list.split(self.separator)
 
-            for i in range(len(proper_list)):
-                if isinstance(proper_list[i], str):
-                    proper_list[i] = proper_list[i].replace(self.separator_substitute, self.separator)
-
-            proper_list[i] = self.field_text_list_element_dict_from_str(proper_list[i])
-
-            return proper_list
+        return self.field_text_list_get(field_text_list)
     
     def field_text_list_talents_skills_add(self, name, class_skill, key_ability_name, points_ranks, points_others_modifiers, index='append'):
         skill = {
@@ -851,6 +1158,11 @@ class Sheet_DnD35(Shareable):
         self.talents_skills = self.field_text_list_from_list(skill_list)
         self.save()
 
+    def field_text_list_information_classes_get(self):
+        field_text_list = getattr(self, 'information_classes')
+
+        return self.field_text_list_get(field_text_list)
+    
     def field_text_list_information_classes_add(self, name, levels, hit_dice, source_book, index='append'):        
         new_class = {
             'name': name,
@@ -861,10 +1173,12 @@ class Sheet_DnD35(Shareable):
 
         self.information_classes = self.field_text_list_add(self.information_classes, new_class, index=index)
         self.save()
+        self.update_information_level()
 
     def field_text_list_information_classes_pop(self, index='first'):
         self.information_classes = self.field_text_list_pop(self.information_classes, index=index)
         self.save()
+        self.update_information_level()
 
     def field_text_list_information_classes_replace(self, name, levels, hit_dice, source_book, index):
         update_class = {
@@ -876,7 +1190,13 @@ class Sheet_DnD35(Shareable):
 
         self.information_classes = self.field_text_list_replace(self.information_classes, update_class, index)
         self.save()
+        self.update_information_level()
 
+    def field_text_list_battle_attacks_get(self):
+        field_text_list = getattr(self, 'battle_attacks')
+
+        return self.field_text_list_get(field_text_list)
+    
     def field_text_list_battle_attacks_add(self, name, key_ability_name, bonus_others, damage, critical, attack_type, attack_range, ammunition, notes, index='append'):      
         new_attack = {
             'name': name,
@@ -927,6 +1247,11 @@ class Sheet_DnD35(Shareable):
         self.battle_attacks = self.field_text_list_from_list(attack_list)
         self.save()
         
+    def field_text_list_inventory_equipments_get(self):
+        field_text_list = getattr(self, 'inventory_equipments')
+
+        return self.field_text_list_get(field_text_list)
+    
     def field_text_list_inventory_equipments_add(self, name, description, item_type, armor_class_bonus, max_dexterity, max_speed, check_penalty, spell_failure, weight, price, special_properties, is_using, index='append'):
         new_equipment = {
             'name': name, 'description': description, 'item_type': item_type,
@@ -945,12 +1270,14 @@ class Sheet_DnD35(Shareable):
         self.save()
         self.update_inventory_weight_current()
         self.update_battle_ca_equipment_armor()
+        self.update_magic_arcane_spell_failure()
 
     def field_text_list_inventory_equipments_pop(self, index='first'):
         self.inventory_equipments = self.field_text_list_pop(self.inventory_equipments, index=index)
         self.save()
         self.update_inventory_weight_current()
         self.update_battle_ca_equipment_armor()
+        self.update_magic_arcane_spell_failure()
 
     def field_text_list_inventory_equipments_replace(self, name, description, item_type, armor_class_bonus, max_dexterity, max_speed, check_penalty, spell_failure, weight, price, special_properties, is_using, index='append'):
         update_equipment = {
@@ -970,7 +1297,13 @@ class Sheet_DnD35(Shareable):
         self.save()
         self.update_inventory_weight_current()
         self.update_battle_ca_equipment_armor()
+        self.update_magic_arcane_spell_failure()
 
+    def field_text_list_inventory_possessions_get(self):
+        field_text_list = getattr(self, 'inventory_possessions')
+
+        return self.field_text_list_get(field_text_list)
+    
     def field_text_list_inventory_possessions_add(self, name, group, description, weight, price, index='append'):
         # Nota: group definirá a que tipo de grupo uma posse pertence, podendo ser riches, supplies ou others
         possession = {

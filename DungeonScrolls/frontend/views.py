@@ -2,4 +2,5 @@ from django.shortcuts import render
 
 
 def index(request):
-    return render(request, 'frontend/index.html')
+    context = {'test': 'Armando é um Trouxa'}
+    return render(request, 'frontend/index.html', context)
