@@ -4,14 +4,14 @@ import { BrowserRouter as Router, Route } from 'react-router-dom';
 
 import Header from './layout/Header';
 import Registration from './accounts/Registration';
-var djangoData = $('#test').data();
+const djangoData = $('#test').data();
 
 class App extends Component {
     render() {
         return (
             <Router>
                 <div className="App" >
-                    <h1>{djangoData}</h1>
+                    <h1>{djangoData.other}</h1>
                 </div>
             </Router>
         );

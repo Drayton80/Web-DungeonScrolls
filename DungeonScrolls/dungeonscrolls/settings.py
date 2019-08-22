@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles',    
+    'django.contrib.staticfiles',
+    'rest_framework',   
     #External Apps:
     'crispy_forms',
     'registration',
@@ -46,7 +47,8 @@ INSTALLED_APPS = [
     'sharing',
     'calculator',
     'rule_system',
-    'sheets'
+    'sheets',
+    'rest',
 ]
 
 # Crispy Forms Settings:
