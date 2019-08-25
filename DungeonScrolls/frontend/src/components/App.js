@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Route } from 'react-router-dom';
 
 import Header from './layout/Header';
 import Registration from './accounts/Registration';
-const djangoData = $('#test').data();
+const djangoData = $('#User').data();
 
 class App extends Component {
     render() {
