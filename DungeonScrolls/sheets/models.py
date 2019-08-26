@@ -33,108 +33,158 @@ class Chapter(models.Model):
 
 
 class Sheet(Shareable):
-    # Attributes:
+    # ATTRIBUTES:
     name = models.CharField(max_length=50, blank=True)
+    sheet_type = models.CharField(max_length=3, choices=(('CHA', 'Character'), ('CRB', 'Creature Base'), ('CRI', 'Creature Instance'),))  
 
-    # Relationships:
-    rule_system = models.ForeignKey(RuleSystem, null=True, on_delete=models.SET_NULL)
-
-    class Meta:
-        abstract = True
+    # RELATIONSHIPS::
+    rule_system = models.ForeignKey(RuleSystem, blank=True, null=True, default=None, on_delete=models.SET_NULL)
+    # Caso seja Character:
+    #game = models.ManyToManyField(Game)
+    # Caso seja Creature:
+    chapter = models.ForeignKey(Chapter, null=True, blank=True, default=None, on_delete=models.CASCADE)
+    ancestral = models.ForeignKey('self', null=True, blank=True, default=None, related_name='creature', on_delete=models.SET_NULL)
         
+    separator = '|;|'
+    separator_substitute = '|;.;|'  # Serve para substituir o separator caso ele esteja no texto que será incluido
+
+    # DEFAULT METHODS OVERWRITE:
     def __str__(self):
         return str(self.name)
-        
-    def populate_dnd35_sheet(self, sheet):
-        '''
-        part_unnamed = ''
 
-        page_general_information_name = 'General Information'
-        page_general_information_number = 0
-        
-        part_abilities = 'Abilites'
-        strength_total = Field(
-            sheet=sheet, 
-            page_name=page_general_information_name, page_number=page_general_information_number, 
-            part_name=part_abilities, field_name="Strength Total", field_value="")
-        strength_total.save()
-        strength_modifier = Field(
-            sheet=sheet, 
-            page_name=page_general_information_name, page_number=page_general_information_number, 
-            part_name=part_abilities, field_name="Strength Modifier", field_value="")
-        strength_modifier.save()
-
-        part_saving_throws = 'Saving Throws'
-        part_skills = 'Skills'
-        
-        
-        page_front = Field(sheet=sheet, page_name=page_general_information_name, page_number=page_general_information_number, part_name=part_abilities,
-                           field_name="Total Strength", field_value="")
-        page_front.save()
-
-    sheet = GenericForeignKey('content_type', 'object_id')
-        page_battle_information_name = 'Battle Information'
-        page_battle_information_number = 1
-        part_gear = 'Gear'
-        part_attacks = 'Attacks'
-        part_special_attacks = 'Special Attacks'
-
-        page_inventory_name = 'Inventário'
-        page_inventory_number = 2
-        part_riches = 'Riches'
-        part_supplies = 'Supplies' 
-        part_possesions = 'Possessions'
-
-        page_feats_special_name = 'Feats and Special Abilites'
-        page_feats_special_name = 3
-        part_feats = 'Feats'
-        part_special_abilities = 'Special Abilities'
-        
-        page_magic_name = 'Magic'
-        page_magic_number = 4
-        part_spells = 'Spells'
-        part_slots = 'Spells Slots'
-
-        page_annotations_name = 'Annotations'
-        page_annotations_number = 5
-        part_background = 'Background'
-        part_appearance = 'Detailed Appearance'
-        part_other = 'Other Notes'
-        '''
-
-
-class Character(Sheet):
-    # Relationships:
-    #room = models.ManyToManyField(Room)
-
-    @classmethod
-    def create_dnd35_sheet(cls, name):
-        new_sheet = cls(name=name, rule_system=RuleSystem.objects.filter(name='Dungeons & Dragons: 3.5').first())
-
-        cls.populate_dnd35_sheet(cls, new_sheet)
-
-        return new_sheet
-
-
-class Creature(Sheet):
-    # Relationships:
-    chapter = models.ForeignKey(Chapter, on_delete=models.CASCADE)
-    ancestral = models.ForeignKey('self', null=True, blank=True, related_name='creature', on_delete=models.SET_NULL)
-
-    @classmethod
-    def create_dnd35_sheet(cls, name, chapter, status, ancestral=None):
-        dnd35 = RuleSystem.objects.filter(name='Dungeons & Dragons: 3.5').first()
-
-        if ancestral:
-            new_sheet = cls(name=name, rule_system=dnd35, chapter=chapter, status=status, ancestral=ancestral)
+    # CHECKED VALUE AS:
+    # Métodos que checam se um determinado valor é numérico e, caso seja, retornam esse valor num formato específico.
+    # Esses métodos são necessários pois muitos dos campos do Banco de Dados podem ou não estarem preenchidos e, mesmo
+    # que não estejam, há outros campos que requisitam os valores deles para determinados cálculos
+    def checked_value_as_integer(self, value):
+        if value == None or value == '' or (isinstance(value, str) and not value.isdigit()):
+            return 0
         else:
-            new_sheet = cls(name=name, rule_system=dnd35, chapter=chapter, status=status)
+            return int(value)
 
-        cls.populate_dnd35_sheet(cls, new_sheet)
+    def checked_value_as_float(self, value):
+        try:
+            value_as_float = float(value)
 
-        return new_sheet
+            if not math.isnan(value_as_float):
+                return value_as_float
+
+        except ValueError:
+            pass
+            
+        finally:
+            return 0
+
+    def checked_value_as_string(self, value):
+        if value == None or value == '':
+            return ''
+        else:
+            return str(value)
+    
+    def check_if_there_is_separator_and_replace(self, value):
+        if isinstance(value, str):
+            value.replace(self.separator, self.separator_substitute)
+        elif isinstance(value, dict):
+            for key in value.keys():
+                if isinstance(value[key], str):
+                    value[key] = value[key].replace(self.separator, self.separator_substitute)
+        
+        return value
+
+    # FIELD TEXT LIST - GENERIC:
+    # São métodos que lidam com um tipo especial de campo que possuí em seu interior uma estrutura de dados convertida
+    # para String, no caso a estrutura aqui é uma lista de dicionários (aqui ficam os métodos mais genéricos que lidam
+    # apenas com uma forma abstrata dessa lista, ou seja, não levam em conta a forma específica de cada dicionário)
+    def field_text_list_element_dict_from_str(self, element):
+        # Transforma uma string no formato de um dicionário em um dict do python:
+        return ast.literal_eval(element)
+    
+    def field_text_list_from_list(self, proper_list: list):
+        first_element = True
+        
+        for item in proper_list:
+            if first_element:
+                custom_text_separate = str(item)
+                first_element = False
+            else:
+                custom_text_separate += self.separator + str(item)
+
+        return custom_text_separate
+
+    def field_text_list_to_list(self, field_text_list: str):
+        proper_list = []
+
+        for element_as_string in field_text_list.split(self.separator):
+            element_as_dict = self.field_text_list_element_dict_from_str(element_as_string)
+
+            proper_list.append(element_as_dict)
+
+        return proper_list
+
+    def field_text_list_get(self, field_text_list):
+        if isinstance(field_text_list, str) and not field_text_list == '':
+            proper_list = field_text_list.split(self.separator)
+
+            for i in range(len(proper_list)):
+                if isinstance(proper_list[i], str):
+                    proper_list[i] = proper_list[i].replace(self.separator_substitute, self.separator)
+                    proper_list[i] = self.field_text_list_element_dict_from_str(proper_list[i])
+
+            return proper_list
+        else:
+            return field_text_list
+    
+    def field_text_list_add(self, field_text_list, new_element, index='append'):
+        if field_text_list == None or field_text_list == '':
+            proper_list = []
+        elif isinstance(field_text_list, str):
+            proper_list = field_text_list.split(self.separator)
+        else:
+            return field_text_list
+
+        new_element = self.check_if_there_is_separator_and_replace(new_element)
+
+        if index == 'append':
+            proper_list.append(new_element)
+        elif isinstance(index, int):
+            proper_list.insert(index, new_element)
+
+        modified_field_text_list = self.field_text_list_from_list(proper_list)
+
+        return modified_field_text_list
+
+    def field_text_list_pop(self, field_text_list, index='first'):
+        if isinstance(field_text_list, str) and not field_text_list == '':
+            proper_list = field_text_list.split(self.separator)
+        else:
+            return field_text_list
+ 
+        if index == 'first':
+            proper_list.pop()
+        elif isinstance(index, int):
+            proper_list.pop(index)
+
+        modified_field_text_list = self.field_text_list_from_list(proper_list)
+
+        return modified_field_text_list
+
+    def field_text_list_replace(self, field_text_list, new_element, index):
+        if isinstance(field_text_list, str) and not field_text_list == '':
+            proper_list = field_text_list.split(self.separator)
+        else:
+            return field_text_list
+
+        if isinstance(index, int) and 0 <= index and index < len(proper_list):
+            new_element = self.check_if_there_is_separator_and_replace(new_element)
+
+            proper_list[index] = new_element
+
+        modified_field_text_list = self.field_text_list_from_list(proper_list)
+
+        return modified_field_text_list
 
 
+# Relativo às fichas customizáveis que podem possuir campos genéricos e dinâmicos:
 class Field(models.Model):
     # Page - Attributes:
     page_name = models.CharField(max_length=30, default='')
@@ -149,20 +199,14 @@ class Field(models.Model):
     position = models.IntegerField(unique=True, blank=True, null=True)    
 
     # Relationships:
-    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE, null=True)
-    object_id = models.PositiveIntegerField(null=True)
-    sheet = GenericForeignKey('content_type', 'object_id')
+    sheet = models.ForeignKey(Sheet, default=None, on_delete=models.CASCADE)
 
     def __str__(self):
         return str(getattr(self, 'page_name')) + ' - ' + str(getattr(self, 'part_name')) + ' - ' + str(getattr(self, 'field_name'))
 
 
-class Sheet_DnD35(Shareable):
+class SheetDnD35(Sheet):
     # ATTRIBUTES:
-    # General:
-    name = models.CharField(max_length=50, blank=True)
-    sheet_type = models.CharField(max_length=3, choices=(('CHA', 'Character'), ('CRB', 'Creature Base'), ('CRI', 'Creature Instance'),))  
-    # Specific:
     information_name = models.TextField(blank=True, null=True)
     information_classes = models.TextField(blank=True, null=True)
     information_level = models.IntegerField(blank=True, null=True, default=None)
@@ -254,64 +298,10 @@ class Sheet_DnD35(Shareable):
     annotations_background = models.TextField(blank=True, null=True, default=None)
     annotations_others = models.TextField(blank=True, null=True, default=None)
 
-    # If that sheet is a companion of other character/creature:
+    # Se essa ficha for um animal de estimação de outra ficha:
     companion_pet_master = models.ForeignKey('self', related_name='pet', null=True, blank=True, default=None, on_delete=models.SET_NULL)
+    # Se essa ficha for seguidora de outra ficha:
     companion_leader = models.ForeignKey('self', related_name='follower', null=True, blank=True, default=None, on_delete=models.SET_NULL)
-
-    # RELATIONSHIPS::
-    rule_system = models.ForeignKey(RuleSystem, blank=True, null=True, default=None, on_delete=models.SET_NULL)
-    # Character:
-    #game = models.ManyToManyField(Game)
-    # Creature:
-    chapter = models.ForeignKey(Chapter, null=True, blank=True, default=None, on_delete=models.CASCADE)
-    ancestral = models.ForeignKey('self', null=True, blank=True, default=None, related_name='creature', on_delete=models.SET_NULL)
-        
-    
-    separator = '|;|'
-    separator_substitute = '|;.;|'  # Serve para substituir o separator caso ele esteja no texto que será incluido
-
-    
-    def __str__(self):
-        return str(self.name)
-
-    # CHECKED VALUE AS:
-    # Métodos que checam se um determinado valor é numérico e, caso seja, retornam esse valor num formato específico.
-    # Esses métodos são necessários pois muitos dos campos do Banco de Dados podem ou não estarem preenchidos e, mesmo
-    # que não estejam, há outros campos que requisitam os valores deles para determinados cálculos
-    def checked_value_as_integer(self, value):
-        if value == None or value == '' or (isinstance(value, str) and not value.isdigit()):
-            return 0
-        else:
-            return int(value)
-
-    def checked_value_as_float(self, value):
-        try:
-            value_as_float = float(value)
-
-            if not math.isnan(value_as_float):
-                return value_as_float
-
-        except ValueError:
-            pass
-            
-        finally:
-            return 0
-
-    def checked_value_as_string(self, value):
-        if value == None or value == '':
-            return ''
-        else:
-            return str(value)
-    
-    def check_if_there_is_separator_and_replace(self, value):
-        if isinstance(value, str):
-            value.replace(self.separator, self.separator_substitute)
-        elif isinstance(value, dict):
-            for key in value.keys():
-                if isinstance(value[key], str):
-                    value[key] = value[key].replace(self.separator, self.separator_substitute)
-        
-        return value
 
     # FORMULA:
     # São métodos relativos à fórmulas específicas que são usadas em diversos outros métodos:
@@ -342,6 +332,7 @@ class Sheet_DnD35(Shareable):
         ability_modifier = self.get_ability_modifier_by_name(key_ability_name)
 
         return ability_modifier + self.checked_value_as_integer(points_ranks) + self.checked_value_as_integer(points_others_modifiers)
+    
     # GET METHODS:
     # Como vários valores inteiros podem ser nulos, o get aqui também serve para checar se o campo possui algum número
     # para retornar 0 caso não tenha, isso é necessário pois muitos dos campos servem de cálculo para outros então
@@ -1013,99 +1004,6 @@ class Sheet_DnD35(Shareable):
     def set_annotations_others(self, annotations_others):
         self.annotations_others = annotations_others
         self.save()
-    
-    # FIELD TEXT LIST - GENERIC:
-    # São métodos que lidam com um tipo especial de campo que possuí em seu interior uma estrutura de dados convertida
-    # para String, no caso a estrutura aqui é uma lista de dicionários (aqui ficam os métodos mais genéricos que lidam
-    # apenas com uma forma abstrata dessa lista, ou seja, não levam em conta a forma específica de cada dicionário)
-    def field_text_list_element_dict_from_str(self, element):
-        # Transforma uma string no formato de um dicionário em um dict do python:
-        return ast.literal_eval(element)
-    
-    def field_text_list_from_list(self, proper_list: list):
-        first_element = True
-        
-        for item in proper_list:
-            if first_element:
-                custom_text_separate = str(item)
-                first_element = False
-            else:
-                custom_text_separate += self.separator + str(item)
-
-        return custom_text_separate
-
-    def field_text_list_to_list(self, field_text_list: str):
-        proper_list = []
-
-        for element_as_string in field_text_list.split(self.separator):
-            element_as_dict = self.field_text_list_element_dict_from_str(element_as_string)
-
-            proper_list.append(element_as_dict)
-
-        return proper_list
-
-    def field_text_list_get(self, field_text_list):
-        if isinstance(field_text_list, str) and not field_text_list == '':
-            proper_list = field_text_list.split(self.separator)
-
-            for i in range(len(proper_list)):
-                if isinstance(proper_list[i], str):
-                    proper_list[i] = proper_list[i].replace(self.separator_substitute, self.separator)
-
-            proper_list[i] = self.field_text_list_element_dict_from_str(proper_list[i])
-
-            return proper_list
-        else:
-            return field_text_list
-    
-    def field_text_list_add(self, field_text_list, new_element, index='append'):
-        if field_text_list == None or field_text_list == '':
-            proper_list = []
-        elif isinstance(field_text_list, str):
-            proper_list = field_text_list.split(self.separator)
-        else:
-            return field_text_list
-
-        new_element = self.check_if_there_is_separator_and_replace(new_element)
-
-        if index == 'append':
-            proper_list.append(new_element)
-        elif isinstance(index, int):
-            proper_list.insert(index, new_element)
-
-        modified_field_text_list = self.field_text_list_from_list(proper_list)
-
-        return modified_field_text_list
-
-    def field_text_list_pop(self, field_text_list, index='first'):
-        if isinstance(field_text_list, str) and not field_text_list == '':
-            proper_list = field_text_list.split(self.separator)
-        else:
-            return field_text_list
- 
-        if index == 'first':
-            proper_list.pop()
-        elif isinstance(index, int):
-            proper_list.pop(index)
-
-        modified_field_text_list = self.field_text_list_from_list(proper_list)
-
-        return modified_field_text_list
-
-    def field_text_list_replace(self, field_text_list, new_element, index):
-        if isinstance(field_text_list, str) and not field_text_list == '':
-            proper_list = field_text_list.split(self.separator)
-        else:
-            return field_text_list
-
-        if isinstance(index, int) and 0 <= index and index < len(proper_list):
-            new_element = self.check_if_there_is_separator_and_replace(new_element)
-
-            proper_list[index] = new_element
-
-        modified_field_text_list = self.field_text_list_from_list(proper_list)
-
-        return modified_field_text_list    
 
     # FIELD TEXT LIST - SPECIFIC:
     # Aqui ficam os métodos específicos de cada campo que usam os métodos mais genéricos acima, é necessário essa distinção
