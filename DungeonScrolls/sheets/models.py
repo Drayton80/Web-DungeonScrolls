@@ -52,6 +52,11 @@ class Sheet(Shareable):
     def __str__(self):
         return str(self.name)
 
+    # PSEUDO CONSTRUCTOR:
+    @classmethod
+    def create(cls, name, sheet_type, chapter, rule_system):
+        return cls(name=name, sheet_type=sheet_type, chapter=chapter, rule_system=rule_system)
+
     # CHECKED VALUE AS:
     # Métodos que checam se um determinado valor é numérico e, caso seja, retornam esse valor num formato específico.
     # Esses métodos são necessários pois muitos dos campos do Banco de Dados podem ou não estarem preenchidos e, mesmo
@@ -302,7 +307,7 @@ class SheetDnD35(Sheet):
     companion_pet_master = models.ForeignKey('self', related_name='pet', null=True, blank=True, default=None, on_delete=models.SET_NULL)
     # Se essa ficha for seguidora de outra ficha:
     companion_leader = models.ForeignKey('self', related_name='follower', null=True, blank=True, default=None, on_delete=models.SET_NULL)
-
+    
     # FORMULA:
     # São métodos relativos à fórmulas específicas que são usadas em diversos outros métodos:
     def formula_ability_modifier(self, ability_total):
