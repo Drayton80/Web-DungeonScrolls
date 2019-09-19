@@ -18,7 +18,7 @@ class App extends Component {
 
 	componentDidMount() {
 		axios
-			.get(`http://localhost:8000/rest/api/getUser/${djangoData.other}/`)
+			.get(`http://localhost:8000/rest/api/get-user/${djangoData.other}/`)
 			.then(res => {
 				const user = res.data;
 				this.setState({ user: user });
@@ -30,7 +30,13 @@ class App extends Component {
 			<Router>
 				<div className="App">
 					<div>
-						<SideMenu user={this.state.user} />>
+						{(() => {
+							if (this.state.user == undefined) {
+								return "Carregando..., por favor aguarde";
+							} else {
+								return <SideMenu user={this.state.user} />;
+							}
+						})()}
 					</div>
 				</div>
 			</Router>

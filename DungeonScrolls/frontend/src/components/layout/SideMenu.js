@@ -1,49 +1,128 @@
 import React, { Component } from "react";
 import $ from "jquery";
+import axios from "axios";
 
 import "./SideMenu.css";
 import Sheet from "./Sheet";
 
+function JQueryFuction() {
+  jQuery(function ($) {
+    $(".sidebar-dropdown > a").click(function () {
+      $(".sidebar-submenu").slideUp(200);      
+      if (
+        $(this)
+          .parent()
+          .hasClass("active")
+      ) {
+        $(".sidebar-dropdown").removeClass("active");
+        $(this)
+          .parent()
+          .removeClass("active");
+      } else {
+        $(".sidebar-dropdown").removeClass("active");
+        $(this)
+          .next(".sidebar-submenu")
+          .slideDown(200);
+        $(this)
+          .parent()
+          .addClass("active");
+      }
+    });
+
+    $("#close-sidebar").click(function () {
+      $(".page-wrapper").removeClass("toggled");
+    });
+    $("#show-sidebar").click(function () {
+      $(".page-wrapper").addClass("toggled");
+    });
+  });
+}
+
+function ActiveDesctiveDropdown(dropdown){
+  console.log("AAAAAAAAAAA")
+  if (
+    $(dropdown)
+      .parent()
+      .hasClass("active")
+  ) {
+    $(".sidebar-dropdown").removeClass("active");
+    $(dropdown)
+      .parent()
+      .removeClass("active");
+  } else {
+    $(".sidebar-dropdown").removeClass("active");
+    $(dropdown)
+      .next(".sidebar-submenu")
+      .slideDown(200);
+    $(dropdown)
+      .parent()
+      .addClass("active");
+  }
+}
+
 export default class SideMenu extends Component {
-	state = {
-		tipoUser: []
-	};
+  
+  state = {
+    bestiaryList: [],
+    chapterList: [],
+    sheetListName: []
+  }
 
 	componentDidMount() {
-		jQuery(function($) {
-			$(".sidebar-dropdown > a").click(function() {
-				$(".sidebar-submenu").slideUp(200);
-				if (
-					$(this)
-						.parent()
-						.hasClass("active")
-				) {
-					$(".sidebar-dropdown").removeClass("active");
-					$(this)
-						.parent()
-						.removeClass("active");
-				} else {
-					$(".sidebar-dropdown").removeClass("active");
-					$(this)
-						.next(".sidebar-submenu")
-						.slideDown(200);
-					$(this)
-						.parent()
-						.addClass("active");
-				}
-			});
-
-			$("#close-sidebar").click(function() {
-				$(".page-wrapper").removeClass("toggled");
-			});
-			$("#show-sidebar").click(function() {
-				$(".page-wrapper").addClass("toggled");
-			});
-		});
+    JQueryFuction();    
     }
+
+  UNSAFE_componentWillReceiveProps(props) {
+    axios
+      .get(`http://localhost:8000/rest/api/get-bestiary-list/${props.user.id}/`)
+      .then(res => {
+        const bestiaryList = res.data;
+        //Linha usada só pra test
+        bestiaryList[1].name = "Teste"        
+        //Linha usada só pra test
+        this.setState({ bestiaryList: bestiaryList });
+
+        for (var i = 0; i < bestiaryList.length; i++) {          
+          axios
+            .get(`http://localhost:8000/rest/api/get-chapter-list/${bestiaryList[i].id}/`)
+            .then(response => {
+              const chapterListN = response.data;              
+              this.setState({ chapterList: this.state.chapterList.concat(chapterListN) });
+
+              for (var j = 0; j < chapterListN.length; j++) {
+                axios
+                  .get(`http://localhost:8000/rest/api/get-sheet-list/${chapterListN[j].id}/`)
+                  .then(response1 => {
+                    const sheetListNameN = response1.data;
+                    this.setState({ sheetListName: this.state.sheetListName.concat(sheetListNameN) });
+                  });
+              }
+            });          
+        }        
+      });
+
     
+
+       
+  }
+
  
-	render() {
+	render() {    
+    const listMenu = this.state.bestiaryList.map((bestiary) => (
+      <li key={bestiary.id} className="sidebar-dropdown">
+        <a href="#">
+          <span>{bestiary.name}</span>
+        </a>
+        <div className="sidebar-submenu">
+          <ul>
+            <li>
+              <a href="#">Dashboard 2</a>
+            </li>
+          </ul>
+        </div>
+      </li>
+    ));    
+
 		return (
 			<div>
         <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css" />
@@ -88,25 +167,13 @@ export default class SideMenu extends Component {
                   </span>
                 </div>
               </div>
-              {/* sidebar-header  */}
-              <div className="sidebar-search">
-                <div>
-                  <div className="input-group">
-                    <input type="text" className="form-control search-menu" placeholder="Search..." />
-                    <div className="input-group-append">
-                      <span className="input-group-text">
-                        <i className="fa fa-search" aria-hidden="true" />
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              {/* sidebar-search  */}
+              {/* sidebar-header  */}          
               <div className="sidebar-menu">
                 <ul>
                   <li className="header-menu">
                     <span>General</span>
-                  </li>
+                  </li>                  
+                  {listMenu}                              
                   <li className="sidebar-dropdown">
                     <a href="#">
                       <i className="fa fa-tachometer-alt" />
@@ -115,9 +182,8 @@ export default class SideMenu extends Component {
                     </a>
                     <div className="sidebar-submenu">
                       <ul>
-                        <li>
-                          <a href="#">Dashboard 1
-                            <span className="badge badge-pill badge-success">Pro</span>
+                        <li>                          
+                          <a href="#">Dashboard 1                            
                           </a>
                         </li>
                         <li>
