@@ -4,22 +4,26 @@ import axios from "axios";
 
 import "./SideMenu.css";
 import Sheet from "./Sheet";
+import { HashRouter as Router, Route, Switch, Redirect, Link } from 'react-router-dom' 
+
+
 
 function JQueryFuction() {
   jQuery(function ($) {
-    $(".sidebar-dropdown > a").click(function () {
-      $(".sidebar-submenu").slideUp(200);      
+    $(".sidebar-dropdown > a").off('click');
+    $(".sidebar-dropdown > a").click(function () {         
       if (
         $(this)
           .parent()
           .hasClass("active")
-      ) {
-        $(".sidebar-dropdown").removeClass("active");
+      ) {       
+        $(this)
+          .next(".sidebar-submenu")
+          .slideUp(200);
         $(this)
           .parent()
           .removeClass("active");
-      } else {
-        $(".sidebar-dropdown").removeClass("active");
+      } else {        
         $(this)
           .next(".sidebar-submenu")
           .slideDown(200);
@@ -29,6 +33,8 @@ function JQueryFuction() {
       }
     });
 
+    $("#close-sidebar").off('click');
+    $("#show-sidebar").off('click');
     $("#close-sidebar").click(function () {
       $(".page-wrapper").removeClass("toggled");
     });
@@ -38,41 +44,32 @@ function JQueryFuction() {
   });
 }
 
-function ActiveDesctiveDropdown(dropdown){
-  console.log("AAAAAAAAAAA")
-  if (
-    $(dropdown)
-      .parent()
-      .hasClass("active")
-  ) {
-    $(".sidebar-dropdown").removeClass("active");
-    $(dropdown)
-      .parent()
-      .removeClass("active");
-  } else {
-    $(".sidebar-dropdown").removeClass("active");
-    $(dropdown)
-      .next(".sidebar-submenu")
-      .slideDown(200);
-    $(dropdown)
-      .parent()
-      .addClass("active");
-  }
-}
+const CallSheetPage = ({ match, location }) => {
+  const {
+    params: { sheet }
+  } = match;
 
-export default class SideMenu extends Component {
+  return (
+    <Sheet sheet={sheet} />
+  );
+};
+
+export default class SideMenu extends Component {  
   
   state = {
     bestiaryList: [],
     chapterList: [],
-    sheetListName: []
+    sheetListName: [],
+    sheetClicked: []
   }
 
 	componentDidMount() {
-    JQueryFuction();    
+       
     }
 
-  UNSAFE_componentWillReceiveProps(props) {
+    
+
+  UNSAFE_componentWillReceiveProps(props) {   
     axios
       .get(`http://localhost:8000/rest/api/get-bestiary-list/${props.user.id}/`)
       .then(res => {
@@ -95,33 +92,66 @@ export default class SideMenu extends Component {
                   .then(response1 => {
                     const sheetListNameN = response1.data;
                     this.setState({ sheetListName: this.state.sheetListName.concat(sheetListNameN) });
-                  });
+                  })
+                   
               }
+              
             });          
         }        
-      });
+      })
 
-    
-
-       
   }
 
+  
  
 	render() {    
-    const listMenu = this.state.bestiaryList.map((bestiary) => (
+    JQueryFuction();
+    const routing = (
+      <Router>
+        <div>
+          <Switch>
+            <Route exact path="/sheet/:sheetID" component={Sheet}>            
+          </Route> 
+          </Switch>         
+        </div>
+      </Router>
+    )
+    const bestiaryListMenu = this.state.bestiaryList.map((bestiary) => (
       <li key={bestiary.id} className="sidebar-dropdown">
         <a href="#">
           <span>{bestiary.name}</span>
-        </a>
-        <div className="sidebar-submenu">
-          <ul>
-            <li>
-              <a href="#">Dashboard 2</a>
-            </li>
-          </ul>
-        </div>
+        </a>     
+        <div className="sidebar-submenu">  
+            {this.state.chapterList.filter(function(obj){
+              return obj.bestiary == bestiary.id
+            }).map((chapter) => (              
+              <ul key={chapter.id}>
+              <li key={chapter.id} className="sidebar-dropdown">
+                <a href="#">{chapter.name}</a>  
+                    <div className="sidebar-submenu">                
+                    {this.state.sheetListName.filter(function (obj2) {
+                      return obj2.chapter == chapter.id
+                    }).map((sheet) => (                    
+                      <ul key={sheet.id}> 
+                        <li key={sheet.id} >
+                          <Router>
+                          <Link to={`/sheet/${sheet.id}`} href="#">
+                            <span >{sheet.name}</span>                            
+                          </Link>
+                          </Router>
+                      </li>
+                      </ul>                    
+                    ))}
+                    </div>
+              </li>
+              </ul>
+                                         
+            ))}  
+        </div>        
       </li>
-    ));    
+    ));
+    
+    
 
 		return (
 			<div>
@@ -173,7 +203,7 @@ export default class SideMenu extends Component {
                   <li className="header-menu">
                     <span>General</span>
                   </li>                  
-                  {listMenu}                              
+                  {bestiaryListMenu}                              
                   <li className="sidebar-dropdown">
                     <a href="#">
                       <i className="fa fa-tachometer-alt" />
@@ -327,7 +357,7 @@ export default class SideMenu extends Component {
           {/* sidebar-wrapper  */}
           <main className="page-content">
             <div className="container-fluid">
-                        <Sheet/>
+              {routing}
               <hr />
               <div className="row">
                 <div className="form-group col-md-12">

@@ -1,7 +1,46 @@
 import React, { Component } from "react";
 import './Sheet.css';
+import axios from "axios";
 
 export default class Sheet extends Component {
+
+   state = {   
+    sheetClicked: []
+  }
+
+  componentDidMount() {
+    const { sheetID } =  this.props.match.params    
+    axios
+      .get(`http://localhost:8000/rest/api/get-sheet-dnd35/${sheetID}/`)
+      .then(res => {
+        const sheetClicked = res.data;       
+        this.setState({ sheetClicked: sheetClicked });
+        console.log(sheetClicked)      
+      })
+  }
+
+  UNSAFE_componentWillReceiveProps(props) {
+    const { sheetID } = props.match.params
+    axios
+      .get(`http://localhost:8000/rest/api/get-sheet-dnd35/${sheetID}/`)
+      .then(res => {
+        const sheetClicked = res.data;
+        this.setState({ sheetClicked: sheetClicked });
+        console.log(sheetClicked)
+      })
+  }
+
+   handleOnChange = (e) => {
+     const { name, value} = e.target;
+     this.setState({
+       sheetClicked: {
+        [name]: value
+       }
+     })
+     
+     console.log(name, value, this.state.sheetClicked.name);
+   }
+
 	render() {
 		return (
 	<div>
@@ -12,7 +51,7 @@ export default class Sheet extends Component {
         {/* Version 2.7.8 1/7/19 (Fix roll buttons)*/}
         <input type="hidden" name="attr_currentsheetversion" title="currentsheetversion" defaultValue="7.8" />
         <input type="radio" className="sheet-switch-pc-show sheet-switch" title="npc-show" name="attr_npc-show" defaultValue={1} defaultChecked /><span style={{textAlign: 'left'}} data-i18n="pc">PC </span><span> &nbsp; &nbsp; &nbsp; &nbsp;</span>
-        <input type="radio" className="sheet-switch-npc-show sheet-switch" title="npc-show" name="attr_npc-show" defaultValue={2} /><span style={{textAlign: 'left'}} data-i18n="npc">NPC</span>
+        <input type="radio" className="sheet-switch-npc-show sheet-switch" title="npc-show" name="attr_npc-show" defaultValue={2} /><span style={{textAlign: 'left'}} data-i18n="npc">{this.state.sheetClicked.id}</span>
         <div className="sheet-switch-pc">
           {/* start PC section */}
           {/* Header / Character Description */}
@@ -26,20 +65,28 @@ export default class Sheet extends Component {
                     <td colSpan={6}>
                       <table>
                         <tbody><tr>
-                            <td><div style={{float: 'left'}}><input type="text" name="attr_character_name" title="character_name" style={{width: '125px', textAlign: 'right'}} /><input type="text" name="attr_character-name2" title="character-name2" style={{width: '175px'}} /> &nbsp; <br /><span data-i18n="character-name">Character Name</span></div></td>
-                            <td><div style={{float: 'left'}}><input type="text" name="attr_playername" title="playername" style={{width: '160px'}} /><br /><span data-i18n="player-name">Player Name</span></div></td>
+                            <td><div style={{float: 'left'}}>
+                              <input type="text" name="information_name" title="character_name" 
+                              style={{width: '125px', textAlign: 'right'}} defaultValue={this.state.sheetClicked.information_name} 
+                              onChange={this.handleOnChange}/>                              
+                              <br /><span data-i18n="character-name">Character Name</span></div></td>                            
                           </tr>
                           <tr>
-                            <td><div style={{float: 'left'}}><input type="text" name="attr_expcurrent" title="expcurrent" style={{width: '145px', textAlign: 'right'}} />/<input type="text" name="attr_expgoal" title="expgoal" style={{width: '150px'}} /><br /><span data-i18n="experience-points">Experience Points</span></div></td>
-                            <td><div style={{float: 'left'}}><input type="text" name="attr_homeland" title="homeland" style={{width: '160px'}} /><br /><span data-i18n="homeland">Homeland</span></div> </td>
+                            <td><div style={{float: 'left'}}>
+                              <input type="text" name="information_experience" title="expcurrent"
+                               style={{width: '145px', textAlign: 'right'}} defaultValue={this.state.sheetClicked.information_experience} 
+                              />/<input type="text" name="attr_expgoal" title="expgoal" style={{width: '150px'}} value={this.state.sheetClicked.information_level * 1000} />
+                              <br /><span data-i18n="experience-points">Experience Points</span></div></td>
+                            <td><div style={{float: 'left'}}><input type="text" name="attr_homeland" title="homeland" style={{width: '160px'}}   value={this.state.sheetClicked.name}/><br /><span data-i18n="homeland">Homeland</span></div> </td>
                           </tr>
                         </tbody></table>
                     </td>
                     <td colSpan={2}><div style={{float: 'left'}}><img src="http://i.imgur.com/A746uyc.png?1" style={{float: 'left', width: '200px'}} /> &nbsp; 3.5</div></td>
                   </tr>
                   <tr>
-                    <td><div style={{float: 'left'}}><input type="text" name="attr_race" title="race" style={{width: '130px'}} /> <br /><span data-i18n="race">Race</span></div></td>
-                    <td colSpan={2}><div style={{float: 'left'}}><input type="text" name="attr_racetype" title="racetype" style={{width: '130px'}} /> <br /><span data-i18n="type">Type</span></div></td>
+                    <td><div style={{float: 'left'}}>
+                      <input type="text" name="information_race" title="race" style={{width: '130px'}} defaultValue={this.state.sheetClicked.information_race}/> 
+                      <br /><span data-i18n="race">Race</span></div></td>                    
                     <td><div style={{float: 'left'}}><select style={{width: '90px'}} name="attr_size" title="size">
                           <option value={-8} data-i18n="colossal">Colossal</option>
                           <option value={-4} data-i18n="gargantuan">Gargantuan</option>
@@ -51,19 +98,46 @@ export default class Sheet extends Component {
                           <option value={4} data-i18n="diminutive">Diminutive</option>
                           <option value={8} data-i18n="fine">Fine</option>
                         </select><br /><span data-i18n="size">Size</span></div></td>
-                    <td><div style={{float: 'left'}}><input type="text" name="attr_gender" title="gender" style={{width: '70px'}} /> <br /><span data-i18n="gender">Gender</span></div></td>
-                    <td><div style={{float: 'left'}}><input type="text" name="attr_alignment" title="alignment" style={{width: '70px'}} /> <br /><span data-i18n="alignment">Alignment</span></div></td>
-                    <td colSpan={2}><div style={{float: 'left'}}><input type="text" name="attr_deity" title="deity" style={{width: '220px'}} /> <br /><span data-i18n="deity">Deity</span></div></td>
+                    <td><div style={{float: 'left'}}>
+                      <input type="text" name="information_gender" title="gender" style={{width: '70px'}} 
+                      defaultValue={this.state.sheetClicked.information_gender}/>
+                       <br /><span data-i18n="gender">Gender</span></div></td>
+                    <td><div style={{float: 'left'}}>
+                      <input type="text" name="information_alignment" title="alignment" style={{width: '70px'}} 
+                      defaultValue={this.state.sheetClicked.information_alignment}/>
+                      <br /><span data-i18n="alignment">Alignment</span></div></td>
+                    <td colSpan={2}><div style={{float: 'left'}}>
+                      <input type="text" name="information_deity" title="deity" style={{width: '220px'}} 
+                      defaultValue={this.state.sheetClicked.information_deity}/>
+                       <br /><span data-i18n="deity">Deity</span></div></td>
                   </tr>
                   <tr>
-                    <td><div style={{float: 'left'}}><input type="text" name="attr_class" title="class" style={{width: '130px'}} /> <br /><span data-i18n="class">Class</span></div></td>
-                    <td><div style={{float: 'left'}}><input type="text" name="attr_level" title="level" style={{width: '85px'}} /> <br /><span data-i18n="level">Level</span></div></td>
-                    <td><div style={{float: 'left'}}><input type="text" name="attr_hitdie" title="hitdie" style={{width: '43px'}} /> <br /><span data-i18n="hit-dice-i">HD</span></div></td>
-                    <td><div style={{float: 'left'}}><input type="text" name="attr_age" title="age" style={{width: '90px'}} /> <br /><span data-i18n="age">Age</span></div></td>
-                    <td><div style={{float: 'left'}}><input type="text" name="attr_height" title="height" style={{width: '70px'}} /> <br /><span data-i18n="height">Height</span></div> </td>
-                    <td><div style={{float: 'left'}}><input type="text" name="attr_weight" title="weight" style={{width: '70px'}} /> <br /><span data-i18n="weight">Weight</span></div></td>
-                    <td><div style={{float: 'left'}}><input type="text" name="attr_eyes" title="eyes" style={{width: '95px'}} /> <br /><span data-i18n="eyes">Eyes</span></div></td>
-                    <td><div style={{float: 'left'}}><input type="text" name="attr_hair" title="hair" style={{width: '120px'}} /> <br /><span data-i18n="hair">Hair</span></div></td>
+                    <td><div style={{float: 'left'}}>
+                      <input type="text" name="attr_class" title="class" style={{width: '130px'}} />
+                       <br /><span data-i18n="class">Class</span></div></td>
+                    <td><div style={{float: 'left'}}>
+                      <input type="text" name="information_level" title="level" style={{width: '85px'}} 
+                      defaultValue={this.state.sheetClicked.information_level}/>
+                       <br /><span data-i18n="level">Level</span></div></td>
+                    <td><div style={{float: 'left'}}>
+                      <input type="text" name="attr_hitdie" title="hitdie" style={{width: '43px'}} />
+                       <br /><span data-i18n="hit-dice-i">HD</span></div></td>
+                    <td><div style={{float: 'left'}}>
+                      <input type="text" name="information_age" title="age" style={{width: '90px'}} 
+                      defaultValue={this.state.sheetClicked.information_age}/>
+                       <br /><span data-i18n="age">Age</span></div></td>
+                    <td><div style={{float: 'left'}}>
+                      <input type="text" name="attr_height" title="height" style={{width: '70px'}} />
+                       <br /><span data-i18n="height">Height</span></div> </td>
+                    <td><div style={{float: 'left'}}>
+                      <input type="text" name="attr_weight" title="weight" style={{width: '70px'}} />
+                       <br /><span data-i18n="weight">Weight</span></div></td>
+                    <td><div style={{float: 'left'}}>
+                      <input type="text" name="attr_eyes" title="eyes" style={{width: '95px'}} />
+                       <br /><span data-i18n="eyes">Eyes</span></div></td>
+                    <td><div style={{float: 'left'}}>
+                      <input type="text" name="attr_hair" title="hair" style={{width: '120px'}} />
+                       <br /><span data-i18n="hair">Hair</span></div></td>
                   </tr>
                 </tbody>
               </table>

@@ -33,7 +33,7 @@ class SheetListSerializer(ModelSerializer):
     
     class Meta:
         model = Sheet
-        fields = ['id', 'name', 'sheet_type', 'rule_system', 'ancestral']
+        fields = ['id', 'name', 'sheet_type', 'rule_system', 'ancestral', 'chapter']
 
     def get_rule_system(self, obj):
         if obj.rule_system:
