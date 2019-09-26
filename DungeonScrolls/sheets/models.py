@@ -212,6 +212,13 @@ class Field(models.Model):
 
 class SheetDnD35(Sheet):
     # ATTRIBUTES:
+    bigStringInventoryOthers = models.TextField(blank=True, null=True, default=None)
+    bigStringInventoryArmor = models.TextField(blank=True, null=True, default=None)
+    bigStringInventoryShield = models.TextField(blank=True, null=True, default=None)
+    bigStringAttacks = models.TextField(blank=True, null=True, default=None)
+    stringClass = models.TextField(blank=True, null=True, default=None)
+    bigStringSkills = models.TextField(blank=True, null=True, default=None)
+
     information_name = models.TextField(blank=True, null=True)
     information_classes = models.TextField(blank=True, null=True)
     information_level = models.IntegerField(blank=True, null=True, default=None)

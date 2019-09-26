@@ -106,7 +106,7 @@ export default class SideMenu extends Component {
  
 	render() {    
     JQueryFuction();
-    const routing = (
+    const routingSheet = (
       <Router>
         <div>
           <Switch>
@@ -356,8 +356,9 @@ export default class SideMenu extends Component {
           </nav>
           {/* sidebar-wrapper  */}
           <main className="page-content">
+             {routingSheet}
             <div className="container-fluid">
-              {routing}
+             
               <hr />
               <div className="row">
                 <div className="form-group col-md-12">

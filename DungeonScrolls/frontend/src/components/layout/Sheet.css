@@ -532,12 +532,12 @@ div.sheet-tab-content
     display: inline-block;
     text-align: center;
     margin: -2px;
-    padding: 2px;
+    padding: 1px;
     width: 124px;
     height: 24px;
     background-color: gray;
-    border-top-left-radius: 1em 3em;
-    border-top-right-radius: 1em 3em;
+    border-top-left-radius: 2em 3em;
+    border-top-right-radius: 2em 3em;
     border: solid thin gray;
     border-bottom: none;
 }
