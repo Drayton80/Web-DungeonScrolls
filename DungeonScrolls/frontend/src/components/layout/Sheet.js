@@ -1,11 +1,45 @@
 import React, { Component } from "react";
 import './Sheet.css';
 import axios from "axios";
+import Modal from 'react-responsive-modal';
 
 export default class Sheet extends Component {
 
-   state = {   
-    sheetClicked: []
+   state = {
+     usingGetRouters: true,
+    sheetClicked: {},
+    openSharedModal: false,
+    openDeleteModal: false,
+    inputNameValue: ""
+  }
+
+  sharedSheet(){
+    this.closeModal()
+    console.log(this.state.sheetClicked.name, this.state.inputNameValue)
+  }
+
+  deleteSheet(){
+    this.closeModal()
+    console.log(this.state.sheetClicked.name)
+  }
+
+   sharedeModal(){
+    this.setState({
+          openSharedModal: true,                  
+       })
+  }
+
+   closeModal(){
+      this.setState({
+          openSharedModal: false,
+          openDeleteModal: false,       
+       })
+   }
+
+  deleteModal(){
+      this.setState({
+          openDeleteModal: true             
+       })
   }
 
   componentDidMount() {
@@ -20,7 +54,9 @@ export default class Sheet extends Component {
   }
 
   UNSAFE_componentWillReceiveProps(props) {
-    const { sheetID } = props.match.params
+     if(this.state.usingGetRouters) { 
+       this.setState({ usingGetRouters: false }) 
+      const { sheetID } = props.match.params
     axios
       .get(`http://localhost:8000/rest/api/get-sheet-dnd35/${sheetID}/`)
       .then(res => {
@@ -28,34 +64,61 @@ export default class Sheet extends Component {
         this.setState({ sheetClicked: sheetClicked });
         console.log(sheetClicked)
       })
-  }
+    }
+  }  
+ 
 
-   handleOnChange = (e) => {
+   handleOnChange = (e) => {     
      const { name, value} = e.target;
-     this.setState({
+     if(name == "inputNameShared"){
+       console.log("entrou")
+        this.setState({ inputNameValue: value })
+     }
+     else{
+     this.setState(prevState =>({
        sheetClicked: {
+         ...prevState.sheetClicked, 
         [name]: value
        }
-     })
+      
+     }))
+    }
      
      console.log(name, value, this.state.sheetClicked.name);
    }
 
 	render() {
+    const modalDelete = (
+         
+        <Modal open={this.state.openDeleteModal} center onClose={(() => this.closeModal())} >
+          <h2>Deletando Ficha</h2>
+          <p>Tem certeza que quer deletar a Ficha {this.state.sheetClicked.name}?                                    
+          </p>
+          <button type="button" class="btn btn-primary ml-5" onClick={(() => this.deleteSheet())}>Deletar</button>
+          <button type="button" class="btn btn-danger ml-5" onClick={(() => this.closeModal())}>Cancelar</button>           
+        </Modal>
+    );
+
+
+    const modalShared = (         
+        <Modal open={this.state.openSharedModal} center onClose={(() => this.closeModal())} >
+          <h2>Compartilhar ficha com outro Usuario</h2>
+          <p>Digite o nome do Usuario:</p>
+           <input type="text" name="inputNameShared" style={{height: '40px' ,width: '150px'}} onChange={this.handleOnChange}/>
+           <button type="button" class="btn btn-secondary ml-4 mb-1" style={{width: '120px'}} onClick={(() => this.sharedSheet())}>Compartilhar</button>
+        </Modal>
+    );  
 		return (
 	<div>
         {/* D&D 3.5 Character Sheet */}
-        {/* by Diana P. */}
-        {/* based on Pathfinder sheets from Barry R., Sam, Brian, and Justin N. */}
-        {/* with lots of help from Toby*/}
-        {/* Version 2.7.8 1/7/19 (Fix roll buttons)*/}        
+        {/* by Armando S. S. Neto */}        
         <div className="sheet-switch-pc">
           {/* start PC section */}
           {/* Header / Character Description */}
           <div class='container'>
             <input type="checkbox" className="sheet-pc-charrpinfo-show sheet-arrow" name="attr_charrpinfo-show" defaultValue={1} defaultChecked /><span style={{textAlign: 'left'}} data-i18n="header">Header</span>
           <div className="sheet-pc-charrpinfo">
-          <div class='row'>
+          <div class='row'>           
             <div style={{float: 'left'}}>
               <table>
                 <tbody>                  
@@ -80,6 +143,7 @@ export default class Sheet extends Component {
                     </td>
                     <td colSpan={2}><div style={{float: 'left'}}><img src="http://i.imgur.com/A746uyc.png?1" style={{float: 'left', width: '200px'}} /> &nbsp; 3.5</div></td>
                   </tr>
+                
                   <tr>
                     <td><div style={{float: 'left'}}>
                       <input type="text" name="information_race" title="race" style={{width: '130px'}} 
@@ -124,13 +188,27 @@ export default class Sheet extends Component {
           <br />
           </div>
           </div>
-          <input type="radio" name="attr_tab" className="sheet-tab sheet-tab1" defaultValue={1} title="Stats" defaultChecked="checked" />
-          <span className="sheet-tab sheet-tab1" data-i18n="stats">Stats</span>
-          <input type="radio" name="attr_tab" className="sheet-tab sheet-tab4" defaultValue={4} title="Equipment" />
-          <span className="sheet-tab sheet-tab4" data-i18n="equipment">Ataques e Equipamentos</span>
-          <input type="radio" name="attr_tab" className="sheet-tab sheet-tab2" defaultValue={2} title="Weapons" />
-          <span className="sheet-tab sheet-tab2" data-i18n="weapons">Skills e Spells</span>         
-          <br />&nbsp;
+          <button type="button" disabled="true" style={{background:'transparent', border:'none', color: 'transparent', width: '30px', cursor:'none'}} ></button>
+          <input type="radio" name="attr_tab" className="sheet-tab sheet-tab1" defaultValue={1} defaultChecked="checked" />
+          <span className="sheet-tab sheet-tab1" data-i18n="stats" style={{ width:'80px'}} >Stats</span>
+          <input type="radio" name="attr_tab" className="sheet-tab sheet-tab4" defaultValue={4} />
+          <span className="sheet-tab sheet-tab4" data-i18n="equipment" style={{ width:'180px'}} >Ataques e Equipamentos</span>
+          <input type="radio" name="attr_tab" className="sheet-tab sheet-tab2" defaultValue={2} />
+          <span className="sheet-tab sheet-tab2" data-i18n="weapons" style={{ width:'160px'}} >Skills e Spells</span>
+          
+          <button type="button" disabled="true" style={{background:'transparent', border:'none', color: 'transparent', width: '220px', cursor:'none'}} ></button>  
+          <button type="button" className="btn btn-outline-primary" style={{ float: 'rigth'}}
+          onClick={(() => this.sharedeModal())}>Salvar Alterações</button>
+          <button type="button" disabled="true" style={{background:'transparent', border:'none', color: 'transparent', width: '20px', cursor:'none'}} ></button>           
+          <button type="button" class="btn btn-outline-secondary"
+          onClick={(() => this.sharedeModal())}> Compartilhar Ficha</button>
+          <button type="button" disabled="true" style={{background:'transparent', border:'none', color: 'transparent', width: '20px', cursor:'none'}} ></button>
+          <button type="button" className="btn btn-outline-danger"
+          onClick={(() => this.deleteModal())}>Deletar ficha</button>  
+           {modalShared}
+            {modalDelete}
+          
+          <br />&nbsp;          
           <div className="sheet-tab-content sheet-tab1 sheet-tab99">
             {/*Stats*/}
             <input type="checkbox" className="sheet-pc-statblock-show sheet-arrow" title="statblock-show" name="attr_statblock-show" defaultValue={1} defaultChecked /><span style={{textAlign: 'left'}} data-i18n="abilities">Abilities</span>

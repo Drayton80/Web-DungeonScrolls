@@ -26,6 +26,6 @@ urlpatterns = [
           views.ChapterList.as_view(), name='GetChapterList'),
      path('api/get-sheet-list/<int:chapter_id>/',
          views.SheetList.as_view(), name='GetSheetList'),
-     path('api/get-sheet-dnd35/<int:sheet_id>/',
+     path('api/get-sheet-dnd35/<int:pk>/',
          views.SheetDnD35Detail.as_view(), name='GetSheetDnD35'),
 ]

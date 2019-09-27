@@ -69,6 +69,10 @@
 
 .sheet-pc-rolltemplates-show:not(:checked)~.sheet-pc-rolltemplates {display:none;}
 
+
+
+
+
 .charsheet label {
     display: inline-block;
     width: 75px;
