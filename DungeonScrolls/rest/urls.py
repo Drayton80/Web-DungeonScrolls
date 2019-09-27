@@ -7,6 +7,15 @@ from . import views
 # router.register('api/getUser/<int:pk>/', views.UserDetail.as_view(), 'GetUser') isso é só pra viewsets
 
 urlpatterns = [
+     path('api/bestiary/', views.BestiaryList.as_view()),
+     path('api/bestiary/<int:pk>/', views.BestiaryDetail.as_view()),
+     path('api/chapter/', views.ChapterList.as_view()),
+     path('api/chapter/<int:pk>/', views.ChapterDetail.as_view()),
+     path('api/sheet-list/<int:chapter_id>/', views.SheetList.as_view()),
+     path('api/sheet-list/from-users-that-edit/<int:user_that_edit_id>/', views.SheetListFromUserThatEdit.as_view()),
+     path('api/sheet-dnd35/create/', views.SheetDnD35Detail.as_view()),
+     path('api/sheet-dnd35/<int:pk>/', views.SheetDnD35Detail.as_view()),
+
      path('api/get-user/', views.UserDetail.as_view()),
      path('api/get-user/<int:pk>/', views.UserDetail.as_view(), name='GetUser'),
      path('api/get-rule-system/<int:rule_system_id>/',
