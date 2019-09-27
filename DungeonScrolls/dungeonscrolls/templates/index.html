@@ -5,3 +5,27 @@
 
 {% block content %}
 {% endblock %}
+
+
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<head>
+    {% load staticfiles %}
+    <script src="{% static 'calculator/js/experience_calculator_systems.js' %}"></script>
+</head>
+
+<!-- RPG Rule System - Dropdown Choice Form -->
+{% csrf_token %}
+{{ model_choice_form|crispy }}
+
+<!-- Formulary generated based on Rule System selected -->
+<div id="experience_calculator_formulary" class="row">
+</div>
+
+<div id="experience_calculator_result" class="row-1 mt-4">
+</div>
+
+{% endblock content %}
