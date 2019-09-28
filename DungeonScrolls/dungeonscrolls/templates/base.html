@@ -41,14 +41,14 @@
 <body>
   {% include 'navbar.html' %}
 
-  <div id="content" class="container">
-    <h1 class="mb-3">{% block title %}{% endblock %}</h1>
+  <div id="content">
+    <!--h1 class="mb-3">{% block title %}{% endblock %}</h1-->
     {% block content %}
 
     {% endblock content %}
   </div>
 
-  <div id="footer" class="container">
+  <div id="footer">
     {% block footer %}
 
     {% endblock %}

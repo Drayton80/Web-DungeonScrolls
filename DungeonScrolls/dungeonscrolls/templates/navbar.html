@@ -7,10 +7,16 @@
     }
 </style-->
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" style="z-index: 10;">
-    <div class="container">
+<head>
+    <link href="https://fonts.googleapis.com/css?family=MedievalSharp&display=swap" rel="stylesheet">
+</head>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" style="z-index: 10; height: 8vh;">
+    <div class="container-fluid p-0">
         <!-- App Title -->
-        <a class="navbar-brand text-white h1 mb-0">Dungeon Scrolls</a>
+        <a class="navbar-brand text-white h1 mb-0 ml-1" style="font-family: 'MedievalSharp', cursive;  font-size: 25px;"
+            href="{% url 'home_page' %}">
+            Dungeon Scrolls</a>
 
         <!-- Botão Lateral de Expansão -->
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSite">
@@ -20,20 +26,16 @@
         <!-- Itens do Navbar: -->
         <div class="collapse navbar-collapse" id="navbarSite">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item">
+                <!--li class="nav-item">
                     <a class="nav-link" href="">Mini-Projeto I</a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link" href="">Mini-Projeto II</a>
-                </li>
+                </li-->
 
             </ul>
 
             <!-- Username -->
             <ul class="navbar-nav ml-auto">
                 {% if user.is_active and user.is_authenticated %}
-                <li class="nav-item dropdown">
+                <li class="nav-item dropdown mr-2">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         {{ user.get_username }}

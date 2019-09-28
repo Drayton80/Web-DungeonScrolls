@@ -6,7 +6,7 @@ from .views import index
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('home/', index, name='home'),
+    path('home/', index, name='home_page'),
     path('', include('frontend.urls')),
     path('calculator/', include('calculator.urls')),
     path('sheets/', include('sheets.urls')),

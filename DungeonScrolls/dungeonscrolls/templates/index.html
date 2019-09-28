@@ -1,4 +1,5 @@
 {% extends "sidenavbar.html" %}
+{% load staticfiles %}
 
 <head>
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
@@ -8,6 +9,39 @@
     <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
 </head>
 
+{% block side-navbar-title %}
+Tools
+{% endblock side-navbar-title %}
+
+
+{% block side-navbar-items %}
+<li class="header-menu">
+    <span>RPG Utilities</span>
+</li>
+{% if user.is_authenticated %}
+<li>
+    <a href="#">
+        <i class="fas fa-book"></i>
+        <span>Bestiaries</span>
+    </a>
+</li>
+{% endif %}
+<li>
+    <a href="#">
+        <i class="fas fa-chess-rook"></i>
+        <span>Battle Initiative</span>
+    </a>
+</li>
+<li>
+    <a href="#">
+        <i class="fas fa-calculator"></i>
+        <span>Experience Calculator</span>
+    </a>
+</li>
+{% endblock side-navbar-items %}
+
+
+{% block page-content %}
 <style>
     /*!
  * Start Bootstrap - Agency v5.2.2 (https://startbootstrap.com/template-overviews/agency)
@@ -33,7 +67,7 @@
     }
 
     .text-primary {
-        color: #fed136 !important;
+        color: #3a3f48 !important;
     }
 
     h1,
@@ -47,7 +81,8 @@
     }
 
     .page-section {
-        padding: 100px 0;
+        padding: 0;
+        height: 100vh;
     }
 
     .page-section h2.section-heading {
@@ -96,6 +131,7 @@
     .btn {
         font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
         font-weight: 700;
+        border-radius: 12px;
     }
 
     .btn-xl {
@@ -104,16 +140,17 @@
     }
 
     .btn-primary {
-        background-color: #fed136;
-        border-color: #fed136;
+        background-color: #474d57;
+        border-color: #474d57;
     }
 
     .btn-primary:active,
     .btn-primary:focus,
     .btn-primary:hover {
-        background-color: #fec810 !important;
-        border-color: #fec810 !important;
-        color: white;
+        background-color: #525965 !important;
+        border-color: #525965 !important;
+        color: #16c7ff;
+        text-shadow: 0px 0px 3px rgba(22, 199, 255, 0.5);
     }
 
     .btn-primary:active,
@@ -195,11 +232,12 @@
     header.masthead {
         text-align: center;
         color: white;
-        background-image: url("../img/header-bg.jpg");
+        background-image: url("{% static 'images/home-page-background.png' %}");
         background-repeat: no-repeat;
         background-attachment: scroll;
         background-position: center center;
         background-size: cover;
+        height: 100vh;
     }
 
     header.masthead .intro-text {
@@ -428,6 +466,10 @@
         background-image: url("../img/map-image.png");
         background-repeat: no-repeat;
         background-position: center;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
     }
 
     section#contact .section-heading {
@@ -524,75 +566,64 @@
     }
 </style>
 
-{% block side-navbar-title %}
-Ferramentas
-{% endblock side-navbar-title %}
-
-
-{% block side-navbar-items %}
-<li class="header-menu">
-    <span>Utilitários</span>
-</li>
-<li>
-    <a href="#">
-        <i class="fas fa-book"></i>
-        <span>Bestiários</span>
-    </a>
-</li>
-<li>
-    <a href="#">
-        <i class="fas fa-chess-rook"></i>
-        <span>Rolagem de Iniciativa</span>
-    </a>
-</li>
-<li>
-    <a href="#">
-        <i class="fas fa-calculator"></i>
-        <span>Cálculo de Experiência</span>
-    </a>
-</li>
-{% endblock side-navbar-items %}
-
-
-{% block page-content %}
 <!-- Services -->
-<section class="page-section" id="services">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12 text-center mt-5">
-                <h2 class="section-heading text-uppercase">Our Services</h2>
-                <h3 class="section-subheading text-muted">Lorem ipsum dolor sit amet consectetur.</h3>
+<div class="container-fluid p-0" style="background-color: white;">
+    <!-- Header -->
+    <header class="masthead">
+        <div class="container">
+            <div class="intro-text">
+                <div class="intro-lead-in">
+                    Welcome
+                    {% if user.is_authenticated %}
+                    {{ user.get_username }}
+                    {% else %}
+                    to Dungeon Scrolls!
+                    {% endif %}</div>
+                <div class="intro-heading text-uppercase">have a nice game</div>
+                <a class="btn btn-primary btn-xl text-uppercase js-scroll-trigger" href="#services">Known our Tools</a>
             </div>
         </div>
-        <div class="row text-center mt-4">
-            <div class="col-md-4">
-                <span class="fa-stack fa-4x">
-                    <i class="fas fa-circle fa-stack-2x text-primary"></i>
-                    <i class="fas fa-shopping-cart fa-stack-1x fa-inverse"></i>
-                </span>
-                <h4 class="service-heading">E-Commerce</h4>
-                <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima maxime quam
-                    architecto quo inventore harum ex magni, dicta impedit.</p>
+    </header>
+
+    <!--img src="{% static 'images/home-page-background.png' %}" class="img-fluid" alt="Responsive image"-->
+    <section class="page-section" id="services">
+        <div class="container" style="padding-top: 10vh;">
+            <div class="row">
+                <div class="col-lg-12 text-center mt-5">
+                    <h2 class="section-heading text-uppercase">Our Services</h2>
+                    <h3 class="section-subheading text-muted">A brief explanation about our main tools.</h3>
+                </div>
             </div>
-            <div class="col-md-4">
-                <span class="fa-stack fa-4x">
-                    <i class="fas fa-circle fa-stack-2x text-primary"></i>
-                    <i class="fas fa-laptop fa-stack-1x fa-inverse"></i>
-                </span>
-                <h4 class="service-heading">Responsive Design</h4>
-                <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima maxime quam
-                    architecto quo inventore harum ex magni, dicta impedit.</p>
-            </div>
-            <div class="col-md-4">
-                <span class="fa-stack fa-4x">
-                    <i class="fas fa-circle fa-stack-2x text-primary"></i>
-                    <i class="fas fa-lock fa-stack-1x fa-inverse"></i>
-                </span>
-                <h4 class="service-heading">Web Security</h4>
-                <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima maxime quam
-                    architecto quo inventore harum ex magni, dicta impedit.</p>
+            <div class="row text-center mt-4">
+                <div class="col-md-4">
+                    <span class="fa-stack fa-4x">
+                        <i class="fas fa-circle fa-stack-2x text-primary"></i>
+                        <i class="fas fa-book fa-stack-1x fa-inverse"></i>
+                    </span>
+                    <h4 class="service-heading">Bestiaries</h4>
+                    <p class="text-muted">A tool that registered users have to group their creature's sheets in an
+                        organized and partitioned way.</p>
+                </div>
+                <div class="col-md-4">
+                    <span class="fa-stack fa-4x">
+                        <i class="fas fa-circle fa-stack-2x text-primary"></i>
+                        <i class="fas fa-chess-rook fa-stack-1x fa-inverse"></i>
+                    </span>
+                    <h4 class="service-heading">Battle Initiative</h4>
+                    <p class="text-muted">Used to roll the initiative of all creatures engaged in a battle, applying
+                        their modifiers and reorganizing them in a descendent way.</p>
+                </div>
+                <div class="col-md-4">
+                    <span class="fa-stack fa-4x">
+                        <i class="fas fa-circle fa-stack-2x text-primary"></i>
+                        <i class="fas fa-calculator fa-stack-1x fa-inverse"></i>
+                    </span>
+                    <h4 class="service-heading">Experience Calculator</h4>
+                    <p class="text-muted">With this tool you can easy calculate the amount of XP that your charcaters
+                        receive after a battle.</p>
+                </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
+</div>
 {% endblock page-content %}

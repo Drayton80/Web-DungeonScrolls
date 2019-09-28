@@ -69,11 +69,11 @@
     .sidebar-wrapper .sidebar-menu ul li a,
     #show-sidebar,
     #close-sidebar {
-        -webkit-transition: all 0.3s ease;
-        -moz-transition: all 0.3s ease;
-        -ms-transition: all 0.3s ease;
-        -o-transition: all 0.3s ease;
-        transition: all 0.3s ease;
+        -webkit-transition: all 0.4s ease;
+        -moz-transition: all 0.4s ease;
+        -ms-transition: all 0.4s ease;
+        -o-transition: all 0.4s ease;
+        transition: all 0.4s ease;
     }
 
     /*----------------page-wrapper----------------*/
@@ -102,7 +102,7 @@
 
     @media screen and (min-width: 768px) {
         .page-wrapper.toggled .page-content {
-            padding-left: 300px;
+            padding-left: 260px;
         }
     }
 
@@ -110,7 +110,7 @@
     #show-sidebar {
         position: fixed;
         left: 0;
-        top: 50px;
+        padding-top: 8vh;
         border-radius: 0 4px 4px 0px;
         width: 35px;
         transition-delay: 0.3s;
@@ -372,10 +372,9 @@
     /*--------------------------page-content-----------------------------*/
 
     .page-wrapper .page-content {
-        display: inline-block;
         width: 100%;
         padding-left: 0px;
-        padding-top: 20px;
+        padding-top: 0px;
     }
 
     .page-wrapper .page-content>div {
@@ -550,7 +549,7 @@
     </a>
 
     <nav id="sidebar" class="sidebar-wrapper">
-        <div class="sidebar-content mt-5">
+        <div class="sidebar-content" style="padding-top: 8vh;">
             <div class="sidebar-brand">
                 <a href="#">{% block side-navbar-title %}{% endblock side-navbar-title %}</a>
                 <div id="close-sidebar">
@@ -613,12 +612,10 @@
         </div-->
     </nav>
     <!-- sidebar-wrapper  -->
-    <main class="page-content">
-        <div class="container-fluid">
-            {% block page-content %}
+    <main class="page-content" style="background-color: #31353D;">
+        {% block page-content %}
 
-            {% endblock page-content %}
-        </div>
+        {% endblock page-content %}
     </main>
     <!-- page-content" -->
 </div>

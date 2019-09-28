@@ -18,10 +18,11 @@ class App extends Component {
 
 	componentDidMount() {
 		axios
-			.get(`http://localhost:8000/rest/api/get-user/${djangoData.other}/`)
+			.get(`http://127.0.0.1:8000/rest/api/get-user/${djangoData.other}/`)
 			.then(res => {
 				const user = res.data;
 				this.setState({ user: user });
+				console.log(res.data)
 			});
 	}
 

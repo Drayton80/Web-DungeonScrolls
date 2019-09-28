@@ -64,21 +64,21 @@ export default class SideMenu extends Component {
 
   updateMenu(props) {
     axios
-      .get(`http://localhost:8000/rest/api/get-bestiary-list/${props.user.id}/`)
+      .get(`http://127.0.0.1:8000/rest/api/get-bestiary-list/${props.user.id}/`)
       .then(res => {
         const bestiaryList = res.data;
         this.setState({ bestiaryList: bestiaryList });
 
         for (var i = 0; i < bestiaryList.length; i++) {
           axios
-            .get(`http://localhost:8000/rest/api/get-chapter-list/${bestiaryList[i].id}/`)
+            .get(`http://127.0.0.1:8000/rest/api/get-chapter-list/${bestiaryList[i].id}/`)
             .then(response => {
               const chapterListN = response.data;
               this.setState({ chapterList: this.state.chapterList.concat(chapterListN) });
 
               for (var j = 0; j < chapterListN.length; j++) {
                 axios
-                  .get(`http://localhost:8000/rest/api/get-sheet-list/${chapterListN[j].id}/`)
+                  .get(`http://127.0.0.1:8000/rest/api/get-sheet-list/${chapterListN[j].id}/`)
                   .then(response1 => {
                     const sheetListNameN = response1.data;
                     this.setState({ sheetListName: this.state.sheetListName.concat(sheetListNameN) });
@@ -158,7 +158,25 @@ export default class SideMenu extends Component {
     const bestiaryListMenu = this.state.bestiaryList.map((bestiary) => (
       <li key={bestiary.id} className="sidebar-dropdown">
         <a  >
-          <span>{bestiary.name}</span>
+          <div className="d-flex" style={{ background: '#31353D' }}>
+
+            <span>{bestiary.name}</span>
+
+            <div className="d-flex ml-auto" style={{ background: '#31353D' }}>
+              <button type="button" className="btn btn-sm mb-n2 mr-2 bestiary-delete-icon">
+                <FontAwesomeIcon className="mb-3 ml-n1" icon={faTrashAlt} size="xs"
+                  onClick={(() => this.deleteModal(bestiary, "bestiary"))} />
+              </button>
+
+              <button type="button" className="btn btn-sm mb-n2 mr-2 bestiary-add-icon">
+                <FontAwesomeIcon className="mb-3 ml-n1" icon={faPlus} size="xs"
+                  onClick={(() => this.createModal("chapter"))} />
+              </button>
+            </div>
+
+          </div>
+
+          {/*
           <button type="button" className="btn btn-primary btn-sm ml-5" style={{ height: '20px', width: '20px' }}
             onClick={(() => this.createModal("chapter"))}>
             <FontAwesomeIcon className="ml-n1 mb-3" icon={faPlus} style={{ fontSize: "12px" }} size="xs" />
@@ -166,7 +184,7 @@ export default class SideMenu extends Component {
           <button type="button" className="btn btn-danger btn-sm ml-1" style={{ height: '20px', width: '20px' }}
             onClick={(() => this.deleteModal(bestiary, "bestiary"))}>
             <FontAwesomeIcon className="ml-n1 mb-3" icon={faTrashAlt} style={{ fontSize: "12px" }} size="xs" />
-          </button>
+          </button> */}
         </a>
         <div className="sidebar-submenu">
           {this.state.chapterList.filter(function (obj) {
@@ -330,15 +348,13 @@ export default class SideMenu extends Component {
                   <li className="header-menu">
 
                     <div className="d-flex">
-                      <div className="align-self-center">
-                        <span>General</span>
-                      </div>
+                      <span>General</span>
 
-                      <li className="ml-auto mb-n2 mr-n4 align-self-center" onClick={(() => this.createModal("bestiary"))} >
-                        <a onMouseOver={""} style={{ cursor: 'pointer' }}>
-                          <i class="fas fa-plus"></i>
-                        </a>
-                      </li>
+                      <button type="button" className="btn btn-sm mb-n2 ml-auto bestiary-add-icon" style={{ "margin-right": "38px", "margin-top": "21px" }}>
+                        <FontAwesomeIcon className="mb-3 ml-n1" icon={faPlus} size="xs"
+                          onClick={(() => this.createModal("bestiary"))} />
+                      </button>
+
                       {/* <button type="button" className="btn btn-primary btn-sm align-self-center mb-n2 ml-auto mr-3" style={{ height: '20px', width: '20px' }}>
                         <FontAwesomeIcon className="ml-n1 mb-3" icon={faPlus} style={{ fontSize: "12px" }} size="xs"
                           onClick={(() => this.createModal("bestiary"))} />
