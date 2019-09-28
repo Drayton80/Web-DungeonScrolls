@@ -1,7 +1,7 @@
 var all_difficulty_levels;
 var system_selected_id;
 
-function generate_experience_calculator_formulary(select_id){
+function generate_experience_calculator_formulary(select_id) {
     // Instancia um objeto da Tag em que será gerada o HTML relativa ao formulário da calculadora de pontos de experiência:
     var div_object = document.getElementById("experience_calculator_formulary");
     var select = document.getElementById(select_id);
@@ -9,19 +9,19 @@ function generate_experience_calculator_formulary(select_id){
     system_selected_id = select.options[select.selectedIndex].value;
 
     $.ajax({
-        url:"/calculator/experience-points",
+        url: "/calculator/experience-points",
         type: "POST",
         data: {
             response_type: 'calculator_formulary',
             rule_system_selected_id: system_selected_id,
             csrfmiddlewaretoken: $("input[name='csrfmiddlewaretoken']").val(),
         },
-        success:function(response_data){
+        success: function (response_data) {
             var difficulty_level_prefix;
             var html_text = "";
 
-            if(typeof response_data.difficulty_level_information.all_levels == 'undefined' ||
-               typeof response_data.difficulty_level_information.prefix == 'undefined' ){
+            if (typeof response_data.difficulty_level_information.all_levels == 'undefined' ||
+                typeof response_data.difficulty_level_information.prefix == 'undefined') {
                 return;
             }
 
@@ -39,7 +39,7 @@ function generate_experience_calculator_formulary(select_id){
             html_text += '</div>'
 
             html_text += '<div class="form-row">'
-            for(index in all_difficulty_levels){
+            for (index in all_difficulty_levels) {
                 difficulty_level = difficulty_level_prefix + ' ' + all_difficulty_levels[index]
                 id = all_difficulty_levels[index]
 
@@ -60,22 +60,22 @@ function generate_experience_calculator_formulary(select_id){
 
             div_object.innerHTML = html_text
         },
-        complete:function(){},
-        error:function (xhr, textStatus, thrownError){
+        complete: function () { },
+        error: function (xhr, textStatus, thrownError) {
             alert("error doing something");
         }
     });
 }
 
-function calculate_experience(){
+function calculate_experience() {
     calculator_formulary_data = {};
     calculator_formulary_data['number_of_characters'] = document.getElementById('number_of_characters').value;
     calculator_formulary_data['difficulty_levels_values'] = {};
 
-    for(index in all_difficulty_levels){
+    for (index in all_difficulty_levels) {
         number_of_enemies = document.getElementById(all_difficulty_levels[index]).value;
 
-        if(number_of_enemies){
+        if (number_of_enemies) {
             calculator_formulary_data.difficulty_levels_values[all_difficulty_levels[index]] = number_of_enemies
         }
     }
@@ -83,7 +83,7 @@ function calculate_experience(){
     console.log(calculator_formulary_data)
 
     $.ajax({
-        url:"/calculator/experience-points",
+        url: "/calculator/experience-points",
         type: "POST",
         data: {
             response_type: 'calculator_result',
@@ -91,15 +91,15 @@ function calculate_experience(){
             calculator_formulary_data: calculator_formulary_data,
             csrfmiddlewaretoken: $("input[name='csrfmiddlewaretoken']").val(),
         },
-        success:function(response_data){
+        success: function (response_data) {
             var div_object = document.getElementById("experience_calculator_result");
             html_text = '';
 
-            if(typeof response_data.experience_points_per_level == 'undefined'){
+            if (typeof response_data.experience_points_per_level == 'undefined') {
                 return;
             }
 
-            for(character_level in response_data.experience_points_per_level){
+            for (character_level in response_data.experience_points_per_level) {
                 character_experience_received = response_data.experience_points_per_level[character_level]
 
                 html_text += '<div class="row-1">'
@@ -111,8 +111,8 @@ function calculate_experience(){
 
             div_object.innerHTML = html_text;
         },
-        complete:function(){},
-        error:function (xhr, textStatus, thrownError){
+        complete: function () { },
+        error: function (xhr, textStatus, thrownError) {
             alert("error doing something");
         }
     });

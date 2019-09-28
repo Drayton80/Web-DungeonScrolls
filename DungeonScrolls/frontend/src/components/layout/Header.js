@@ -4,7 +4,7 @@ export default class Header extends Component {
     render() {
         return (
             <div>
-                <nav className="navbar navbar-expand-lg navbar-dark bg-primary navbar-fixed-top" style={{zIndex:"10"}}>
+                <nav className="navbar navbar-expand-lg navbar-dark bg-dark navbar-fixed-top" style={{ zIndex: "10" }}>
                     <div className="container">
 
                         <a className="navbar-brand text-white h1 mb-0">Dungeon Scrolls</a>
@@ -40,7 +40,7 @@ export default class Header extends Component {
                         </div>
 
                     </div>
-                 </nav>
+                </nav>
             </div>
         )
     }

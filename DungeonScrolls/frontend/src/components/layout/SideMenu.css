@@ -101,7 +101,7 @@ body {
 #show-sidebar {
 	position: fixed;
 	left: 0;
-	top: 60px;
+	top: 50px;
 	border-radius: 0 4px 4px 0px;
 	width: 35px;
 	transition-delay: 0.3s;
