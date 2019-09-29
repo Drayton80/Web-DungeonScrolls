@@ -11,6 +11,16 @@ import json
 import datetime
 
 
+class UserDetailFromUsername(APIView):
+    def get(self, request, username):
+        try:
+            user = User.objects.filter(username=username).first()
+            serializer = UserSerializer(user, many=False)
+
+            return JsonResponse(serializer.data, safe=False)
+        except User.DoesNotExist:
+            raise Http404
+
 class UserDetail(APIView):
     def get(self, request, pk, format=None):
         return self.get_object(pk)
@@ -194,7 +204,7 @@ class SheetDnD35Detail(APIView):
     # Update a D&D 3.5 Sheet:
     def put(self, request, pk):
         sheet = self.get_object(pk)
-        serializer = BestiarySerializer(sheet, data=request.data)
+        serializer = SheetDnD35Serializer(sheet, data=request.data)
 
         if serializer.is_valid():
             serializer.save()

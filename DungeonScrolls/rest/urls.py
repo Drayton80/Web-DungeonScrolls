@@ -7,6 +7,7 @@ from . import views
 # router.register('api/getUser/<int:pk>/', views.UserDetail.as_view(), 'GetUser') isso é só pra viewsets
 
 urlpatterns = [
+     path('api/user/from-user-name/<str:username>/', views.UserDetailFromUsername.as_view()),
      path('api/bestiary/', views.BestiaryList.as_view()),
      path('api/bestiary/<int:pk>/', views.BestiaryDetail.as_view()),
      path('api/chapter/', views.ChapterList.as_view()),
