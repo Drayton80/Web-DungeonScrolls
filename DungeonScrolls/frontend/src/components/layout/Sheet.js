@@ -13,6 +13,14 @@ export default class Sheet extends Component {
     inputNameValue: ""
   }
 
+  updateSheet() {
+    this.closeModal()  
+      axios.put(`http://127.0.0.1:8000/rest/api/sheet-dnd35/${this.state.sheetClicked.id}/`, this.state.sheetClicked)
+            .then((response) => {          
+              
+            })
+  }
+
   sharedSheet() {
     this.closeModal()
     console.log(this.state.sheetClicked.name, this.state.inputNameValue)
@@ -20,7 +28,11 @@ export default class Sheet extends Component {
 
   deleteSheet() {
     this.closeModal()
-    console.log(this.state.sheetClicked.name)
+  
+      axios.delete(`http://127.0.0.1:8000/rest/api/sheet-dnd35/${this.state.sheetClicked.id}/`)
+            .then((response) => {              
+              
+            })
   }
 
   sharedeModal() {
@@ -69,7 +81,8 @@ export default class Sheet extends Component {
 
 
   handleOnChange = (e) => {
-    const { name, value } = e.target;
+    console.log(this.state.sheetClicked)
+    const { name, value } = e.target;    
     if (name == "inputNameShared") {
       console.log("entrou")
       this.setState({ inputNameValue: value })
@@ -80,7 +93,6 @@ export default class Sheet extends Component {
           ...prevState.sheetClicked,
           [name]: value
         }
-
       }))
     }
 
@@ -94,7 +106,8 @@ export default class Sheet extends Component {
         <h2>Deletando Ficha</h2>
         <p>Tem certeza que quer deletar a Ficha {this.state.sheetClicked.name}?
           </p>
-        <button type="button" class="btn btn-primary ml-5" onClick={(() => this.deleteSheet())}>Deletar</button>
+        
+        <button type="button" class="btn btn-primary ml-5" onClick={(() => this.deleteSheet())}>Deletar</button>        
         <button type="button" class="btn btn-danger ml-5" onClick={(() => this.closeModal())}>Cancelar</button>
       </Modal>
     );
@@ -198,7 +211,7 @@ export default class Sheet extends Component {
 
           <button type="button" disabled="true" style={{ background: 'transparent', border: 'none', color: 'transparent', width: '220px', cursor: 'none' }} ></button>
           <button type="button" className="btn btn-outline-primary" style={{ float: 'rigth' }}
-            onClick={(() => this.sharedeModal())}>Salvar Alterações</button>
+            onClick={(() => this.updateSheet())}>Salvar Alterações</button>
           <button type="button" disabled="true" style={{ background: 'transparent', border: 'none', color: 'transparent', width: '20px', cursor: 'none' }} ></button>
           <button type="button" class="btn btn-outline-secondary"
             onClick={(() => this.sharedeModal())}> Compartilhar Ficha</button>

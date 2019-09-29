@@ -49,73 +49,134 @@ function JQueryFuction() {
 
 export default class SideMenu extends Component {
 
+  
+
   state = {
+    userOnline: {},
     usingGetRouters: true,
     bestiaryList: [],
     chapterList: [],
     sheetListName: [],
+    sharedSheetListName: [],
     sheetClicked: [],
     openCreateModal: false,
     openDeleteModal: false,
     modalDeleteObj: [],
+    modalCreateInObj: [],
     modalObjType: "",
-    inputNameValue: ""
+    inputNameValue: "",
+    
   }
 
-  updateMenu(props) {
+  updateMenu(props, fazChapter=true) {
+     
     axios
       .get(`http://127.0.0.1:8000/rest/api/get-bestiary-list/${props.user.id}/`)
       .then(res => {
-        const bestiaryList = res.data;
+        const bestiaryList = res.data;        
         this.setState({ bestiaryList: bestiaryList });
-
+        
         for (var i = 0; i < bestiaryList.length; i++) {
           axios
             .get(`http://127.0.0.1:8000/rest/api/get-chapter-list/${bestiaryList[i].id}/`)
             .then(response => {
-              const chapterListN = response.data;
-              this.setState({ chapterList: this.state.chapterList.concat(chapterListN) });
+              const chapterListN = response.data; 
+              this.setState({ chapterList: _.unionBy(this.state.chapterList, chapterListN, "id")});
+                             
 
               for (var j = 0; j < chapterListN.length; j++) {
                 axios
                   .get(`http://127.0.0.1:8000/rest/api/get-sheet-list/${chapterListN[j].id}/`)
                   .then(response1 => {
                     const sheetListNameN = response1.data;
-                    this.setState({ sheetListName: this.state.sheetListName.concat(sheetListNameN) });
+                    this.setState({ sheetListName: _.unionBy(this.state.sheetListName, sheetListNameN, "id")});
                   })
 
               }
-
+                
             });
+          
         }
       })
+
+      axios
+        .get(`http://127.0.0.1:8000/rest/api/sheet-list/from-users-that-edit/${props.user.id}/`)
+        .then(response1 => {          
+          const sharedSheetListNameN = response1.data;          
+          this.setState({ sharedSheetListName: _.unionBy(this.state.sharedSheetListName, sharedSheetListNameN, "id")});
+        })
+
   }
+
 
   handleOnChange = (e) => {
     const { name, value } = e.target;
     this.setState({ inputNameValue: value })
   }
 
+ 
   createAllObjs() {
-    this.closeModal()
-    console.log(this.state.inputNameValue, this.state.modalObjType)
-    if (this.state.modalObjType == "bestiary") { }
-    if (this.state.modalObjType == "chapter") { }
-    if (this.state.modalObjType == "sheet") { }
+    this.closeModal()    
+    if (this.state.modalObjType == "bestiary") {
+          axios.post('http://127.0.0.1:8000/rest/api/bestiary/', {
+              name: this.state.inputNameValue,
+              owner: this.state.userOnline.id
+            })
+            .then((response) => {
+              this.updateMenu(this.props) 
+            })
+    }
+
+    if (this.state.modalObjType == "chapter") {
+       axios.post('http://127.0.0.1:8000/rest/api/chapter/', {
+              name: this.state.inputNameValue,
+              bestiary: this.state.modalCreateInObj.id
+            })
+            .then((response) => {
+              this.setState({ chapterList: this.state.chapterList.concat(response) })
+              this.updateMenu(this.props)     
+            })
+     }
+    if (this.state.modalObjType == "sheet") {
+       axios.post('http://127.0.0.1:8000/rest/api/sheet-dnd35/create/', {
+              name: this.state.inputNameValue,
+              status: "PU",
+              sheet_type: "CRB",
+              chapter: this.state.modalCreateInObj.id     
+    
+            })
+            .then((response) => {
+              this.setState({ sheetListName: this.state.sheetListName.concat(response) })
+              this.updateMenu(this.props) 
+            })
+     }
   }
 
   deleteBesChaObjs() {
     this.closeModal()
     console.log(this.state.modalDeleteObj.name, this.state.modalObjType)
-    if (this.state.modalObjType == "bestiary") { }
-    if (this.state.modalObjType == "chapter") { }
+    if (this.state.modalObjType == "bestiary") { 
+       axios.delete(`http://127.0.0.1:8000/rest/api/bestiary/${this.state.modalDeleteObj.id}/`)
+            .then((response) => {
+              this.updateMenu(this.props) 
+            })
+     }
+    if (this.state.modalObjType == "chapter") {
+        axios.delete(`http://127.0.0.1:8000/rest/api/chapter/${this.state.modalDeleteObj.id}/`)
+            .then((response) => {
+              
+              this.state.chapterList.splice(this.state.chapterList.indexOf(this.state.modalDeleteObj), 1)
+              this.updateMenu(this.props) 
+            })
+    }
   }
 
-  createModal(type) {
+  createModal(obj, type) {
 
     this.setState({
       openCreateModal: true,
       modalObjType: type,
+      modalCreateInObj: obj
     })
   }
 
@@ -136,6 +197,7 @@ export default class SideMenu extends Component {
 
   UNSAFE_componentWillReceiveProps(props) {
     if (this.state.usingGetRouters) {
+      this.setState({userOnline: props.user})
       this.setState({ usingGetRouters: false })
       this.updateMenu(props)
     }
@@ -143,7 +205,7 @@ export default class SideMenu extends Component {
 
 
   render() {
-
+    
     JQueryFuction();
     const routingSheet = (
       <Router>
@@ -155,8 +217,8 @@ export default class SideMenu extends Component {
         </div>
       </Router>
     )
-    const bestiaryListMenu = this.state.bestiaryList.map((bestiary) => (
-      <li key={bestiary.id} className="sidebar-dropdown">
+    const bestiaryListMenu = this.state.bestiaryList.map((bestiary, index) => (
+      <li key={index} className="sidebar-dropdown">
         <a  >
           <div className="d-flex" style={{ background: '#31353D' }}>
 
@@ -170,32 +232,22 @@ export default class SideMenu extends Component {
 
               <button type="button" className="btn btn-sm mb-n2 mr-2 bestiary-add-icon">
                 <FontAwesomeIcon className="mb-3 ml-n1" icon={faPlus} size="xs"
-                  onClick={(() => this.createModal("chapter"))} />
+                  onClick={(() => this.createModal(bestiary, "chapter"))} />
               </button>
             </div>
 
-          </div>
-
-          {/*
-          <button type="button" className="btn btn-primary btn-sm ml-5" style={{ height: '20px', width: '20px' }}
-            onClick={(() => this.createModal("chapter"))}>
-            <FontAwesomeIcon className="ml-n1 mb-3" icon={faPlus} style={{ fontSize: "12px" }} size="xs" />
-          </button>
-          <button type="button" className="btn btn-danger btn-sm ml-1" style={{ height: '20px', width: '20px' }}
-            onClick={(() => this.deleteModal(bestiary, "bestiary"))}>
-            <FontAwesomeIcon className="ml-n1 mb-3" icon={faTrashAlt} style={{ fontSize: "12px" }} size="xs" />
-          </button> */}
+          </div>         
         </a>
         <div className="sidebar-submenu">
           {this.state.chapterList.filter(function (obj) {
             return obj.bestiary == bestiary.id
-          }).map((chapter) => (
-            <ul key={chapter.id}>
-              <li key={chapter.id} className="sidebar-dropdown">
+          }).map((chapter, index) => (
+            <ul key={index}>
+              <li key={index} className="sidebar-dropdown">
                 <a >
                   <span>{chapter.name}</span>
                   <button type="button" className="btn btn-primary btn-sm ml-5" style={{ height: '20px', width: '20px' }}
-                    onClick={(() => this.createModal("sheet"))}>
+                    onClick={(() => this.createModal(chapter,"sheet"))}>
                     <FontAwesomeIcon className="ml-n1 mb-3" icon={faPlus} style={{ fontSize: "12px" }} size="xs" />
                   </button>
                   <button type="button" className="btn btn-danger btn-sm ml-1" style={{ height: '20px', width: '20px' }}
@@ -207,9 +259,9 @@ export default class SideMenu extends Component {
                 <div className="sidebar-submenu">
                   {this.state.sheetListName.filter(function (obj2) {
                     return obj2.chapter == chapter.id
-                  }).map((sheet) => (
-                    <ul key={sheet.id}>
-                      <li key={sheet.id} >
+                  }).map((sheet, index) => (
+                    <ul key={index}>
+                      <li key={index} >
                         <Router>
                           <Link to={`/sheet/${sheet.id}`}  >
                             <span >{sheet.name}</span>
@@ -226,6 +278,18 @@ export default class SideMenu extends Component {
         </div>
       </li>
     ));
+
+    const sharedSheetListMenu = this.state.sharedSheetListName.map((sheet, index) => (
+                    <ul key={index}>
+                      <li key={index} >
+                        <Router>
+                          <Link to={`/sheet/${sheet.id}`}  >
+                            <span >{sheet.name}</span>
+                          </Link>
+                        </Router>
+                      </li>
+                    </ul>
+                  ))
 
     const modalDelete = (
 
@@ -254,8 +318,8 @@ export default class SideMenu extends Component {
           }
         })()}?
           </p>
-        <button type="button" class="btn btn-primary ml-5" onClick={(() => this.deleteBesChaObjs())}>Deletar</button>
-        <button type="button" class="btn btn-danger ml-5" onClick={(() => this.closeModal())}>Cancelar</button>
+        <button type="button" className="btn btn-primary ml-5" onClick={(() => this.deleteBesChaObjs())}>Deletar</button>
+        <button type="button" className="btn btn-danger ml-5" onClick={(() => this.closeModal())}>Cancelar</button>
 
       </Modal>
     );
@@ -289,7 +353,7 @@ export default class SideMenu extends Component {
         })()} que deseja criar:
           </p>
         <input type="text" style={{ height: '40px', width: '150px' }} onChange={this.handleOnChange} />
-        <button type="button" class="btn btn-primary ml-4 mb-1" style={{ width: '120px' }} onClick={(() => this.createAllObjs())} >Criar</button>
+        <button type="button" className="btn btn-primary ml-4 mb-1" style={{ width: '120px' }} onClick={(() => this.createAllObjs())} >Criar</button>
       </Modal>
     );
 
@@ -364,6 +428,12 @@ export default class SideMenu extends Component {
 
                   </li>
                   {bestiaryListMenu}
+                </ul>
+                <ul>
+                   <li className="header-menu">
+                       <span>Shared Sheets</span>                        
+                   </li>
+                   {sharedSheetListMenu}
                 </ul>
               </div>
               {/* sidebar-menu  */}

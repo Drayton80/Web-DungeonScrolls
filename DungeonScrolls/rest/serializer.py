@@ -21,7 +21,7 @@ class RuleSystemSerializer(ModelSerializer):
 class BestiarySerializer(ModelSerializer):
     name = serializers.CharField(required=False)
     creation_date = serializers.DateField(required=False)
-    owner = serializers.PrimaryKeyRelatedField(many=False, read_only=True)
+    
 
     class Meta:
         model = Bestiary
@@ -29,12 +29,12 @@ class BestiarySerializer(ModelSerializer):
 
     def get_validation_exclusions(self):
         exclusions = super(BestiarySerializer, self).get_validation_exclusions()
-        return exclusions + ['creation_date', 'name', 'owner']
+        return exclusions + ['creation_date', 'name']
         
 class ChapterSerializer(ModelSerializer):
     name = serializers.CharField(required=False)
     description = serializers.CharField(required=False)
-    bestiary = serializers.PrimaryKeyRelatedField(many=False, read_only=True)
+    
 
     class Meta:
         model = Chapter
@@ -42,7 +42,7 @@ class ChapterSerializer(ModelSerializer):
 
     def get_validation_exclusions(self):
         exclusions = super(ChapterSerializer, self).get_validation_exclusions()
-        return exclusions + ['name', 'description', 'bestiary']
+        return exclusions + ['name', 'description']
 
 
 class SheetListSerializer(ModelSerializer):
