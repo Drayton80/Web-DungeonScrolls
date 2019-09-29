@@ -11,11 +11,42 @@
     <link href="https://fonts.googleapis.com/css?family=MedievalSharp&display=swap" rel="stylesheet">
 </head>
 
+<style>
+    .navbar-title {
+        font-family: 'MedievalSharp', cursive;
+        font-size: 25px;
+        color: rgb(189, 187, 187);
+    }
+
+    .navbar-title:hover {
+        color: whitesmoke;
+        text-decoration: none;
+        text-shadow: 0px 0px 2px rgb(251, 252, 252);
+    }
+
+    .dropdown-menu-dungeonscrolls {
+        background-color: #31353D;
+        border-radius: 12px;
+    }
+
+    .dropdown-item-text-dungeonscrolls {
+        color: rgb(189, 187, 187);
+    }
+
+    .dropdown-item-text-dungeonscrolls:hover {
+        color: rgb(204, 200, 200);
+        background-color: rgb(69, 75, 85);
+    }
+
+    .dropdown-item-divider-dungeonscrolls {
+        border-color: rgb(138, 137, 137);
+    }
+</style>
+
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" style="z-index: 10; height: 8vh;">
     <div class="container-fluid p-0">
         <!-- App Title -->
-        <a class="navbar-brand text-white h1 mb-0 ml-1" style="font-family: 'MedievalSharp', cursive;  font-size: 25px;"
-            href="{% url 'home_page' %}">
+        <a class="navbar-title h1 mb-0 ml-2" href=" {% url 'home_page' %}">
             Dungeon Scrolls</a>
 
         <!-- Botão Lateral de Expansão -->
@@ -40,11 +71,13 @@
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         {{ user.get_username }}
                     </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="{% url 'reactEnter' %}">Settings</a>
-                        <a class="dropdown-item" href="#">Profile</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="{% url 'auth_logout' %}">Sign out</a>
+                    <div class="dropdown-menu dropdown-menu-dungeonscrolls" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item dropdown-item-text-dungeonscrolls"
+                            href="{% url 'reactEnter' %}">Settings</a>
+                        <a class="dropdown-item dropdown-item-text-dungeonscrolls" href="#">Profile</a>
+                        <div class="dropdown-divider dropdown-item-divider-dungeonscrolls"></div>
+                        <a class="dropdown-item dropdown-item-text-dungeonscrolls" href="{% url 'auth_logout' %}">Sign
+                            out</a>
                     </div>
                 </li>
 

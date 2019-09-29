@@ -8,6 +8,14 @@ import Header from "./layout/Header";
 import SideMenu from "./layout/SideMenu";
 import Sheet from "./layout/Sheet";
 import Registration from "./accounts/Registration";
+import WebFont from 'webfontloader';
+
+WebFont.load({
+	google: {
+		families: ['MedievalSharp']
+	}
+});
+
 const djangoData = $("#User").data();
 
 class App extends Component {

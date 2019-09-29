@@ -1,1 +1,23 @@
-{% extends "base.html" %}
+{% extends "sidenavbar.html" %}
+
+{% block side-navbar-title %}
+Tools
+{% endblock side-navbar-title %}
+
+{% block side-navbar-items %}
+<li class="header-menu">
+    <span>RPG Utilities</span>
+</li>
+<li>
+    <a href="#">
+        <i class="fas fa-chess-rook"></i>
+        <span>Battle Initiative</span>
+    </a>
+</li>
+<li>
+    <a href="#">
+        <i class="fas fa-calculator"></i>
+        <span>Experience Calculator</span>
+    </a>
+</li>
+{% endblock side-navbar-items %}

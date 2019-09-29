@@ -4,7 +4,7 @@
 
 {% block title %}{% trans "Log in" %}{% endblock %}
 
-{% block content %}
+{% block page-content %}
 <style>
     .asteriskField {
         display: none;
@@ -15,23 +15,24 @@
     }
 </style>
 
-<div class="container-fluid mt-5" style="width: 60%; padding-top: 12vh;">
-    <!-- O primeiro commando é para esconder os asteriscos -->
-    <!-- já o segundo é para fazer desaparecer os hint     -->
-    <!-- texts longos exibidos abaixo dos forms            -->
+<div class="container-fluid mt-5" style="height: 80vh; padding-top: 22vh; background-color: white;">
+    <div class="mr-auto ml-auto" style="width: 60%; padding-left: 50px;">
+        <!-- O primeiro commando é para esconder os asteriscos -->
+        <!-- já o segundo é para fazer desaparecer os hint     -->
+        <!-- texts longos exibidos abaixo dos forms            -->
 
-    <h1 class="mb-3">Log in</h1>
+        <h1 class="mb-3">Log in</h1>
 
-    <form method="post" action="" class="mb-4">
-        {% csrf_token %}
-        {{ form|crispy }}
-        <input class="btn btn-secondary mt-2 w-100" type="submit" value="{% trans 'Log in' %}" />
-        <input type="hidden" name="next" value="{{ next }}" />
-    </form>
+        <form method="post" action="" class="mb-4">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <input class="btn btn-secondary mt-2 w-100" type="submit" value="{% trans 'Log in' %}" />
+            <input type="hidden" name="next" value="{{ next }}" />
+        </form>
 
-    <!--p>{% trans "Forgot your password?" %} <a href="{% url 'auth_password_reset' %}">{% trans "Reset it" %}</a>.</p-->
-    <p>{% trans "Not a member?" %} <a href="{% url 'registration_register' %}">{% trans "Register" %}</a>.</p>
-
+        <!--p>{% trans "Forgot your password?" %} <a href="{% url 'auth_password_reset' %}">{% trans "Reset it" %}</a>.</p-->
+        <p>{% trans "Not a member?" %} <a href="{% url 'registration_register' %}">{% trans "Register" %}</a>.</p>
+    </div>
 </div>
 {% endblock %}
 
