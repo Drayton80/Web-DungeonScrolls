@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
 import axios from "axios";
 import "./App.css";
 
@@ -30,24 +30,20 @@ class App extends Component {
 			.then(res => {
 				const user = res.data;
 				this.setState({ user: user });
-				console.log(res.data)
+				//console.log(res.data)
 			});
 	}
 
 	render() {
 		return (
 			<Router>
-				<div className="App">
-					<div>
-						{(() => {
-							if (this.state.user == undefined) {
-								return "Carregando..., por favor aguarde";
-							} else {
-								return <SideMenu user={this.state.user} />;
-							}
-						})()}
-					</div>
-				</div>
+				<Switch>					
+					<Route exact path="/">  
+						<div className="App">									
+							<SideMenu user={this.state.user} />							
+						</div>
+					</Route>
+				</Switch>
 			</Router>
 		);
 	}

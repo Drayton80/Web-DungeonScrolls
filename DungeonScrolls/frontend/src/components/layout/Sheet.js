@@ -6,6 +6,7 @@ import Modal from 'react-responsive-modal';
 export default class Sheet extends Component {
 
   state = {
+    typeCanSee: "",
     usingGetRouters: true,
     sheetClicked: {},
     openSharedModal: false,
@@ -14,16 +15,34 @@ export default class Sheet extends Component {
   }
 
   updateSheet() {
-    this.closeModal()  
+      //console.log(this.state.sheetClicked)
       axios.put(`http://127.0.0.1:8000/rest/api/sheet-dnd35/${this.state.sheetClicked.id}/`, this.state.sheetClicked)
             .then((response) => {          
               
             })
   }
 
-  sharedSheet() {
-    this.closeModal()
-    console.log(this.state.sheetClicked.name, this.state.inputNameValue)
+  sharedSheet() {    
+    this.closeModal()  
+    
+
+    axios
+      .get(`http://127.0.0.1:8000/rest/api/user/from-user-name/${this.state.inputNameValue}/`)
+      .then((response1) => {
+        var aux = this.state.sheetClicked.users_that_edit
+              aux.push(response1.data.id)
+              console.log(response1.data.id) 
+              this.setState(prevState => ({
+              sheetClicked: {
+                ...prevState.sheetClicked,
+                users_that_edit: aux
+              }
+                }))
+                console.log(this.state.sheetClicked.users_that_edit)
+                this.updateSheet()        
+      })
+
+
   }
 
   deleteSheet() {
@@ -55,36 +74,38 @@ export default class Sheet extends Component {
   }
 
   componentDidMount() {
-    const { sheetID } = this.props.match.params
+    const { sheetID, typeCanSee } = this.props.match.params
+    this.setState({typeCanSee: typeCanSee})
+    
     axios
       .get(`http://127.0.0.1:8000/rest/api/get-sheet-dnd35/${sheetID}/`)
       .then(res => {
         const sheetClicked = res.data;
         this.setState({ sheetClicked: sheetClicked });
-        console.log(sheetClicked)
+        //console.log(sheetClicked)
       })
   }
 
-  UNSAFE_componentWillReceiveProps(props) {
-    if (this.state.usingGetRouters) {
-      this.setState({ usingGetRouters: false })
-      const { sheetID } = props.match.params
+  UNSAFE_componentWillReceiveProps(props) {  
+    
+    const { sheetID, typeCanSee } = props.match.params
+    this.setState({typeCanSee: typeCanSee})
+    //console.log(this.state.typeCanSee)
       axios
         .get(`http://127.0.0.1:8000/rest/api/get-sheet-dnd35/${sheetID}/`)
         .then(res => {
           const sheetClicked = res.data;
           this.setState({ sheetClicked: sheetClicked });
-          console.log(sheetClicked)
+          //console.log(sheetClicked)
         })
-    }
+    
   }
 
 
   handleOnChange = (e) => {
-    console.log(this.state.sheetClicked)
-    const { name, value } = e.target;    
-    if (name == "inputNameShared") {
-      console.log("entrou")
+    
+    var { name, value } = e.target;    
+    if (name == "inputNameShared") {      
       this.setState({ inputNameValue: value })
     }
     else {
@@ -96,7 +117,7 @@ export default class Sheet extends Component {
       }))
     }
 
-    console.log(name, value, this.state.sheetClicked.name);
+    //console.log(name, value, this.state.sheetClicked.name);
   }
 
   render() {
@@ -144,11 +165,17 @@ export default class Sheet extends Component {
                                   style={{ width: '125px', textAlign: 'right' }} defaultValue={this.state.sheetClicked.information_name}
                                   onChange={this.handleOnChange} />
                                 <br /><span data-i18n="character-name">Character Name</span></div></td>
+                                
+                               <td><div style={{ float: 'left' }}>
+                                <input type="text" name="name" title="character_name"
+                                  style={{ width: '125px', textAlign: 'right' }} defaultValue={this.state.sheetClicked.name}
+                                  onChange={this.handleOnChange} />
+                                <br /><span data-i18n="character-name">Sheet Name</span></div></td>
 
                               <td><div style={{ float: 'left' }}>
                                 <input type="text" name="information_experience" title="expcurrent" onChange={this.handleOnChange}
-                                  style={{ width: '145px', textAlign: 'right' }} defaultValue={this.state.sheetClicked.information_experience}
-                                />/<input type="text" name="attr_expgoal" title="expgoal" style={{ width: '150px' }} value={this.state.sheetClicked.information_level * 1000} />
+                                  style={{ width: '100px', textAlign: 'right' }} defaultValue={this.state.sheetClicked.information_experience}
+                                />/<input type="text" name="attr_expgoal" title="expgoal" style={{ width: '100px' }} value={this.state.sheetClicked.information_level * 1000} />
                                 <br /><span data-i18n="experience-points">Experience Points</span></div></td>
 
                             </tr>
@@ -215,9 +242,25 @@ export default class Sheet extends Component {
           <button type="button" disabled="true" style={{ background: 'transparent', border: 'none', color: 'transparent', width: '20px', cursor: 'none' }} ></button>
           <button type="button" class="btn btn-outline-secondary"
             onClick={(() => this.sharedeModal())}> Compartilhar Ficha</button>
-          <button type="button" disabled="true" style={{ background: 'transparent', border: 'none', color: 'transparent', width: '20px', cursor: 'none' }} ></button>
-          <button type="button" className="btn btn-outline-danger"
-            onClick={(() => this.deleteModal())}>Deletar ficha</button>
+         
+            {(() => {
+                      if (this.state.typeCanSee === "my-sheet") {
+                        return ( <button type="button" disabled="true" style={{ background: 'transparent', border: 'none', color: 'transparent', width: '20px', cursor: 'none' }}></button>)
+                      } else {
+                        return ;
+                      }
+                    })()}
+            
+            
+            
+            {(() => {
+                      if (this.state.typeCanSee === "my-sheet") {
+                        return (<button type="button" className="btn btn-outline-danger" onClick={(() => this.deleteModal())}>Deletar ficha</button>)
+                      } else {
+                        return ;
+                      }
+                    })()}
+          
           {modalShared}
           {modalDelete}
 

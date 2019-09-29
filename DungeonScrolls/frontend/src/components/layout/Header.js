@@ -24,7 +24,7 @@ export default class Header extends Component {
                                 <li className="nav-item dropdown mr-2">
                                     <a className="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        Armando Trouxa
+                                        {this.props.user.username}
                                     </a>
                                     <div className="dropdown-menu dropdown-menu-dungeonscrolls" aria-labelledby="navbarDropdown">
                                         <a className="dropdown-item dropdown-item-text-dungeonscrolls"

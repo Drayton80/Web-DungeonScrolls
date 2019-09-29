@@ -65,10 +65,11 @@ export default class SideMenu extends Component {
     modalCreateInObj: [],
     modalObjType: "",
     inputNameValue: "",
+    
 
   }
 
-  updateMenu(props, fazChapter = true) {
+  updateMenu(props) {
 
     axios
       .get(`http://127.0.0.1:8000/rest/api/get-bestiary-list/${props.user.id}/`)
@@ -154,7 +155,7 @@ export default class SideMenu extends Component {
 
   deleteBesChaObjs() {
     this.closeModal()
-    console.log(this.state.modalDeleteObj.name, this.state.modalObjType)
+    //console.log(this.state.modalDeleteObj.name, this.state.modalObjType)
     if (this.state.modalObjType == "bestiary") {
       axios.delete(`http://127.0.0.1:8000/rest/api/bestiary/${this.state.modalDeleteObj.id}/`)
         .then((response) => {
@@ -211,8 +212,7 @@ export default class SideMenu extends Component {
       <Router>
         <div>
           <Switch>
-            <Route exact path="/sheet/:sheetID" component={Sheet}>
-            </Route>
+            <Route path="/:typeCanSee/:sheetID" component={Sheet} />            
           </Switch>
         </div>
       </Router>
@@ -271,7 +271,11 @@ export default class SideMenu extends Component {
                     <ul key={index}>
                       <li key={index} >
                         <Router>
-                          <Link to={`/sheet/${sheet.id}`}  >
+                          <Link to={{
+
+                            pathname:`/${"my-sheet"}/${sheet.id}`
+                            
+                          }}  >
                             <span >{sheet.name}</span>
                           </Link>
                         </Router>
@@ -291,7 +295,7 @@ export default class SideMenu extends Component {
       <ul key={index}>
         <li key={index} >
           <Router>
-            <Link to={`/sheet/${sheet.id}`}  >
+            <Link to={`/${"shared-sheet"}/${sheet.id}`}  >
               <span >{sheet.name}</span>
             </Link>
           </Router>
@@ -378,7 +382,7 @@ export default class SideMenu extends Component {
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossOrigin="anonymous" />
         <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet" />
         <div >
-          <Header />
+          <Header user={this.state.userOnline}/>
         </div>
         <div className="page-wrapper chiller-theme toggled" style={{ paddingTop: "60px" }}>
 
@@ -393,27 +397,7 @@ export default class SideMenu extends Component {
                   <i className="fas fa-angle-left" />
                 </div>
               </div>
-              <div className="sidebar-header">
-                <div className="user-pic">
-                  <img className="img-responsive img-rounded" src="https://raw.githubusercontent.com/azouaoui-med/pro-sidebar-template/gh-pages/src/img/user.jpg" alt="User picture" />
-                </div>
-                <div className="user-info">
-                  <span className="user-name">{this.props.user.username}</span>
-                  <span className="user-role">
-                    {(() => {
-                      if (this.props.user.is_staff) {
-                        return "Administrator";
-                      } else {
-                        return "Usuário";
-                      }
-                    })()}
-                  </span>
-                  <span className="user-status">
-                    <i className="fa fa-circle" />
-                    <span>Online</span>
-                  </span>
-                </div>
-              </div>
+              
               {/* sidebar-header  */}
               <div className="sidebar-menu">
                 <ul>
@@ -452,7 +436,7 @@ export default class SideMenu extends Component {
           <main className="page-content">
 
             {routingSheet}
-            <div className="container-fluid">
+           {/* <div className="container-fluid">
               <hr />
               <div className="row">
                 <div className="form-group col-md-12">
@@ -475,7 +459,7 @@ export default class SideMenu extends Component {
                   </div>
                 </div>
               </div>
-            </div>
+                    </div> */}
 
           </main>
           {/* page-content" */}
