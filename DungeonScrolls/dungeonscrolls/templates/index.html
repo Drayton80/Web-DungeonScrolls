@@ -20,7 +20,7 @@ Tools
 </li>
 {% if user.is_authenticated %}
 <li>
-    <a href="#">
+    <a href="{% url 'reactEnter' %}">
         <i class="fas fa-book"></i>
         <span>Bestiaries</span>
     </a>
@@ -33,7 +33,7 @@ Tools
     </a>
 </li>
 <li>
-    <a href="#">
+    <a href="{% url 'experience_points' %}">
         <i class="fas fa-calculator"></i>
         <span>Experience Calculator</span>
     </a>
