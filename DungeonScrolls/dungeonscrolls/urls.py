@@ -11,6 +11,6 @@ urlpatterns = [
     path('calculator/', include('calculator.urls')),
     path('sheets/', include('sheets.urls')),
     path('rest/', include('rest.urls')),
-    url(r'^accounts/', include('registration.backends.default.urls'))
+    url(r'^accounts/', include('registration.backends.simple.urls'))
     #path('accounts/', include('accounts.urls'))
 ]
