@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'rule_system',
     'sheets',
     'rest',
+    'battle',
 ]
 
 # Crispy Forms Settings:

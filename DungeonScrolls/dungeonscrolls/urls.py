@@ -10,6 +10,7 @@ urlpatterns = [
     path('home/', index),
     path('bestiary/', include('frontend.urls')),
     path('calculator/', include('calculator.urls')),
+    path('battle/', include('battle.urls')),
     path('sheets/', include('sheets.urls')),
     path('rest/', include('rest.urls')),
     url(r'^accounts/', include('registration.backends.simple.urls'))
