@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'sheets',
     'rest',
     'battle',
+    'settings_page',
 ]
 
 # Crispy Forms Settings:
