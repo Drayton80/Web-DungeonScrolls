@@ -1,7 +1,6 @@
 from django.urls import path, include
-from .views import settings_page
-
+from .views import SettingsPage
 
 urlpatterns = [
-    path('settings-page/', settings_page, name='settings_page'),
+    path('settings-page/', SettingsPage.as_view(), name='settings_page'),
 ]

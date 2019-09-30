@@ -3,7 +3,7 @@
 
 
 <head>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 {% block side-navbar-title %}
@@ -13,298 +13,319 @@ Settings
 
 {% block side-navbar-items %}
 <li class="header-menu">
-    <span>RPG Utilities</span>
+  <span>RPG Utilities</span>
 </li>
 {% if user.is_authenticated %}
 <li>
-    <a href="{% url 'reactEnter' %}">
-        <i class="fas fa-book"></i>
-        <span>Bestiaries</span>
-    </a>
+  <a href="{% url 'reactEnter' %}">
+    <i class="fas fa-book"></i>
+    <span>Bestiaries</span>
+  </a>
 </li>
 {% endif %}
 <li>
-    <a href="#">
-        <i class="fas fa-chess-rook"></i>
-        <span>Battle Initiative</span>
-    </a>
+  <a href="#">
+    <i class="fas fa-chess-rook"></i>
+    <span>Battle Initiative</span>
+  </a>
 </li>
 <li>
-    <a href="{% url 'experience_points' %}">
-        <i class="fas fa-calculator"></i>
-        <span>Experience Calculator</span>
-    </a>
+  <a href="{% url 'experience_points' %}">
+    <i class="fas fa-calculator"></i>
+    <span>Experience Calculator</span>
+  </a>
 </li>
 {% endblock side-navbar-items %}
 
 {% block page-content %}
 
 <style>
-
-
-.btn i {
+  .btn i {
     font-size: 17px;
-}
+  }
 
-html, body {
-  height: 100%;
-  width: 100%;
-}
+  html,
+  body {
+    height: 100%;
+    width: 100%;
+  }
 
-body {
-  margin: 0;
-  padding: 0;
-  font-family: "Open Sans";
-  font-size: 14px;
-  font-weight: 400;
-  background-color: #ececec;
-  color: #102c58;
-}
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: "Open Sans";
+    font-size: 14px;
+    font-weight: 400;
+    background-color: #ececec;
+    color: #102c58;
+  }
 
-h1 {
-  font-size: 24px;
-}
+  h1 {
+    font-size: 24px;
+  }
 
-h2 {
-  font-size: 20px;
-}
+  h2 {
+    font-size: 20px;
+  }
 
-h3 {
-  font-size: 18px;
-}
+  h3 {
+    font-size: 18px;
+  }
 
-.u-list {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
+  .u-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
 
-.u-input {
-  outline: 0;
-  border: 1px solid #d0d0d0;
-  padding: 5px 10px;
-  height: 35px;
-  font-size: 12px;
-  -webkit-border-radius: 10px;
-  border-radius: 10px;
-  background-clip: padding-box;
-}
-main.l-main {  
-  padding: 25px 0 0 25px;
-  -webkit-transition: padding 0.5s ease-in-out;
-  -moz-transition: padding 0.5s ease-in-out;
-  -ms-transition: padding 0.5s ease-in-out;
-  -o-transition: padding 0.5s ease-in-out;
-  transition: padding 0.5s ease-in-out;
-}
-main.l-main .content-wrapper {
-  padding: 25px;
-  height: 100%;
-}
-main.l-main .content-wrapper .page-content {
-  border-top: 1px solid #d0d0d0;
-  padding-top: 25px;
-}
-main.l-main .content-wrapper--with-bg .page-content {
-  background: #fff;
-  border-radius: 3px;
-  border: 1px solid #d0d0d0;
-  padding: 25px;
-}
-main.l-main .page-title {
-  font-weight: 400;
-  margin-top: 0;
-  margin-bottom: 25px;
-}
+  .u-input {
+    outline: 0;
+    border: 1px solid #d0d0d0;
+    padding: 5px 10px;
+    height: 35px;
+    font-size: 12px;
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+    background-clip: padding-box;
+  }
+
+  main.l-main {
+    padding: 25px 0 0 25px;
+    -webkit-transition: padding 0.5s ease-in-out;
+    -moz-transition: padding 0.5s ease-in-out;
+    -ms-transition: padding 0.5s ease-in-out;
+    -o-transition: padding 0.5s ease-in-out;
+    transition: padding 0.5s ease-in-out;
+  }
+
+  main.l-main .content-wrapper {
+    padding: 25px;
+    height: 100%;
+  }
+
+  main.l-main .content-wrapper .page-content {
+    border-top: 1px solid #d0d0d0;
+    padding-top: 25px;
+  }
+
+  main.l-main .content-wrapper--with-bg .page-content {
+    background: #fff;
+    border-radius: 3px;
+    border: 1px solid #d0d0d0;
+    padding: 25px;
+  }
+
+  main.l-main .page-title {
+    font-weight: 400;
+    margin-top: 0;
+    margin-bottom: 25px;
+  }
 </style>
 
 
 <!-- Services -->
 <div class="container-fluid mt-5" style="height: auto; padding-top: 7vh; background-color: white;">
-    <div class="mr-auto ml-auto" style="width: 60%; padding-left: 50px;">
-<main class="l-main">
-  <div class="content-wrapper content-wrapper--with-bg">
-    
-    <div class="container">
-	<form class="form-horizontal">
-<fieldset>
+  <div class="mr-auto ml-auto" style="width: 60%; padding-left: 50px;">
+    <main class="l-main">
+      <div class="content-wrapper content-wrapper--with-bg">
 
-<!-- Form Name -->
-<legend>Account Settings</legend>
+        <div class="container">
+          <form class="form-horizontal">
+            <fieldset>
 
-<!-- Text input-->
-<div class="form-group">
-  <label class="col-md-4 control-label" for="displayname">Username</label>  
-  <div >  
-  <div class="input-group input-file" name="publickey">
-  <input type="text" class="form-control" placeholder="Username" value="{{ user.get_username }}" id="changeUserNameInput"/>	
-  <span class="input-group-btn ml-4 mr-4" style="width: 30%;">  
-            	<button class="btn btn-primary" type="button" style="width: 100%;" onClick="changeUserName()">Change Username</button>
-  </span>
-  </div>
-  </div>
-</div>
+              <!-- Form Name -->
+              <legend>Account Settings</legend>
 
-<div class="form-group">
-  <label class="col-md-4 control-label" for="displayname">Complete name</label>  
-  <div >  
-  <div class="input-group input-file" name="publickey">
-  
-   <input type="text" class="form-control" placeholder="Frist name" value="{{ user.first_name }}" id="changeFNameInput"/>	
-   <input type="text" class="form-control" placeholder='Last name' value="{{ user.last_name }}" id="changeLNameInput"/>	
+              <!-- Text input-->
+              <div class="form-group">
+                <label class="col-md-4 control-label" for="displayname">Username</label>
+                <div>
+                  <div class="input-group input-file" name="publickey">
+                    <input type="text" class="form-control" placeholder="Username" value="{{ user.get_username }}"
+                      id="changeUserNameInput" />
+                    <span class="input-group-btn ml-4 mr-4" style="width: 30%;">
+                      <button class="btn btn-primary" type="button" style="width: 100%;"
+                        onClick="changeUserName()">Change Username</button>
+                    </span>
+                  </div>
+                </div>
+              </div>
 
-  <span class="input-group-btn ml-4 mr-4" style="width: 30%;">  
-            	<button class="btn btn-primary" type="button" style="width: 100%;" onClick="changeFandLName()">Change Name</button>
-  </span>
-  </div>
-  </div>
-</div>
+              <div class="form-group">
+                <label class="col-md-4 control-label" for="displayname">Complete name</label>
+                <div>
+                  <div class="input-group input-file" name="publickey">
 
-<div class="form-group">
-  <label class="col-md-4 control-label" for="displayname">E-mail</label>  
-  <div >  
-  <div class="input-group input-file" name="publickey">
-  <input type="text" class="form-control" placeholder="E-mail" value="{{ user.email }}" id="changeEmailInput"/>	
-  <span class="input-group-btn ml-4 mr-4" style="width: 30%;">  
-            	<button class="btn btn-primary" type="button" style="width: 100%;" onClick="changeEmail()">Change E-mail</button>
-  </span>
-  </div>
-  </div>
-</div>
+                    <input type="text" class="form-control" placeholder="Frist name" value="{{ user.first_name }}"
+                      id="changeFNameInput" />
+                    <input type="text" class="form-control" placeholder='Last name' value="{{ user.last_name }}"
+                      id="changeLNameInput" />
 
-<div class="form-group">
-  <label class="col-md-4 control-label" for="displayname">Password</label>  
-  <div >
-  <div class="input-group input-file" name="publickey">  
-  <input type="text" class="form-control" placeholder="Enter Password" style="width: 41vh;" id="changeOldPasswordInput"/>
-  <span class="input-group-btn ml-4 mr-4" style="width: 30%;" >
-  </span>
-  </div>
-  <br/>
-  </div>
-  <div class="input-group input-file" name="publickey">  
-  <input type="text" class="form-control" placeholder="Enter new Password" id="changeNewPasswordInput"/>	
-  <span class="input-group-btn ml-4 mr-4" style="width: 30%;" >  
-            	<button class="btn btn-primary" type="button" style="width: 100%;" onClick="changePassword()">Change Password</button>
-  </span>
-  </div>
-<br/>
+                    <span class="input-group-btn ml-4 mr-4" style="width: 30%;">
+                      <button class="btn btn-primary" type="button" style="width: 100%;"
+                        onClick="changeFandLName()">Change Name</button>
+                    </span>
+                  </div>
+                </div>
+              </div>
 
-<script type="text/javascript">
+              <div class="form-group">
+                <label class="col-md-4 control-label" for="displayname">E-mail</label>
+                <div>
+                  <div class="input-group input-file" name="publickey">
+                    <input type="text" class="form-control" placeholder="E-mail" value="{{ user.email }}"
+                      id="changeEmailInput" />
+                    <span class="input-group-btn ml-4 mr-4" style="width: 30%;">
+                      <button class="btn btn-primary" type="button" style="width: 100%;" onClick="changeEmail()">Change
+                        E-mail</button>
+                    </span>
+                  </div>
+                </div>
+              </div>
 
-    var userId = "{{ user.id|safe }}"
-    var userPass = "{{ user.password|safe }}"
-    var userLLog = "{{ user.last_login|safe }}"
-    var userIsSpUs = "{{ user.is_superuser|safe }}"
-    var userName = "{{ user.username|safe }}"
-    var userFname = "{{ user.first_name|safe }}"
-    var userLname = "{{ user.last_nam|safe }}"
-    var userEmail = "{{ user.email|safe }}"
-    var userIsSt = "{{ user.is_staff|safe }}"
-    var userIsAct = "{{ user.is_active|safe }}"
-    var userDtJoin = "{{ user.date_joined|safe }}"
-    var userGroups = "{{ user.groups|safe }}"
-    var userPermi = "{{ user.user_permissions|safe }}"
-     
-     user = {
-        id : userId,
-        password : userPass,
-        last_login : userLLog,
-        is_superuser : userIsSpUs,
-        username : userName,
-        first_name : userFname,
-        last_name : userLname,
-        email : userEmail,
-        is_staff : userIsSt,
-        is_active : userIsAct,
-        date_joined : userDtJoin,
-        groups : userGroups,
-        user_permissions : userPermi
-    }
+              <div class="form-group">
+                <label class="col-md-4 control-label" for="displayname">Password</label>
+                <div>
+                  <div class="input-group input-file" name="publickey">
+                    <input type="text" class="form-control" placeholder="Enter Password" style="width: 41vh;"
+                      id="changeOldPasswordInput" />
+                    <span class="input-group-btn ml-4 mr-4" style="width: 30%;">
+                    </span>
+                  </div>
+                  <br />
+                </div>
+                <div class="input-group input-file" name="publickey">
+                  <input type="text" class="form-control" placeholder="Enter new Password"
+                    id="changeNewPasswordInput" />
+                  <span class="input-group-btn ml-4 mr-4" style="width: 30%;">
+                    <button class="btn btn-primary" type="button" style="width: 100%;" onClick="changePassword()">Change
+                      Password</button>
+                  </span>
+                </div>
+                <br />
 
-function changeUserName(){
+                <script type="text/javascript">
 
-    var newName = document.getElementById("changeUserNameInput").value;
-    user.username = newName;
-   
+                  var userId = "{{ user.id|safe }}"
+                  var userPass = "{{ user.password|safe }}"
+                  var userLLog = "{{ user.last_login|safe }}"
+                  var userIsSpUs = "{{ user.is_superuser|safe }}"
+                  var userName = "{{ user.username|safe }}"
+                  var userFname = "{{ user.first_name|safe }}"
+                  var userLname = "{{ user.last_nam|safe }}"
+                  var userEmail = "{{ user.email|safe }}"
+                  var userIsSt = "{{ user.is_staff|safe }}"
+                  var userIsAct = "{{ user.is_active|safe }}"
+                  var userDtJoin = "{{ user.date_joined|safe }}"
+                  var userGroups = "{{ user.groups|safe }}"
+                  var userPermi = "{{ user.user_permissions|safe }}"
 
-     $.ajax({
-            url: "/settings/settings-page",
-            type: "POST",
-            data: {
-                user
-            }
-            });
+                  user = {
+                    id: userId,
+                    password: userPass,
+                    last_login: userLLog,
+                    is_superuser: userIsSpUs,
+                    username: userName,
+                    first_name: userFname,
+                    last_name: userLname,
+                    email: userEmail,
+                    is_staff: userIsSt,
+                    is_active: userIsAct,
+                    date_joined: userDtJoin,
+                    groups: userGroups,
+                    user_permissions: userPermi
+                  }
 
-   
-    
-    console.log(user)
-}
+                  function changeUserName() {
 
-function changeFandLName(){
+                    var newName = document.getElementById("changeUserNameInput").value;
+                    user.username = newName;
 
-    var newFName = document.getElementById("changeFNameInput").value;
-    var newLName = document.getElementById("changeLNameInput").value;
-    user.first_name = newFName;
-    user.last_name = newLName;
-   
 
-     $.ajax({
-            url: "/settings/settings-page",
-            type: "POST",
-            data: {
-                user
-            }
-            });
+                    $.ajax({
+                      headers: { "X-CSRFToken": '{{csrf_token}}' },
+                      url: "/settings/settings-page/",
+                      type: "POST",
+                      data: {
+                        user: user,
+                        change_type: 'username',
+                      }
+                    });
 
-   
-    
-    console.log(user)
-}
 
-function changeEmail(){
 
-    var newEmail = document.getElementById("changeEmailInput").value;
-    user.email = newEmail;
-   
+                    console.log(user)
+                  }
 
-     $.ajax({
-            url: "/settings/settings-page",
-            type: "POST",
-            data: {
-                user
-            }
-            });
+                  function changeFandLName() {
 
-   
-    
-    console.log(user)
-}
+                    var newFName = document.getElementById("changeFNameInput").value;
+                    var newLName = document.getElementById("changeLNameInput").value;
+                    user.first_name = newFName;
+                    user.last_name = newLName;
 
-function changePassword(){
 
-    var oldPassword = document.getElementById("changeOldPasswordInput").value;
-    var newPassword = document.getElementById("changeNewPasswordInput").value;
-    user.password = newPassword;    
-   
+                    $.ajax({
+                      headers: { "X-CSRFToken": '{{csrf_token}}' },
+                      url: "/settings/settings-page/",
+                      type: "POST",
+                      data: {
+                        user: user,
+                        change_type: 'complete_name',
+                      }
+                    });
 
-     $.ajax({
-            url: "/settings/settings-page",
-            type: "POST",
-            data: {
-                user, 
-                oldPassword
-            }
-            });
 
-   
-    
-    console.log(user)
-}
 
-</script>
-       
-    </div>     
-<div>
-{% endblock page-content %}
+                    console.log(user)
+                  }
 
+                  function changeEmail() {
+
+                    var newEmail = document.getElementById("changeEmailInput").value;
+                    user.email = newEmail;
+
+
+                    $.ajax({
+                      headers: { "X-CSRFToken": '{{csrf_token}}' },
+                      url: "/settings/settings-page/",
+                      type: "POST",
+                      data: {
+                        user: user,
+                        change_type: 'email',
+                      }
+                    });
+
+
+
+                    console.log(user)
+                  }
+
+                  function changePassword() {
+
+                    var oldPassword = document.getElementById("changeOldPasswordInput").value;
+                    var newPassword = document.getElementById("changeNewPasswordInput").value;
+                    user.password = newPassword;
+
+
+                    $.ajax({
+                      headers: { "X-CSRFToken": '{{csrf_token}}' },
+                      url: "/settings/settings-page/",
+                      type: "POST",
+                      data: {
+                        user: user,
+                        old_password: oldPassword,
+                        change_type: 'password',
+                      }
+                    });
+
+
+
+                    console.log(user)
+                  }
+
+                </script>
+
+              </div>
+              <div>
+                {% endblock page-content %}
