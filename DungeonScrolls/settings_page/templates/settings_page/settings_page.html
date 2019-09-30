@@ -137,9 +137,9 @@ main.l-main .page-title {
   <label class="col-md-4 control-label" for="displayname">Username</label>  
   <div >  
   <div class="input-group input-file" name="publickey">
-  <input type="text" class="form-control" placeholder="Username" value="{{ user.get_username }}"/>	
+  <input type="text" class="form-control" placeholder="Username" value="{{ user.get_username }}" id="changeUserNameInput"/>	
   <span class="input-group-btn ml-4 mr-4" style="width: 30%;">  
-            	<button class="btn btn-primary" type="button" style="width: 100%;">Change Username</button>
+            	<button class="btn btn-primary" type="button" style="width: 100%;" onClick="changeUserName()">Change Username</button>
   </span>
   </div>
   </div>
@@ -150,11 +150,11 @@ main.l-main .page-title {
   <div >  
   <div class="input-group input-file" name="publickey">
   
-   <input type="text" class="form-control" placeholder="Frist name" value="{{ user.first_name }}"/>	
-   <input type="text" class="form-control" placeholder='Last name' value="{{ user.last_name }}"/>	
+   <input type="text" class="form-control" placeholder="Frist name" value="{{ user.first_name }}" id="changeFNameInput"/>	
+   <input type="text" class="form-control" placeholder='Last name' value="{{ user.last_name }}" id="changeLNameInput"/>	
 
   <span class="input-group-btn ml-4 mr-4" style="width: 30%;">  
-            	<button class="btn btn-primary" type="button" style="width: 100%;">Change Name</button>
+            	<button class="btn btn-primary" type="button" style="width: 100%;" onClick="changeFandLName()">Change Name</button>
   </span>
   </div>
   </div>
@@ -164,9 +164,9 @@ main.l-main .page-title {
   <label class="col-md-4 control-label" for="displayname">E-mail</label>  
   <div >  
   <div class="input-group input-file" name="publickey">
-  <input type="text" class="form-control" placeholder="E-mail" value="{{ user.email }}"/>	
+  <input type="text" class="form-control" placeholder="E-mail" value="{{ user.email }}" id="changeEmailInput"/>	
   <span class="input-group-btn ml-4 mr-4" style="width: 30%;">  
-            	<button class="btn btn-primary" type="button" style="width: 100%;">Change E-mail</button>
+            	<button class="btn btn-primary" type="button" style="width: 100%;" onClick="changeEmail()">Change E-mail</button>
   </span>
   </div>
   </div>
@@ -176,19 +176,133 @@ main.l-main .page-title {
   <label class="col-md-4 control-label" for="displayname">Password</label>  
   <div >
   <div class="input-group input-file" name="publickey">  
-  <input type="text" class="form-control" placeholder="Enter Password" style="width: 41vh;"/>
+  <input type="text" class="form-control" placeholder="Enter Password" style="width: 41vh;" id="changeOldPasswordInput"/>
   <span class="input-group-btn ml-4 mr-4" style="width: 30%;" >
   </span>
   </div>
   <br/>
   </div>
   <div class="input-group input-file" name="publickey">  
-  <input type="text" class="form-control" placeholder="Enter new Password" />	
+  <input type="text" class="form-control" placeholder="Enter new Password" id="changeNewPasswordInput"/>	
   <span class="input-group-btn ml-4 mr-4" style="width: 30%;" >  
-            	<button class="btn btn-primary" type="button" style="width: 100%;">Change Password</button>
+            	<button class="btn btn-primary" type="button" style="width: 100%;" onClick="changePassword()">Change Password</button>
   </span>
   </div>
 <br/>
+
+<script type="text/javascript">
+
+    var userId = "{{ user.id|safe }}"
+    var userPass = "{{ user.password|safe }}"
+    var userLLog = "{{ user.last_login|safe }}"
+    var userIsSpUs = "{{ user.is_superuser|safe }}"
+    var userName = "{{ user.username|safe }}"
+    var userFname = "{{ user.first_name|safe }}"
+    var userLname = "{{ user.last_nam|safe }}"
+    var userEmail = "{{ user.email|safe }}"
+    var userIsSt = "{{ user.is_staff|safe }}"
+    var userIsAct = "{{ user.is_active|safe }}"
+    var userDtJoin = "{{ user.date_joined|safe }}"
+    var userGroups = "{{ user.groups|safe }}"
+    var userPermi = "{{ user.user_permissions|safe }}"
+     
+     user = {
+        id : userId,
+        password : userPass,
+        last_login : userLLog,
+        is_superuser : userIsSpUs,
+        username : userName,
+        first_name : userFname,
+        last_name : userLname,
+        email : userEmail,
+        is_staff : userIsSt,
+        is_active : userIsAct,
+        date_joined : userDtJoin,
+        groups : userGroups,
+        user_permissions : userPermi
+    }
+
+function changeUserName(){
+
+    var newName = document.getElementById("changeUserNameInput").value;
+    user.username = newName;
+   
+
+     $.ajax({
+            url: "/settings/settings-page",
+            type: "POST",
+            data: {
+                user
+            }
+            });
+
+   
+    
+    console.log(user)
+}
+
+function changeFandLName(){
+
+    var newFName = document.getElementById("changeFNameInput").value;
+    var newLName = document.getElementById("changeLNameInput").value;
+    user.first_name = newFName;
+    user.last_name = newLName;
+   
+
+     $.ajax({
+            url: "/settings/settings-page",
+            type: "POST",
+            data: {
+                user
+            }
+            });
+
+   
+    
+    console.log(user)
+}
+
+function changeEmail(){
+
+    var newEmail = document.getElementById("changeEmailInput").value;
+    user.email = newEmail;
+   
+
+     $.ajax({
+            url: "/settings/settings-page",
+            type: "POST",
+            data: {
+                user
+            }
+            });
+
+   
+    
+    console.log(user)
+}
+
+function changePassword(){
+
+    var oldPassword = document.getElementById("changeOldPasswordInput").value;
+    var newPassword = document.getElementById("changeNewPasswordInput").value;
+    user.password = newPassword;    
+   
+
+     $.ajax({
+            url: "/settings/settings-page",
+            type: "POST",
+            data: {
+                user, 
+                oldPassword
+            }
+            });
+
+   
+    
+    console.log(user)
+}
+
+</script>
        
     </div>     
 <div>
