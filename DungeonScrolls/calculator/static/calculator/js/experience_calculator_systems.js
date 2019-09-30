@@ -31,10 +31,15 @@ function generate_experience_calculator_formulary(select_id) {
 
             html_text += '<div class="col">'
 
-            html_text += '<div class="row-1">'
+            html_text += '<div class="d-flex w-100 mb-4 p-0 align-items-center">'
+            html_text += '<div class="col w-100 p-0 mr-2">'
             html_text += '<div class="form-group">'
             html_text += '<label for="number_of_characters">Number of Characters in Battle</label>'
             html_text += '<input  id="number_of_characters" type="number" class="form-control" min="1" value="1">'
+            html_text += '</div>'
+            html_text += '</div>'
+            html_text += '<div class="col w-100 p-0 mt-3 ml-2">'
+            html_text += '<button type="button" class="btn btn-outline-dark btn-block" onclick="calculate_experience()">Calculate</button>'
             html_text += '</div>'
             html_text += '</div>'
 
@@ -53,7 +58,6 @@ function generate_experience_calculator_formulary(select_id) {
             html_text += '</div>'
 
             html_text += '<div class="row-1 mt-3">'
-            html_text += '<button type="button" class="btn btn-primary btn-block" onclick="calculate_experience()">Calculate</button>'
             html_text += '</div>'
 
             html_text += '</div>'
@@ -93,23 +97,41 @@ function calculate_experience() {
         },
         success: function (response_data) {
             var div_object = document.getElementById("experience_calculator_result");
+            var h2_title = "";
+            var top_div_xp_result_text = "";
+            var bottom_div_xp_result_text = "";
+            var xp_result_text = "";
             html_text = '';
 
             if (typeof response_data.experience_points_per_level == 'undefined') {
                 return;
             }
 
+            h2_title = '<h2 class="mb-4"> Experience Received by Character\'s Level </h2>';
+            top_div_xp_result_text = '<div class="row mb-4 ml-1">';
             for (character_level in response_data.experience_points_per_level) {
                 character_experience_received = response_data.experience_points_per_level[character_level]
 
-                html_text += '<div class="row-1">'
-                html_text += '<button type="button" class="btn btn-outline-primary btn-block" disabled>'
-                html_text += 'Characters in Level ' + character_level + ' receive ' + character_experience_received
-                html_text += '</button>'
-                html_text += '</div>'
+                if (character_experience_received != "0") {
+                    xp_result_text += '<div class="col-3 p-0">'
+                    xp_result_text += '<button type="button" class="btn btn-outline-dark btn-block" disabled>'
+                    xp_result_text += 'Level ' + character_level + ' receive ' + character_experience_received + ' XP'
+                    xp_result_text += '</button>'
+                    xp_result_text += '</div>'
+                }
+
+            }
+            bottom_div_xp_result_text += '</div>';
+
+            if (xp_result_text != "") {
+                html_text = h2_title + top_div_xp_result_text + xp_result_text + bottom_div_xp_result_text;
+            } else {
+                html_text = '<h2 class="mb-4">The Characters don\'t received XP</h2>'
             }
 
             div_object.innerHTML = html_text;
+
+            window.scrollTo(0, document.body.scrollHeight);
         },
         complete: function () { },
         error: function (xhr, textStatus, thrownError) {

@@ -1,13 +1,36 @@
 {% extends "sidenavbar.html" %}
 {% load crispy_forms_tags %}
+{% load staticfiles %}
 
 {% block side-navbar-title %}
-Sistemas de Regras
+Tools
 {% endblock side-navbar-title %}
 
 
 {% block side-navbar-items %}
-
+<li class="header-menu">
+    <span>RPG Utilities</span>
+</li>
+{% if user.is_authenticated %}
+<li>
+    <a href="{% url 'reactEnter' %}">
+        <i class="fas fa-book"></i>
+        <span>Bestiaries</span>
+    </a>
+</li>
+{% endif %}
+<li>
+    <a href="#">
+        <i class="fas fa-chess-rook"></i>
+        <span>Battle Initiative</span>
+    </a>
+</li>
+<li>
+    <a href="{% url 'experience_points' %}">
+        <i class="fas fa-calculator"></i>
+        <span>Experience Calculator</span>
+    </a>
+</li>
 {% endblock side-navbar-items %}
 
 
@@ -18,14 +41,20 @@ Sistemas de Regras
     <script src="{% static 'calculator/js/experience_calculator_systems.js' %}"></script>
 </head>
 
-<!-- RPG Rule System - Dropdown Choice Form -->
-{% csrf_token %}
-{{ model_choice_form|crispy }}
+<div class="container-fluid mt-5" style="height: auto; padding-top: 6vh; background-color: white;">
+    <div class="mr-auto ml-auto" style="width: 90%; padding-left: 50px;">
+        <h1 class="mb-3">Experience Calculator</h1>
 
-<!-- Formulary generated based on Rule System selected -->
-<div id="experience_calculator_formulary" class="row">
-</div>
+        <!-- RPG Rule System - Dropdown Choice Form -->
+        {% csrf_token %}
+        {{ model_choice_form|crispy }}
 
-<div id="experience_calculator_result" class="row-1 mt-4">
+        <!-- Formulary generated based on Rule System selected -->
+        <div id="experience_calculator_formulary" class="row">
+        </div>
+
+        <div id="experience_calculator_result" class="row-1 mt-4">
+        </div>
+    </div>
 </div>
 {% endblock page-content %}
