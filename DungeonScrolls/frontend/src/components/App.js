@@ -37,13 +37,17 @@ class App extends Component {
 	render() {
 		return (
 			<Router>
-				<Switch>					
-					<Route exact path="/">  
-						<div className="App">									
-							<SideMenu user={this.state.user} />							
-						</div>
-					</Route>
-				</Switch>
+				<div className="App">
+					<div>
+						{(() => {
+							if (this.state.user == undefined) {
+								return "Carregando..., por favor aguarde";
+							} else {
+								return <SideMenu user={this.state.user} />;
+							}
+						})()}
+					</div>
+				</div>
 			</Router>
 		);
 	}
