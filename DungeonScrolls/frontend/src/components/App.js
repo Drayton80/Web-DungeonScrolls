@@ -36,12 +36,14 @@ class App extends Component {
 	}
 
 	render() {
-		return (			
+		return (
+			<Router>	
 				<div className="App">
 					<div>
 						<SideMenu user={this.state.user} />						
 					</div>
-				</div>			
+				</div>
+			</Router>			
 		);
 	}
 }
