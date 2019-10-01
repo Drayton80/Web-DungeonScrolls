@@ -74,6 +74,7 @@ export default class SideMenu extends Component {
     axios
       .get(`http://127.0.0.1:8000/rest/api/get-bestiary-list/${props.user.id}/`)
       .then(res => {
+        JQueryFuction();
         const bestiaryList = res.data;
         this.setState({ bestiaryList: bestiaryList });
 
@@ -81,6 +82,7 @@ export default class SideMenu extends Component {
           axios
             .get(`http://127.0.0.1:8000/rest/api/get-chapter-list/${bestiaryList[i].id}/`)
             .then(response => {
+              JQueryFuction();
               const chapterListN = response.data;
               this.setState({ chapterList: _.unionBy(this.state.chapterList, chapterListN, "id") });
 
@@ -89,6 +91,7 @@ export default class SideMenu extends Component {
                 axios
                   .get(`http://127.0.0.1:8000/rest/api/get-sheet-list/${chapterListN[j].id}/`)
                   .then(response1 => {
+                    JQueryFuction();
                     const sheetListNameN = response1.data;
                     this.setState({ sheetListName: _.unionBy(this.state.sheetListName, sheetListNameN, "id") });
                   })
@@ -204,10 +207,22 @@ export default class SideMenu extends Component {
     }
   }
 
+  disableClickDropDown(){
+    //console.log("Entrou")
+    jQuery(function ($) {
+    $(".sidebar-dropdown > a").off('click');
+    });
+  }
+
+  enableClickDropDown(){
+    //console.log("Saiu")
+    JQueryFuction()
+  }
+
 
   render() {
 
-    JQueryFuction();
+    
     const routingSheet = (
       <Router>
         <div>
@@ -225,14 +240,18 @@ export default class SideMenu extends Component {
             <span>{bestiary.name}</span>
 
             <div className="d-flex ml-auto" style={{ background: '#31353D' }}>
-              <button type="button" className="btn btn-sm mb-n2 mr-2 bestiary-delete-icon">
-                <FontAwesomeIcon className="mb-3 ml-n1" icon={faTrashAlt} size="xs"
-                  onClick={(() => this.deleteModal(bestiary, "bestiary"))} />
+              <button type="button" className="btn btn-sm mb-n2 mr-2 bestiary-delete-icon"
+               onClick={(() => this.deleteModal(bestiary, "bestiary"))} 
+                  onMouseOver={(() => this.disableClickDropDown())} 
+                  onMouseLeave={(() => this.enableClickDropDown())}>
+                <FontAwesomeIcon className="mb-3 ml-n1" icon={faTrashAlt} size="xs"/>
               </button>
 
-              <button type="button" className="btn btn-sm mb-n2 mr-2 bestiary-add-icon">
-                <FontAwesomeIcon className="mb-3 ml-n1" icon={faPlus} size="xs"
-                  onClick={(() => this.createModal(bestiary, "chapter"))} />
+              <button type="button" className="btn btn-sm mb-n2 mr-2 bestiary-add-icon"
+              onClick={(() => this.createModal(bestiary, "chapter"))} 
+              onMouseOver={(() => this.disableClickDropDown())} 
+              onMouseLeave={(() => this.enableClickDropDown())}>
+                <FontAwesomeIcon className="mb-3 ml-n1" icon={faPlus} size="xs"/>
               </button>
             </div>
 
@@ -250,14 +269,18 @@ export default class SideMenu extends Component {
                     <span className="ml-3">{chapter.name}</span>
 
                     <div className="d-flex ml-auto" >
-                      <button type="button" className="btn btn-sm mb-n2 mr-2 bestiary-delete-icon">
-                        <FontAwesomeIcon className="mb-3 ml-n1" icon={faTrashAlt} size="xs"
-                          onClick={(() => this.deleteModal(chapter, "chapter"))} />
+                      <button type="button" className="btn btn-sm mb-n2 mr-2 bestiary-delete-icon"
+                      onClick={(() => this.deleteModal(chapter, "chapter"))}
+                      onMouseOver={(() => this.disableClickDropDown())} 
+                      onMouseLeave={(() => this.enableClickDropDown())}>
+                        <FontAwesomeIcon className="mb-3 ml-n1" icon={faTrashAlt} size="xs"/>
                       </button>
 
-                      <button type="button" className="btn btn-sm mb-n2 mr-2 bestiary-add-icon">
-                        <FontAwesomeIcon className="mb-3 ml-n1" icon={faPlus} size="xs"
-                          onClick={(() => this.createModal(chapter, "sheet"))} />
+                      <button type="button" className="btn btn-sm mb-n2 mr-2 bestiary-add-icon"
+                       onClick={(() => this.createModal(chapter, "sheet"))} 
+                       onMouseOver={(() => this.disableClickDropDown())} 
+                        onMouseLeave={(() => this.enableClickDropDown())}>
+                        <FontAwesomeIcon className="mb-3 ml-n1" icon={faPlus} size="xs"/>
                       </button>
                     </div>
 
@@ -308,30 +331,30 @@ export default class SideMenu extends Component {
       <Modal open={this.state.openDeleteModal} center onClose={(() => this.closeModal())} >
         <h2>{(() => {
           var itemType = this.state.modalObjType
-          if (itemType == "bestiary") {
-            return "Deletando Bestiario";
+          if (itemType == "Bestiary") {
+            return "Deleting Bestiario";
           }
           if (itemType == "chapter") {
-            return "Deletando Capitulo";
+            return "Deleting Chapter";
           } else {
-            return "Deletando Ficha";
+            return "Deleting Sheet";
           }
         })()}
         </h2>
-        <p>Tem certeza que quer deletar {(() => {
+        <p>Are you sure you want to delete {(() => {
           var itemType = this.state.modalObjType
           if (itemType == "bestiary") {
-            return "o Bestiario " + this.state.modalDeleteObj.name;
+            return "this Bestiario " + this.state.modalDeleteObj.name;
           }
           if (itemType == "chapter") {
-            return "o Capitulo" + this.state.modalDeleteObj.name;
+            return "this Chapter" + this.state.modalDeleteObj.name;
           } else {
-            return "a Ficha" + this.state.modalDeleteObj.name;
+            return "this Sheet" + this.state.modalDeleteObj.name;
           }
         })()}?
           </p>
-        <button type="button" className="btn btn-primary ml-5" onClick={(() => this.deleteBesChaObjs())}>Deletar</button>
-        <button type="button" className="btn btn-danger ml-5" onClick={(() => this.closeModal())}>Cancelar</button>
+        <button type="button" className="btn btn-primary ml-5" onClick={(() => this.deleteBesChaObjs())}>Delete</button>
+        <button type="button" className="btn btn-danger ml-5" onClick={(() => this.closeModal())}>Cancel</button>
 
       </Modal>
     );
@@ -343,29 +366,29 @@ export default class SideMenu extends Component {
         <h2>{(() => {
           var itemType = this.state.modalObjType
           if (itemType == "bestiary") {
-            return "Criando Bestiario";
+            return "Creating Bestiary";
           }
           if (itemType == "chapter") {
-            return "Criando Capitulo";
+            return "Creating Chapter";
           } else {
-            return "Criando Ficha";
+            return "Creating Sheet";
           }
         })()}
         </h2>
-        <p>Digite o nome {(() => {
+        <p>Enter the name {(() => {
           var itemType = this.state.modalObjType
           if (itemType == "bestiary") {
-            return "do Bestiario";
+            return "of the Bestiary";
           }
           if (itemType == "chapter") {
-            return "do Capitulo";
+            return "of the Chapter";
           } else {
-            return "da Ficha";
+            return "of the Sheet";
           }
-        })()} que deseja criar:
+        })()} you want to create:
           </p>
         <input type="text" style={{ height: '40px', width: '150px' }} onChange={this.handleOnChange} />
-        <button type="button" className="btn btn-primary ml-4 mb-1" style={{ width: '120px' }} onClick={(() => this.createAllObjs())} >Criar</button>
+        <button type="button" className="btn btn-primary ml-4 mb-1" style={{ width: '120px' }} onClick={(() => this.createAllObjs())} >Create</button>
       </Modal>
     );
 
@@ -378,7 +401,7 @@ export default class SideMenu extends Component {
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="description" content="Responsive sidebar template with sliding effect and dropdown menu based on bootstrap 3" />
-        <title>Sidebar template</title>
+        <title>Sidebar</title>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossOrigin="anonymous" />
         <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet" />
         <div >
@@ -392,7 +415,7 @@ export default class SideMenu extends Component {
           <nav id="sidebar" className="sidebar-wrapper">
             <div className="sidebar-content mt-5">
               <div className="sidebar-brand">
-                <a  >Bestiario</a>
+                <a  >Bestiary Library</a>
                 <div id="close-sidebar">
                   <i className="fas fa-angle-left" />
                 </div>
@@ -404,11 +427,10 @@ export default class SideMenu extends Component {
                   <li className="header-menu">
 
                     <div className="d-flex">
-                      <span>General</span>
+                      <span>My Bestiarys</span>
 
-                      <button type="button" className="btn btn-sm mb-n2 ml-auto bestiary-add-icon" style={{ "margin-right": "38px", "margin-top": "21px" }}>
-                        <FontAwesomeIcon className="mb-3 ml-n1" icon={faPlus} size="xs"
-                          onClick={(() => this.createModal("bestiary"))} />
+                      <button type="button" className="btn btn-sm mb-n2 ml-auto bestiary-add-icon" style={{ "margin-right": "38px", "margin-top": "21px" }} onClick={(() => this.createModal("bestiary"))} >
+                        <FontAwesomeIcon className="mb-3 ml-n1" icon={faPlus} size="xs"/>
                       </button>
 
                       {/* <button type="button" className="btn btn-primary btn-sm align-self-center mb-n2 ml-auto mr-3" style={{ height: '20px', width: '20px' }}>

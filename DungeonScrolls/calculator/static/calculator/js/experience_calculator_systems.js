@@ -18,6 +18,7 @@ function generate_experience_calculator_formulary(select_id) {
             data: {
                 response_type: 'calculator_formulary',
                 rule_system_selected_id: system_selected_id,
+                csrfmiddlewaretoken: $("input[name='csrfmiddlewaretoken']").val(),
             },
             success: function (response_data) {
                 var difficulty_level_prefix;

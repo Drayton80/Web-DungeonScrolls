@@ -6,6 +6,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
+
 {% block side-navbar-title %}
 Settings
 {% endblock side-navbar-title %}
@@ -24,7 +25,7 @@ Settings
 </li>
 {% endif %}
 <li>
-  <a href="#">
+  <a href="{% url 'battle_initiative' %}">
     <i class="fas fa-chess-rook"></i>
     <span>Battle Initiative</span>
   </a>
@@ -38,6 +39,7 @@ Settings
 {% endblock side-navbar-items %}
 
 {% block page-content %}
+{% if user.exists  %}
 
 <style>
   .btn i {
@@ -124,7 +126,7 @@ Settings
 
 
 <!-- Services -->
-<div class="container-fluid mt-5" style="height: auto; padding-top: 7vh; background-color: white;">
+<div class="container-fluid mt-5" style="height: 100%; padding-top: 7vh; background-color: white;">
   <div class="mr-auto ml-auto" style="width: 60%; padding-left: 50px;">
     <main class="l-main">
       <div class="content-wrapper content-wrapper--with-bg">
@@ -187,16 +189,16 @@ Settings
                 <label class="col-md-4 control-label" for="displayname">Password</label>
                 <div>
                   <div class="input-group input-file" name="publickey">
-                    <input type="text" class="form-control" placeholder="Enter Password" style="width: 41vh;"
-                      id="changeOldPasswordInput" />
+                    <input type="password" class="form-control" placeholder="Enter Password" style="width: 41vh;"
+                      id="changeOldPasswordInput" autocomplete="new-password"/>
                     <span class="input-group-btn ml-4 mr-4" style="width: 30%;">
                     </span>
                   </div>
                   <br />
                 </div>
                 <div class="input-group input-file" name="publickey">
-                  <input type="text" class="form-control" placeholder="Enter new Password"
-                    id="changeNewPasswordInput" />
+                  <input type="password" class="form-control" placeholder="Enter new Password"
+                    id="changeNewPasswordInput" autocomplete="new-password"/>
                   <span class="input-group-btn ml-4 mr-4" style="width: 30%;">
                     <button class="btn btn-primary" type="button" style="width: 100%;" onClick="changePassword()">Change
                       Password</button>
@@ -249,12 +251,23 @@ Settings
                       data: {
                         user: user,
                         change_type: 'username',
-                      }
+                      },
+                        success: function (response_data) {
+                          if(response_data['error_message'] != null){
+                          alert(response_data['error_message'])
+                          }else{
+                            alert("Username changed successfully")
+                          }
+                        },
+                      complete: function () { },
+                      error: function (xhr, textStatus, thrownError) {
+                          alert("error doing something");
+                        }
                     });
 
 
 
-                    console.log(user)
+                    //console.log(user)
                   }
 
                   function changeFandLName() {
@@ -272,12 +285,21 @@ Settings
                       data: {
                         user: user,
                         change_type: 'complete_name',
-                      }
+                      },
+                        success: function (response_data) {
+                         
+                            alert("Frist an Last names changed successfully")
+                          
+                        },
+                      complete: function () { },
+                      error: function (xhr, textStatus, thrownError) {
+                          alert("error doing something");
+                        }
                     });
 
 
 
-                    console.log(user)
+                    //console.log(user)
                   }
 
                   function changeEmail() {
@@ -293,12 +315,21 @@ Settings
                       data: {
                         user: user,
                         change_type: 'email',
-                      }
+                      },
+                        success: function (response_data) {
+                         
+                            alert("E-mail changed successfully")
+                          
+                        },
+                      complete: function () { },
+                      error: function (xhr, textStatus, thrownError) {
+                          alert("error doing something");
+                        }
                     });
 
 
 
-                    console.log(user)
+                    //console.log(user)
                   }
 
                   function changePassword() {
@@ -316,16 +347,28 @@ Settings
                         user: user,
                         old_password: oldPassword,
                         change_type: 'password',
-                      }
+                      },
+                        success: function (response_data) {
+                          if(response_data['error_message'] != null){
+                          alert(response_data['error_message'])
+                          }else{
+                            alert("Password changed successfully")
+                          }
+                        },
+                      complete: function () { },
+                      error: function (xhr, textStatus, thrownError) {
+                          alert("error doing something");
+                        }
                     });
 
 
 
-                    console.log(user)
+                    //console.log(user)
                   }
 
                 </script>
 
               </div>
               <div>
+              {% endif %}
                 {% endblock page-content %}

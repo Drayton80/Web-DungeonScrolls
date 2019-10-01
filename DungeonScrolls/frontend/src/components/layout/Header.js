@@ -28,10 +28,9 @@ export default class Header extends Component {
                                     </a>
                                     <div className="dropdown-menu dropdown-menu-dungeonscrolls" aria-labelledby="navbarDropdown">
                                         <a className="dropdown-item dropdown-item-text-dungeonscrolls"
-                                            href="{% url 'reactEnter' %}">Settings</a>
-                                        <a className="dropdown-item dropdown-item-text-dungeonscrolls" href="#">Profile</a>
+                                            href="/settings/settings-page/">Settings</a>                                        
                                         <div className="dropdown-divider dropdown-item-divider-dungeonscrolls"></div>
-                                        <a className="dropdown-item dropdown-item-text-dungeonscrolls" href="#">Signout</a>
+                                        <a className="dropdown-item dropdown-item-text-dungeonscrolls" href="/accounts/logout/">Signout</a>
                                     </div>
                                 </li>
 

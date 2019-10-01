@@ -40,8 +40,9 @@ class App extends Component {
 				<div className="App">
 					<div>
 						{(() => {
-							if (this.state.user == undefined) {
-								return "Carregando..., por favor aguarde";
+							console.log(this.state.user)
+							if (this.state.user == "") {
+								return "Error: Unregistered user";
 							} else {
 								return <SideMenu user={this.state.user} />;
 							}
