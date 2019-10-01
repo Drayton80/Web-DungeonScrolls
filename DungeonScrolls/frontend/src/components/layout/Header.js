@@ -8,7 +8,7 @@ export default class Header extends Component {
                 <nav className="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" style={{ zIndex: "10" }}>
                     <div className="container-fluid p-0">
 
-                        <a className="navbar-title h1 mb-0 ml-2" style={{ "font-family": "MedievalSharp", color: "rgb(189, 187, 187)", "font-size": "25px" }} href="/home/">Dungeon Scrolls</a>
+                        <a className="navbar-title h1 mb-0 ml-2" style={{ fontFamily: "MedievalSharp", color: "rgb(189, 187, 187)", fontSize: "25px" }} href="/home/">Dungeon Scrolls</a>
 
                         <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSite">
                             <span className="navbar-toggler-icon"></span>

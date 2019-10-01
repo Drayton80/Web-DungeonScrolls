@@ -192,7 +192,7 @@ export default class Sheet extends Component {
                               <td><div style={{ float: 'left' }}>
                                 <input type="text" name="information_experience"  onChange={this.handleOnChange}
                                   style={{ width: '100px', textAlign: 'right' }} key={this.state.sheetClicked.id} defaultValue={this.state.sheetClicked.information_experience}
-                                />/<input type="text" name="attr_expgoal"  style={{ width: '100px' }} value={this.state.sheetClicked.information_level * 1000} />
+                                />/<input type="text" name="attr_expgoal"  style={{ width: '100px' }} defaultValue="" value={this.state.sheetClicked.information_level * 1000} />
                                 <br /><span data-i18n="experience-points">Experience Points</span></div></td>
 
                             </tr>
@@ -303,42 +303,42 @@ export default class Sheet extends Component {
                         <div className="sheet-table-row">
                           <span className="sheet-table-row-name" style={{ width: '60px' }} data-i18n="strength-i">STR</span>
                           <span className="sheet-table-data-center"><input type="text" style={{ width: '45px' }} name="ability_strength_modifier"
-                            key={this.state.sheetClicked.id} defaultValue={this.state.sheetClicked.ability_strength_modifier}  readOnly="readonly" onChange={this.handleOnChange} /></span>
+                            key={this.state.sheetClicked.id} defaultValue={this.state.sheetClicked.ability_strength_modifier}    onChange={this.handleOnChange} /></span>
                           <span className="sheet-table-data-center"><input type="text" style={{ width: '45px' }} name="ability_strength_base"
                             key={this.state.sheetClicked.id} defaultValue={this.state.sheetClicked.ability_strength_base}  onChange={this.handleOnChange} /></span>
                         </div>
                         <div className="sheet-table-row">
                           <span className="sheet-table-row-name" style={{ width: '60px' }} data-i18n="dexterity-i">DEX</span>
                           <span className="sheet-table-data-center"><input type="text" style={{ width: '45px' }} name="ability_dexterity_modifier" 
-                            key={this.state.sheetClicked.id} defaultValue={this.state.sheetClicked.ability_dexterity_modifier} readOnly="readonly" onChange={this.handleOnChange} /></span>
+                            key={this.state.sheetClicked.id} defaultValue={this.state.sheetClicked.ability_dexterity_modifier}   onChange={this.handleOnChange} /></span>
                           <span className="sheet-table-data-center"><input type="text" style={{ width: '45px' }} name="ability_dexterity_base" 
                             key={this.state.sheetClicked.id} defaultValue={this.state.sheetClicked.ability_dexterity_base} onChange={this.handleOnChange} /></span>
                         </div>
                         <div className="sheet-table-row">
                           <span className="sheet-table-row-name" style={{ width: '60px' }} data-i18n="constitution-i">CON</span>
                           <span className="sheet-table-data-center"><input type="text" style={{ width: '45px' }} name="ability_constitution_modifier" 
-                            key={this.state.sheetClicked.id} defaultValue={this.state.sheetClicked.ability_constitution_modifier} readOnly="readonly" onChange={this.handleOnChange} /></span>
+                            key={this.state.sheetClicked.id} defaultValue={this.state.sheetClicked.ability_constitution_modifier}   onChange={this.handleOnChange} /></span>
                           <span className="sheet-table-data-center"><input type="text" style={{ width: '45px' }} name="ability_constitution_base" 
                             key={this.state.sheetClicked.id} defaultValue={this.state.sheetClicked.ability_constitution_base} onChange={this.handleOnChange} /></span>
                         </div>
                         <div className="sheet-table-row">
                           <span className="sheet-table-row-name" style={{ width: '60px' }} data-i18n="intelligence-i">INT</span>
                           <span className="sheet-table-data-center"><input type="text" style={{ width: '45px' }} name="ability_intelligence_modifier" 
-                            key={this.state.sheetClicked.id} defaultValue={this.state.sheetClicked.ability_intelligence_modifier} readOnly="readonly" onChange={this.handleOnChange} /></span>
+                            key={this.state.sheetClicked.id} defaultValue={this.state.sheetClicked.ability_intelligence_modifier}   onChange={this.handleOnChange} /></span>
                           <span className="sheet-table-data-center"><input type="text" style={{ width: '45px' }} name="ability_intelligence_base" 
                             key={this.state.sheetClicked.id} defaultValue={this.state.sheetClicked.ability_intelligence_base} onChange={this.handleOnChange} /></span>
                         </div>
                         <div className="sheet-table-row">
                           <span className="sheet-table-row-name" style={{ width: '60px' }} data-i18n="wisdom-i">WIS</span>
                           <span className="sheet-table-data-center"><input type="text" style={{ width: '45px' }} name="ability_wisdom_modifier" 
-                            key={this.state.sheetClicked.id} defaultValue={this.state.sheetClicked.ability_wisdom_modifier} readOnly="readonly" onChange={this.handleOnChange} /></span>
+                            key={this.state.sheetClicked.id} defaultValue={this.state.sheetClicked.ability_wisdom_modifier}   onChange={this.handleOnChange} /></span>
                           <span className="sheet-table-data-center"><input type="text" style={{ width: '45px' }} name="ability_wisdom_base"
                             key={this.state.sheetClicked.id} defaultValue={this.state.sheetClicked.ability_wisdom_base} onChange={this.handleOnChange} /></span>
                         </div>
                         <div className="sheet-table-row">
                           <span className="sheet-table-row-name" style={{ width: '60px' }} data-i18n="charisma-i">CHA</span>
                           <span className="sheet-table-data-center"><input type="text" style={{ width: '45px' }} name="ability_charisma_modifier" 
-                            key={this.state.sheetClicked.id} defaultValue={this.state.sheetClicked.ability_charisma_modifier} readOnly="readonly" onChange={this.handleOnChange} /></span>
+                            key={this.state.sheetClicked.id} defaultValue={this.state.sheetClicked.ability_charisma_modifier}   onChange={this.handleOnChange} /></span>
                           <span className="sheet-table-data-center"><input type="text" style={{ width: '45px' }} name="ability_charisma_base" 
                             key={this.state.sheetClicked.id} defaultValue={this.state.sheetClicked.ability_charisma_base} onChange={this.handleOnChange} /></span>
                         </div>
