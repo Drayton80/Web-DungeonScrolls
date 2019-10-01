@@ -3,11 +3,11 @@
 
 
 <head>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 {% block side-navbar-title %}
-Battle Initiative
+Tools
 {% endblock side-navbar-title %}
 
 
@@ -39,96 +39,106 @@ Battle Initiative
 
 {% block page-content %}
 <style>
-body {
+    body {
         color: #404E67;
-        background: #F5F7FA;
-		font-family: 'Open Sans', sans-serif;
-	}
-	.table-wrapper {
-		width: 700px;
-		margin: 30px auto;
-        background: #fff;
-        padding: 20px;	
-        box-shadow: 0 1px 1px rgba(0,0,0,.05);
+        background: white;
+        font-family: 'Open Sans', sans-serif;
     }
+
+    .table-wrapper {
+        width: 700px;
+        margin: 30px auto;
+        background: #fff;
+        box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+    }
+
     .table-title {
         padding-bottom: 10px;
         margin: 0 0 10px;
     }
+
     .table-title h2 {
         margin: 6px 0 0;
         font-size: 22px;
     }
+
     .table-title .add-new {
         float: right;
-		height: 30px;
-		font-weight: bold;
-		font-size: 12px;
-		text-shadow: none;
-		min-width: 100px;
-		border-radius: 50px;
-		line-height: 13px;
+        height: 30px;
+        font-weight: bold;
+        font-size: 12px;
+        text-shadow: none;
+        min-width: 100px;
+        border-radius: 50px;
+        line-height: 13px;
     }
-	.table-title .add-new i {
-		margin-right: 4px;
-	}
+
+    .table-title .add-new i {
+        margin-right: 4px;
+    }
+
     table.table {
         table-layout: fixed;
     }
-    table.table tr th, table.table tr td {
-        border-color: #d4d4d4;
+
+    table.table tr th,
+    table.table tr td {
+        border-color: white;
     }
+
     table.table th i {
         font-size: 13px;
         margin: 0 5px;
         cursor: pointer;
     }
+
     table.table th:last-child {
         width: 100px;
     }
+
     table.table td a {
-		cursor: pointer;
+        cursor: pointer;
         display: inline-block;
         margin: 0 5px;
-		min-width: 24px;
-    }    
-	table.table td a.add {
+        min-width: 24px;
+    }
+
+    table.table td a.add {
         color: #27C46B;
         font-size: 18px;
-    	margin-right: 3px;
+        margin-right: 3px;
         position: relative;
         top: 3px;
     }
+
     table.table td a.edit {
         color: #FFC107;
     }
+
     table.table td a.delete {
         color: #E34724;
     }
+
     table.table td i {
         font-size: 19px;
     }
-	table.table td a.add i {
-       
-    }    
+
+    table.table td a.add i {}
+
     table.table .form-control {
         height: 32px;
         line-height: 32px;
         box-shadow: none;
         border-radius: 2px;
     }
-	table.table .form-control.error {
-		border-color: #f50000;
-	}
-	table.table td .add {
-		display: none;
-	}
 
-    
+    table.table .form-control.error {
+        border-color: #f50000;
+    }
 
-
-
-
+    table.table td .add {
+        display: none;
+    }
 </style>
 
 
@@ -136,12 +146,17 @@ body {
 <!-- Services -->
 <div class="container-fluid mt-5" style="height: auto; padding-top: 7vh; background-color: white;">
     <div class="mr-auto ml-auto" style="width: 60%; padding-left: 50px;">
+        <h1 class="mt-5">Battle Initiative</h1>
+
         <div class="table-wrapper">
             <div class="table-title">
                 <div class="row">
-                    <div class="col-sm-8"><h2>Character Details</h2></div>
+                    <div class="col-sm-8">
+                        <h2>Character Details</h2>
+                    </div>
                     <div class="col-sm-4">
-                        <button type="button" class="btn btn-info add-new"><i class="fa fa-plus"></i> Add New</button>
+                        <button type="button" class="btn btn-outline-info add-new mr-4"><i class="fa fa-plus"></i> Add
+                            New</button>
                     </div>
                 </div>
             </div>
@@ -149,196 +164,197 @@ body {
                 <thead>
                     <tr>
                         <th>Name</th>
-                        <th>Initiative Bonus</th>                        
+                        <th>Initiative Bonus</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
                         <td>Example (Not include in initiative roll)</td>
-                        <td>999</td>                        
+                        <td>999</td>
                         <td>
-							<a class="add fas fa-plus-square mr-3" title="Add" data-toggle="tooltip"><i></i></a>
+                            <a class="add fas fa-plus-square mr-3" title="Add" data-toggle="tooltip"><i></i></a>
                             <a class="edit far fa-edit" title="Edit" data-toggle="tooltip"></a>
                             <a class="delete fas fa-trash-alt" title="Delete" data-toggle="tooltip"></a>
                         </td>
-                    </tr>                   
+                    </tr>
                 </tbody>
-            </table>            
-            <button type="button" class="btn btn-primary btn-lg mb-3" onClick="rollInitiative()" style="float: right;">Roll Initiative</button>
-             <table class="table table-bordered mt-5" id="table-roll">                
-                    <thead>
-                        <tr>
-                            <th>Order</th>
-                            <th>Name</th>
-                            <th>Initiative</th>  
-                        </tr>
-                    </thead>
-                <tbody>                  
+            </table>
+            <button type="button" class="btn btn-outline-secondary btn-lg mb-3 mt-2" onClick="rollInitiative()"
+                style="width:100%;">Roll
+                Initiative</button>
+            <table class="table table-bordered mt-5" id="table-roll">
+                <thead>
+                    <tr>
+                        <th>Order</th>
+                        <th>Name</th>
+                        <th>Initiative</th>
+                    </tr>
+                </thead>
+                <tbody>
                 </tbody>
             </table>
         </div>
-    </div>     
+    </div>
 
 
-<script type="text/javascript">
+    <script type="text/javascript">
 
-var listInitiative = []
-//Antiga cor da tabela #e9e9e9
+        var listInitiative = []
+        //Antiga cor da tabela #e9e9e9
 
-$(document).ready(function(){
-	$('[data-toggle="tooltip"]').tooltip();
-	var actions = $("table td:last-child").html();
-	// Append table with add row form on add new button click
-    $(".add-new").click(function(){
-		$(this).attr("disabled", "disabled");
-		var index = $("table tbody tr:last-child").index();
-        var row = '<tr>' +
-            '<td><input type="text" class="form-control" name="name" id="name"></td>' +
-            '<td><input type="text" class="form-control" name="department" id="department" onkeypress="isInputNumber(event)"></td>' +            
-			'<td>' + actions + '</td>' +
-        '</tr>';
-    	$("table.table-add").append(row);		
-		$("table tbody tr").eq(index + 1).find(".add, .edit").toggle();
-        $('[data-toggle="tooltip"]').tooltip();
-    });
-	// Add row on add button click
-	$(document).on("click", ".add", function(){
-        var item = []
-		var empty = false;
-		var input = $(this).parents("tr").find('input[type="text"]');
-        input.each(function(){
-			if(!$(this).val()){
-				$(this).addClass("error");
-				empty = true;
-			} else{
-                item.push($(this).val())                
-                $(this).removeClass("error");
-            }
-		});
-		$(this).parents("tr").find(".error").first().focus();
-		if(!empty){            
-			input.each(function(){
-				$(this).parent("td").html($(this).val());                
-			});			
-			$(this).parents("tr").find(".add, .edit").toggle();
-			$(".add-new").removeAttr("disabled");
-		}
-        if(item[0] != "Example (Not include in initiative roll)"){
-        listInitiative.push(item)
-        //console.log(listInitiative)  
-        }    
-    });
-	// Edit row on edit button click
-	$(document).on("click", ".edit", function(){
-
-         $(this).parents("tr").each(function(){ 
-            for(var i = 0; i < listInitiative.length; i++){
-                if(listInitiative[i][0] == $(this).find("td:first").html()){
-                     listInitiative.splice(i, 1);//vai delete o primero match que ele achar
-                     break;
-                }                      
-            }           
-			//console.log($(this).find("td:first").html())
-            //console.log(listInitiative)    
-		});        
-         
-        $(this).parents("tr").find("td:not(:last-child)").each(function(){            
-			$(this).html('<input type="text" class="form-control" value="' + $(this).text() + '">');
-		});
-        	
-		$(this).parents("tr").find(".add, .edit").toggle();
-		$(".add-new").attr("disabled", "disabled");
-    });
-	// Delete row on delete button click
-	$(document).on("click", ".delete", function(){
-        $(this).parents("tr").each(function(){ 
-            for(var i = 0; i < listInitiative.length; i++){
-                if(listInitiative[i][0] == $(this).find("td:first").html()){
-                     listInitiative.splice(i, 1);
-                     break;//vai delete o primero match que ele achar
-                }                      
-            }           
-			//console.log($(this).find("td:first").html())
-            //console.log(listInitiative)    
-		});   
-        $(this).parents("tr").remove();
-		$(".add-new").removeAttr("disabled");
-    });
-});
-
-
- function isInputNumber(evt){
-                
-                var ch = String.fromCharCode(evt.which);
-                
-                if(!(/[0-9]/.test(ch))){
-                    evt.preventDefault();
+        $(document).ready(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+            var actions = $("table td:last-child").html();
+            // Append table with add row form on add new button click
+            $(".add-new").click(function () {
+                $(this).attr("disabled", "disabled");
+                var index = $("table tbody tr:last-child").index();
+                var row = '<tr>' +
+                    '<td><input type="text" class="form-control" name="name" id="name"></td>' +
+                    '<td><input type="text" class="form-control" name="department" id="department" onkeypress="isInputNumber(event)"></td>' +
+                    '<td>' + actions + '</td>' +
+                    '</tr>';
+                $("table.table-add").append(row);
+                $("table tbody tr").eq(index + 1).find(".add, .edit").toggle();
+                $('[data-toggle="tooltip"]').tooltip();
+            });
+            // Add row on add button click
+            $(document).on("click", ".add", function () {
+                var item = []
+                var empty = false;
+                var input = $(this).parents("tr").find('input[type="text"]');
+                input.each(function () {
+                    if (!$(this).val()) {
+                        $(this).addClass("error");
+                        empty = true;
+                    } else {
+                        item.push($(this).val())
+                        $(this).removeClass("error");
+                    }
+                });
+                $(this).parents("tr").find(".error").first().focus();
+                if (!empty) {
+                    input.each(function () {
+                        $(this).parent("td").html($(this).val());
+                    });
+                    $(this).parents("tr").find(".add, .edit").toggle();
+                    $(".add-new").removeAttr("disabled");
                 }
-                
-}
+                if (item[0] != "Example (Not include in initiative roll)") {
+                    listInitiative.push(item)
+                    //console.log(listInitiative)  
+                }
+            });
+            // Edit row on edit button click
+            $(document).on("click", ".edit", function () {
 
-function rollInitiative(){
-    //console.log(listInitiative)
+                $(this).parents("tr").each(function () {
+                    for (var i = 0; i < listInitiative.length; i++) {
+                        if (listInitiative[i][0] == $(this).find("td:first").html()) {
+                            listInitiative.splice(i, 1);//vai delete o primero match que ele achar
+                            break;
+                        }
+                    }
+                    //console.log($(this).find("td:first").html())
+                    //console.log(listInitiative)    
+                });
 
-    
-    var listInitiativeAux = listInitiative.map(function(arr) {
-    return arr.slice();
-    });
-    
-    var table = document.getElementById("table-roll");
-    for(var i = table.rows.length - 1; i > 0; i--)
-    {
-    table.deleteRow(i);
-    }
+                $(this).parents("tr").find("td:not(:last-child)").each(function () {
+                    $(this).html('<input type="text" class="form-control" value="' + $(this).text() + '">');
+                });
 
-    for(var i = 0; i < listInitiativeAux.length; i++){
-       
-       listInitiativeAux[i][1] = parseInt(listInitiativeAux[i][1]) + getRandomIntInclusive(1 , 20)
-    
-    }
+                $(this).parents("tr").find(".add, .edit").toggle();
+                $(".add-new").attr("disabled", "disabled");
+            });
+            // Delete row on delete button click
+            $(document).on("click", ".delete", function () {
+                $(this).parents("tr").each(function () {
+                    for (var i = 0; i < listInitiative.length; i++) {
+                        if (listInitiative[i][0] == $(this).find("td:first").html()) {
+                            listInitiative.splice(i, 1);
+                            break;//vai delete o primero match que ele achar
+                        }
+                    }
+                    //console.log($(this).find("td:first").html())
+                    //console.log(listInitiative)    
+                });
+                $(this).parents("tr").remove();
+                $(".add-new").removeAttr("disabled");
+            });
+        });
 
-    listInitiativeAux = bubbleSort(listInitiativeAux)
 
-    for(var i = 0; i < listInitiativeAux.length; i++){
-        //console.log("Entrou")
-        var row = table.insertRow(i + 1);
+        function isInputNumber(evt) {
 
-        var cell1 = row.insertCell(0);
-        var cell2 = row.insertCell(1);
-        var cell3 = row.insertCell(2);
-        
-        cell1.innerHTML = (i+1)
-        cell2.innerHTML = listInitiativeAux[i][0]
-        cell3.innerHTML = listInitiativeAux[i][1]
-    
-    }
+            var ch = String.fromCharCode(evt.which);
 
-function getRandomIntInclusive(min, max) {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
-function bubbleSort(items) {
-    var length = items.length;
-    //Number of passes
-    for (var i = 0; i < length; i++) { 
-        //Notice that j < (length - i)
-        for (var j = 0; j < (length - i - 1); j++) { 
-            //Compare the adjacent positions
-            if(items[j][1] < items[j+1][1]) {
-                //Swap the numbers
-                var tmp = items[j];  //Temporary variable to hold the current number
-                items[j] = items[j+1]; //Replace current number with adjacent number
-                items[j+1] = tmp; //Replace adjacent number with current number
+            if (!(/[0-9]/.test(ch))) {
+                evt.preventDefault();
             }
-        }        
-    }
-    return items
-}
-                
-}
-</script>
-<div>
-{% endblock page-content %}
+
+        }
+
+        function rollInitiative() {
+            //console.log(listInitiative)
+
+
+            var listInitiativeAux = listInitiative.map(function (arr) {
+                return arr.slice();
+            });
+
+            var table = document.getElementById("table-roll");
+            for (var i = table.rows.length - 1; i > 0; i--) {
+                table.deleteRow(i);
+            }
+
+            for (var i = 0; i < listInitiativeAux.length; i++) {
+
+                listInitiativeAux[i][1] = parseInt(listInitiativeAux[i][1]) + getRandomIntInclusive(1, 20)
+
+            }
+
+            listInitiativeAux = bubbleSort(listInitiativeAux)
+
+            for (var i = 0; i < listInitiativeAux.length; i++) {
+                //console.log("Entrou")
+                var row = table.insertRow(i + 1);
+
+                var cell1 = row.insertCell(0);
+                var cell2 = row.insertCell(1);
+                var cell3 = row.insertCell(2);
+
+                cell1.innerHTML = (i + 1)
+                cell2.innerHTML = listInitiativeAux[i][0]
+                cell3.innerHTML = listInitiativeAux[i][1]
+
+            }
+
+            function getRandomIntInclusive(min, max) {
+                min = Math.ceil(min);
+                max = Math.floor(max);
+                return Math.floor(Math.random() * (max - min + 1)) + min;
+            }
+
+            function bubbleSort(items) {
+                var length = items.length;
+                //Number of passes
+                for (var i = 0; i < length; i++) {
+                    //Notice that j < (length - i)
+                    for (var j = 0; j < (length - i - 1); j++) {
+                        //Compare the adjacent positions
+                        if (items[j][1] < items[j + 1][1]) {
+                            //Swap the numbers
+                            var tmp = items[j];  //Temporary variable to hold the current number
+                            items[j] = items[j + 1]; //Replace current number with adjacent number
+                            items[j + 1] = tmp; //Replace adjacent number with current number
+                        }
+                    }
+                }
+                return items
+            }
+
+        }
+    </script>
+    <div>
+        {% endblock page-content %}

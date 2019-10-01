@@ -190,7 +190,7 @@ Settings
                 <div>
                   <div class="input-group input-file" name="publickey">
                     <input type="password" class="form-control" placeholder="Enter Password" style="width: 41vh;"
-                      id="changeOldPasswordInput" autocomplete="new-password"/>
+                      id="changeOldPasswordInput" autocomplete="new-password" />
                     <span class="input-group-btn ml-4 mr-4" style="width: 30%;">
                     </span>
                   </div>
@@ -198,7 +198,7 @@ Settings
                 </div>
                 <div class="input-group input-file" name="publickey">
                   <input type="password" class="form-control" placeholder="Enter new Password"
-                    id="changeNewPasswordInput" autocomplete="new-password"/>
+                    id="changeNewPasswordInput" autocomplete="new-password" />
                   <span class="input-group-btn ml-4 mr-4" style="width: 30%;">
                     <button class="btn btn-primary" type="button" style="width: 100%;" onClick="changePassword()">Change
                       Password</button>
@@ -252,17 +252,17 @@ Settings
                         user: user,
                         change_type: 'username',
                       },
-                        success: function (response_data) {
-                          if(response_data['error_message'] != null){
+                      success: function (response_data) {
+                        if (response_data['error_message'] != null) {
                           alert(response_data['error_message'])
-                          }else{
-                            alert("Username changed successfully")
-                          }
-                        },
+                        } else {
+                          alert("Username changed successfully")
+                        }
+                      },
                       complete: function () { },
                       error: function (xhr, textStatus, thrownError) {
-                          alert("error doing something");
-                        }
+                        alert("error doing something");
+                      }
                     });
 
 
@@ -286,15 +286,15 @@ Settings
                         user: user,
                         change_type: 'complete_name',
                       },
-                        success: function (response_data) {
-                         
-                            alert("Frist an Last names changed successfully")
-                          
-                        },
+                      success: function (response_data) {
+
+                        alert("Frist an Last names changed successfully")
+
+                      },
                       complete: function () { },
                       error: function (xhr, textStatus, thrownError) {
-                          alert("error doing something");
-                        }
+                        alert("error doing something");
+                      }
                     });
 
 
@@ -316,15 +316,15 @@ Settings
                         user: user,
                         change_type: 'email',
                       },
-                        success: function (response_data) {
-                         
-                            alert("E-mail changed successfully")
-                          
-                        },
+                      success: function (response_data) {
+
+                        alert("E-mail changed successfully")
+
+                      },
                       complete: function () { },
                       error: function (xhr, textStatus, thrownError) {
-                          alert("error doing something");
-                        }
+                        alert("error doing something");
+                      }
                     });
 
 
@@ -348,17 +348,17 @@ Settings
                         old_password: oldPassword,
                         change_type: 'password',
                       },
-                        success: function (response_data) {
-                          if(response_data['error_message'] != null){
+                      success: function (response_data) {
+                        if (response_data['error_message'] != null) {
                           alert(response_data['error_message'])
-                          }else{
-                            alert("Password changed successfully")
-                          }
-                        },
+                        } else {
+                          alert("Password changed successfully")
+                        }
+                      },
                       complete: function () { },
                       error: function (xhr, textStatus, thrownError) {
-                          alert("error doing something");
-                        }
+                        alert("error doing something");
+                      }
                     });
 
 
@@ -370,5 +370,5 @@ Settings
 
               </div>
               <div>
-              {% endif %}
+                {% endif %}
                 {% endblock page-content %}

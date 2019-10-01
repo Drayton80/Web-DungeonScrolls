@@ -72,8 +72,8 @@
                         {{ user.get_username }}
                     </a>
                     <div class="dropdown-menu dropdown-menu-dungeonscrolls" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item dropdown-item-text-dungeonscrolls" href="{% url 'settings_page' %}">Settings</a>                        
-                        <div class="dropdown-divider dropdown-item-divider-dungeonscrolls"></div>
+                        <a class="dropdown-item dropdown-item-text-dungeonscrolls"
+                            href="{% url 'settings_page' %}">Settings</a>
                         <a class="dropdown-item dropdown-item-text-dungeonscrolls" href="{% url 'auth_logout' %}">Sign
                             out</a>
                     </div>
