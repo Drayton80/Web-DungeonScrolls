@@ -227,7 +227,7 @@ export default class SideMenu extends Component {
       <Router>
         <div>
           <Switch>
-            <Route path="/:typeCanSee/:sheetID" component={Sheet} />            
+            <Route  path="/:typeCanSee/:sheetID" component={Sheet} />            
           </Switch>
         </div>
       </Router>
@@ -318,7 +318,7 @@ export default class SideMenu extends Component {
       <ul key={index}>
         <li key={index} >
           <Router>
-            <Link to={`/${"shared-sheet"}/${sheet.id}`}  >
+            <Link key={sheet.id} to={`/${"shared-sheet"}/${sheet.id}`}  >
               <span >{sheet.name}</span>
             </Link>
           </Router>
