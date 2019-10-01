@@ -157,27 +157,35 @@ select.sheet-dtype {
 
 .sheet-statlabel-encumbrance {
     border: 1px solid white;
-    background-color: black;
-    color: white;
+    color: black;
+    padding-left: 6px;
+    padding-right: 6px;
+    padding-top: 4px;
+    padding-bottom: 4px;
     font-size: 0.65em;
-    text-align: center;
+    text-align: left;
 }
 
 .sheet-statlabel-weapons {
     display: table-cell;
     border: 1px solid white;
-    background-color: black;
-    color: white;
+    color: black;
+    padding-left: 6px;
+    padding-right: 6px;
+    padding-top: 4px;
+    padding-bottom: 4px;;
     font-size: 0.7em;
     vertical-align: bottom;
 }
 
 .sheet-table-name {
     display: table-caption;
-    text-align: center;
-    font-weight: bold;
-    color: white;
-    background-color: black;
+    text-align: left;
+    color: black;
+    padding-left: 6px;
+    padding-right: 6px;
+    padding-top: 4px;
+    padding-bottom: 4px;
     width: 100%;
 }
 
@@ -300,9 +308,11 @@ select.sheet-dtype {
 .sheet-table-row-name {
     display: table-cell;
     text-align: center;
-    color: white;
-    background-color: black;
-    font-weight: bold;
+    color: black;
+    padding-left: 6px;
+    padding-right: 6px;
+    padding-top: 4px;
+    padding-bottom: 4px;
 }
 
 .sheet-table-row-small {
@@ -442,8 +452,8 @@ input.sheet-tab9:checked + span.sheet-tab9,
 input.sheet-tab10:checked + span.sheet-tab10,
 input.sheet-tab99:checked + span.sheet-tab99
 {
-	background: gray;
-	color: white;
+	background: white;
+	color: #212529;
 }
 
 input.sheet-tab
@@ -461,12 +471,11 @@ input.sheet-tab
 span.sheet-tab {
 	text-align: center;
 	display: inline-block;
-	font-size: 13px;
-	background: white;
-	color: gray;
-	font-weight: bold;
+	font-size: 15px;
+	background: #ced4da;
+	color: white;
 	width: 70px;
-	height: 20px;
+	height: 30px;
 	cursor: pointer;
 	position: relative;
 	margin-left: -75px;
@@ -475,17 +484,17 @@ input.sheet-tab::before
 {
     content: attr(title);
 
-    border: solid 1px #a8a8a8;
-    border-bottom-color: black;
+    border: solid 1px #ced4da;
+    border-bottom-color: #ced4da;
     text-align: center;
     display: inline-block;
 
     background: #fff;
-    background: -moz-linear-gradient(to top, #c8c8c8, #fff, #c8c8c8);
-    background: -webkit-linear-gradient(to top, #c8c8c8, #fff, #c8c8c8);
-    background: -ms-linear-gradient(to top, #c8c8c8, #fff, #c8c8c8);
-    background: -o-linear-gradient(to top, #c8c8c8, #fff, #c8c8c8);
-    background: linear-gradient(to top, #c8c8c8, #fff, #c8c8c8);
+    background: -moz-linear-gradient(to top, #ced4da, #fff, #ced4da);
+    background: -webkit-linear-gradient(to top, #ced4da, #fff, #ced4da);
+    background: -ms-linear-gradient(to top, #ced4da, #fff, #ced4da);
+    background: -o-linear-gradient(to top, #ced4da, #fff, #ced4da);
+    background: linear-gradient(to top, #ced4da, #fff, #ced4da);
 
     width: 50px;
     height: 20px;
@@ -494,13 +503,13 @@ input.sheet-tab::before
 
 input.sheet-tab:checked::before
 {
-    background: #dcdcdc;
-    background: -moz-linear-gradient(to top, #fcfcfc, #dcdcdc, #fcfcfc);
-    background: -webkit-linear-gradient(to top, #fcfcfc, #dcdcdc, #fcfcfc);
-    background: -ms-linear-gradient(to top, #fcfcfc, #dcdcdc, #fcfcfc);
-    background: -o-linear-gradient(to top, #fcfcfc, #dcdcdc, #fcfcfc);
-    background: linear-gradient(to top, #fcfcfc, #dcdcdc, #fcfcfc);
-    border-bottom-color: #fff;
+    background: #ced4da;
+    background: -moz-linear-gradient(to top, #fcfcfc, #ced4da, #fcfcfc);
+    background: -webkit-linear-gradient(to top, #fcfcfc, #ced4da, #fcfcfc);
+    background: -ms-linear-gradient(to top, #fcfcfc, #ced4da, #fcfcfc);
+    background: -o-linear-gradient(to top, #fcfcfc, #ced4da, #fcfcfc);
+    background: linear-gradient(to top, #fcfcfc, #ced4da, #fcfcfc);
+    border-bottom-color: #ced4da;
 }
 
 input.sheet-tab:not(:first-child)::before
@@ -510,10 +519,10 @@ input.sheet-tab:not(:first-child)::before
 
 div.sheet-tab-content
 {
-    border: 1px solid #a8a8a8;
-    border-top-color: #000;   	                  /* black */
-    margin: 2px 0 0 5px;
-    padding: 5px;
+    border: 1px solid #ced4da;
+    border-radius: 0px;
+    margin: 0px 0 0 0px;
+    padding: 15px;
 }
 
 /* -----------------------tabs style2 (with label) works even in firefox ----------------------- */
@@ -539,10 +548,10 @@ div.sheet-tab-content
     padding: 1px;
     width: 124px;
     height: 24px;
-    background-color: gray;
-    border-top-left-radius: 2em 3em;
-    border-top-right-radius: 2em 3em;
-    border: solid thin gray;
+    background-color: #ced4da;
+    border-top-left-radius: 0em 0em;
+    border-top-right-radius: 0em 0em;
+    border: solid thin #ced4da;
     border-bottom: none;
 }
 
@@ -565,11 +574,11 @@ label div
 
 textarea {
 	height: auto;
-	color: black;
+	color: gray;
 }
 
 input {
-	color: black;
+	color: gray;
 }
 
 input, select {
