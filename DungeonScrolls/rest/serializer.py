@@ -74,6 +74,7 @@ class SheetDnD35Serializer(ModelSerializer):
     sheet_type = serializers.CharField(required=False, allow_null=True)
 
     # RELATIONSHIPS::
+    # TODO resolver o problema do read_only com foreign keys para atualizar elas
     rule_system = serializers.PrimaryKeyRelatedField(many=False, read_only=True)
     #chapter = serializers.PrimaryKeyRelatedField(many=False, read_only=False)
     ancestral = serializers.PrimaryKeyRelatedField(many=False, read_only=True)
