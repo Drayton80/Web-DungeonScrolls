@@ -286,7 +286,6 @@ export default class Sheet extends Component {
                         key={this.state.sheetClicked.id} defaultValue={this.state.sheetClicked.information_deity} onChange={this.handleOnChange} />
                     </div>
                   </div>
-
                 </form>
               </div>
             </div>
@@ -300,7 +299,7 @@ export default class Sheet extends Component {
               <input type="radio" name="attr_tab" className="sheet-tab sheet-tab2" key={this.state.sheetClicked.id} defaultValue={2} />
               <span className="sheet-tab sheet-tab2" data-i18n="weapons" style={{ width: '160px' }} >Skills and Spells</span>
 
-              <br />&nbsp;
+              
               <div className="sheet-tab-content sheet-tab1 sheet-tab9 w-100" style={{ marginTop: "1px", marginLeft: "-27px", marginRight: "-27px", float: "Left" }}>
                 {/*Stats*/}
                 <input type="checkbox" className="sheet-pc-statblock-show sheet-arrow" name="attr_statblock-show" key={this.state.sheetClicked.id} defaultValue={1} defaultChecked /><span style={{ textAlign: 'left' }} data-i18n="abilities">Abilities</span>
@@ -372,25 +371,25 @@ export default class Sheet extends Component {
                               <table>
                                 <tbody><tr>
                                   <td className="sheet-statlabel-big" style={{ width: '70px' }}><span data-i18n="hit-points-i">HP</span><br /><div style={{ fontSize: '0.65em' }} data-i18n="hit-points">Hit Points</div></td>
-                                  <td><input className="sheet-inputbox" type="text" name="battle_hp_current" key={this.state.sheetClicked.id} defaultValue={this.state.sheetClicked.battle_hp_current} onChange={this.handleOnChange} style={{ height: '24px', width: '117px', textAlign: 'center' }} /><br /><div style={{ fontSize: '0.5em' }} data-i18n="current-hit-points">Current HP</div></td>
-                                  <td><input className="sheet-inputbox" type="text" name="battle_hp_total" key={this.state.sheetClicked.id} defaultValue={this.state.sheetClicked.battle_hp_total} onChange={this.handleOnChange} style={{ height: '24px', width: '117px', textAlign: 'center' }} /><br /><div style={{ fontSize: '0.5em' }} data-i18n="max">Max</div></td>
-                                  <td><input className="sheet-inputbox" type="text" name="battle_hp_nonlethal" key={this.state.sheetClicked.id} defaultValue={this.state.sheetClicked.battle_hp_nonlethal} onChange={this.handleOnChange} style={{ height: '24px', width: '140px', textAlign: 'center' }} /><br /><div style={{ fontSize: '0.5em' }} data-i18n="nonlethal-damage">Nonlethal Damage</div></td>
+                                  <td><input className="sheet-inputbox" type="text" name="battle_hp_current" key={this.state.sheetClicked.id} defaultValue={this.state.sheetClicked.battle_hp_current} onChange={this.handleOnChange} style={{ height: '24px', width: '75px', textAlign: 'center' }} /><br /><div style={{ fontSize: '0.5em' }} data-i18n="current-hit-points">Current HP</div></td>
+                                  <td><input className="sheet-inputbox" type="text" name="battle_hp_total" key={this.state.sheetClicked.id} defaultValue={this.state.sheetClicked.battle_hp_total} onChange={this.handleOnChange} style={{ height: '24px', width: '75px', textAlign: 'center' }} /><br /><div style={{ fontSize: '0.5em' }} data-i18n="max">Max</div></td>
+                                  <td><input className="sheet-inputbox" type="text" name="battle_hp_nonlethal" key={this.state.sheetClicked.id} defaultValue={this.state.sheetClicked.battle_hp_nonlethal} onChange={this.handleOnChange} style={{ height: '24px', width: '75px', textAlign: 'center' }} /><br /><div style={{ fontSize: '0.5em' }} data-i18n="nonlethal-damage">Nonlethal Damage</div></td>
                                 </tr>
                                   <tr>
                                     <td className="sheet-statlabel-big" style={{ width: '70px' }} data-i18n="initiative-u">INITIATIVE</td>
                                     <td colSpan={2}>
                                       <table>
                                         <tbody><tr>
-                                          <td><input className="sheet-inputbox" type="text" name="battle_initiative_total" style={{ height: '24px', width: '30px' }} key={this.state.sheetClicked.id} defaultValue={this.state.sheetClicked.battle_initiative_total} disabled="true" /> =<br /><div style={{ fontSize: '0.5em' }} data-i18n="total">Total</div></td>
-                                          <td><input className="sheet-inputbox" type="text" name="ability_dexterity_modifier" key={this.state.sheetClicked.id} defaultValue={this.state.sheetClicked.ability_dexterity_modifier} disabled="true" style={{ height: '24px', width: '30px' }} /> +<br /><div style={{ fontSize: '0.5em' }} data-i18n="dexterity-modifier">Dex Mod</div></td>
-                                          <td><input className="sheet-inputbox" type="text" name="battle_initiative_others" key={this.state.sheetClicked.id} defaultValue={this.state.sheetClicked.battle_initiative_others} style={{ height: '24px', width: '30px' }} /><br /><div style={{ fontSize: '0.5em' }} data-i18n="miscellaneous-modifier-a">Misc Mod</div></td>
+                                          <td><input className="sheet-inputbox" type="text" name="battle_initiative_total" style={{ height: '24px', width: '30px' }} key={this.state.sheetClicked.id} defaultValue={this.state.sheetClicked.battle_initiative_total}   onChange={this.handleOnChange} /> =<br /><div style={{ fontSize: '0.5em' }} data-i18n="total">Total</div></td>
+                                          <td><input className="sheet-inputbox" type="text" name="ability_dexterity_modifier" key={this.state.sheetClicked.id} defaultValue={this.state.sheetClicked.ability_dexterity_modifier}   onChange={this.handleOnChange} style={{ height: '24px', width: '30px' }} /> +<br /><div style={{ fontSize: '0.5em' }} data-i18n="dexterity-modifier">Dex Mod</div></td>
+                                          <td><input className="sheet-inputbox" type="text" name="battle_initiative_others" key={this.state.sheetClicked.id} defaultValue={this.state.sheetClicked.battle_initiative_others} onChange={this.handleOnChange} style={{ height: '24px', width: '30px' }} /><br /><div style={{ fontSize: '0.5em' }} data-i18n="miscellaneous-modifier-a">Misc Mod</div></td>
                                         </tr>
                                         </tbody></table>
                                     </td>
                                     <td>
                                       <table>
                                         <tbody><tr>
-                                          <td className="sheet-statlabel-big" style={{ width: '50px' }} data-i18n="speed-u">SPEED</td>
+                                          <td className="sheet-statlabel-big" style={{ width: '20px' }} data-i18n="speed-u"></td>
                                           <td><input className="sheet-inputbox" type="text" name="battle_speed" key={this.state.sheetClicked.id} defaultValue={this.state.sheetClicked.battle_speed} onChange={this.handleOnChange} style={{ height: '24px', width: '85px' }} /><br /><div style={{ fontSize: '0.5em' }} data-i18n="speed">Speed</div></td>
                                         </tr>
                                         </tbody></table>
@@ -405,20 +404,20 @@ export default class Sheet extends Component {
                                   <tbody><tr>
                                     <td style={{ width: '38px' }} className="sheet-statlabel"><span data-i18n="armor-class-i">AC</span><br /><div style={{ fontSize: '0.65em' }} data-i18n="armor-class">Armor Class</div></td>
                                     <td><input className="sheet-inputbox" type="text" name="battle_ca_total"
-                                      key={this.state.sheetClicked.id} defaultValue={this.state.sheetClicked.battle_ca_total} onChange={this.handleOnChange} disabled="true" style={{ height: '24px', width: '35px' }} /><br /><div style={{ fontSize: '0.5em' }} data-i18n="total">Total</div></td>
+                                      key={this.state.sheetClicked.id} defaultValue={this.state.sheetClicked.battle_ca_total} onChange={this.handleOnChange}    style={{ height: '24px', width: '35px' }} /><br /><div style={{ fontSize: '0.5em' }} data-i18n="total">Total</div></td>
                                     <td>=10<br /><br /></td>
                                     <td>+<input className="sheet-inputbox" type="text" name="ability_dexterity_modifier"
-                                      key={this.state.sheetClicked.id} defaultValue={this.state.sheetClicked.ability_dexterity_modifier} onChange={this.handleOnChange} disabled="true" style={{ height: '24px', width: '28px' }} /><br /><div style={{ fontSize: '0.5em' }} data-i18n="ability-modifier-a">Ability Mod</div></td>
+                                      key={this.state.sheetClicked.id} defaultValue={this.state.sheetClicked.ability_dexterity_modifier} onChange={this.handleOnChange}    style={{ height: '24px', width: '28px' }} /><br /><div style={{ fontSize: '0.5em' }} data-i18n="ability-modifier-a">Ability Mod</div></td>
                                     <td>+<input className="sheet-inputbox" type="text" name="battle_ca_equipment_armor"
-                                      key={this.state.sheetClicked.id} defaultValue={this.state.sheetClicked.battle_ca_equipment_armor} onChange={this.handleOnChange} disabled="true" style={{ height: '24px', width: '28px' }} /><br /><div style={{ fontSize: '0.5em' }} data-i18n="armor-bonus-a">Armor Bns</div></td>
+                                      key={this.state.sheetClicked.id} defaultValue={this.state.sheetClicked.battle_ca_equipment_armor} onChange={this.handleOnChange}    style={{ height: '24px', width: '28px' }} /><br /><div style={{ fontSize: '0.5em' }} data-i18n="armor-bonus-a">Armor Bns</div></td>
                                     <td>+<input className="sheet-inputbox" type="text" name="information_size_modifier_ca_and_attack"
-                                      key={this.state.sheetClicked.id} defaultValue={this.state.sheetClicked.information_size_modifier_ca_and_attack} onChange={this.handleOnChange} disabled="true" style={{ height: '24px', width: '28px' }} /><br /><div style={{ fontSize: '0.5em' }} data-i18n="size-modifier-a">Size Mod</div></td>
+                                      key={this.state.sheetClicked.id} defaultValue={this.state.sheetClicked.information_size_modifier_ca_and_attack} onChange={this.handleOnChange}    style={{ height: '24px', width: '28px' }} /><br /><div style={{ fontSize: '0.5em' }} data-i18n="size-modifier-a">Size Mod</div></td>
                                     <td>+<input className="sheet-inputbox" type="text" name="battle_ca_natural_armor"
-                                      key={this.state.sheetClicked.id} defaultValue={this.state.sheetClicked.battle_ca_natural_armor} onChange={this.handleOnChange} style={{ height: '24px', width: '28px' }} disabled="true" /><br /><div style={{ fontSize: '0.5em' }} data-i18n="natural-armor-a">Nat. Armor</div></td>
+                                      key={this.state.sheetClicked.id} defaultValue={this.state.sheetClicked.battle_ca_natural_armor} onChange={this.handleOnChange} style={{ height: '24px', width: '28px' }}    /><br /><div style={{ fontSize: '0.5em' }} data-i18n="natural-armor-a">Nat. Armor</div></td>
                                     <td>+<input className="sheet-inputbox" type="text" name="battle_ca_deflection_modifier"
-                                      key={this.state.sheetClicked.id} defaultValue={this.state.sheetClicked.battle_ca_deflection_modifier} onChange={this.handleOnChange} style={{ height: '24px', width: '28px' }} disabled="true" /><br /><div style={{ fontSize: '0.5em' }} data-i18n="deflection">Deflection</div></td>
+                                      key={this.state.sheetClicked.id} defaultValue={this.state.sheetClicked.battle_ca_deflection_modifier} onChange={this.handleOnChange} style={{ height: '24px', width: '28px' }}    /><br /><div style={{ fontSize: '0.5em' }} data-i18n="deflection">Deflection</div></td>
                                     <td>+<input className="sheet-inputbox" type="text" name="battle_ca_other_modifier"
-                                      key={this.state.sheetClicked.id} defaultValue={this.state.sheetClicked.battle_ca_other_modifier} onChange={this.handleOnChange} style={{ height: '24px', width: '28px' }} disabled="true" /><br /><div style={{ fontSize: '0.5em' }} data-i18n="miscellaneous-modifier-a">Misc Mod</div></td>
+                                      key={this.state.sheetClicked.id} defaultValue={this.state.sheetClicked.battle_ca_other_modifier} onChange={this.handleOnChange} style={{ height: '24px', width: '28px' }}    /><br /><div style={{ fontSize: '0.5em' }} data-i18n="miscellaneous-modifier-a">Misc Mod</div></td>
                                     <td> &nbsp; &nbsp; &nbsp; </td>
                                   </tr>
                                   </tbody></table>
@@ -429,10 +428,10 @@ export default class Sheet extends Component {
                                 <table>
                                   <tbody><tr>
                                     <td style={{ width: '35px', height: '24px' }} className="sheet-statlabel"><span data-i18n="touch-u">TOUCH</span><br /><div style={{ fontSize: '0.65em' }} data-i18n="armor-class">Armor Class</div></td>
-                                    <td valign="top"><input className="sheet-inputbox" type="text" style={{ width: '35px' }} name="battle_ca_touch" key={this.state.sheetClicked.id} defaultValue={this.state.sheetClicked.battle_ca_touch} onChange={this.handleOnChange} disabled="true" /> &nbsp; </td>
+                                    <td valign="top"><input className="sheet-inputbox" type="text" style={{ height: '24px', width: '35px' }} name="battle_ca_touch" key={this.state.sheetClicked.id} defaultValue={this.state.sheetClicked.battle_ca_touch} onChange={this.handleOnChange}    /> &nbsp; </td>
                                     <td style={{ width: '70px' }} className="sheet-statlabel"><span data-i18n="flat-footed-u">FLAT-FOOTED</span><br /><div style={{ fontSize: '0.65em' }} data-i18n="armor-class">Armor Class</div></td>
-                                    <td valign="top"><input className="sheet-inputbox" type="text" style={{ width: '35px' }} name="battle_ca_flat_footed" key={this.state.sheetClicked.id} defaultValue={this.state.sheetClicked.battle_ca_flat_footed} onChange={this.handleOnChange} disabled="true" /> &nbsp; </td>
-                                    <td valign="top"><input className="sheet-inputbox" type="text" name="battle_damage_reduction" style={{ width: '120px' }} key={this.state.sheetClicked.id} defaultValue={this.state.sheetClicked.battle_damage_reduction} onChange={this.handleOnChange} /><br /><div style={{ fontSize: '0.65em' }} data-i18n="damage-reduction">Damage Reduction</div></td>
+                                    <td valign="top"><input className="sheet-inputbox" type="text" style={{ height: '24px', width: '35px' }} name="battle_ca_flat_footed" key={this.state.sheetClicked.id} defaultValue={this.state.sheetClicked.battle_ca_flat_footed} onChange={this.handleOnChange}    /> &nbsp; </td>
+                                    <td valign="top"><input className="sheet-inputbox" type="text" name="battle_damage_reduction" style={{ height: '24px', width: '75px' }} key={this.state.sheetClicked.id} defaultValue={this.state.sheetClicked.battle_damage_reduction} onChange={this.handleOnChange} /><br /><div style={{ fontSize: '0.65em' }} data-i18n="damage-reduction">Damage Reduction</div></td>
                                   </tr>
                                   </tbody></table>
                                 <br />
@@ -466,25 +465,25 @@ export default class Sheet extends Component {
                                     </div>
                                     <div className="sheet-table-row">
                                       <span className="sheet-table-row-name" style={{ width: '60px' }}><span data-i18n="fortitude">Fortitude</span><br /><div style={{ fontSize: '0.65em' }}>(<span data-i18n="constitution">Constitution</span>)</div></span>
-                                      <span className="sheet-table-data-center"><input type="text" style={{ width: '35px' }} name="saving_throws_fortitude_total" key={this.state.sheetClicked.id} defaultValue={this.state.sheetClicked.saving_throws_fortitude_total} onChange={this.handleOnChange} disabled="true" /></span>
+                                      <span className="sheet-table-data-center"><input type="text" style={{ width: '35px' }} name="saving_throws_fortitude_total" key={this.state.sheetClicked.id} defaultValue={this.state.sheetClicked.saving_throws_fortitude_total} onChange={this.handleOnChange}    /></span>
                                       <span className="sheet-table-data-center">=<input type="text" style={{ width: '35px' }} name="saving_throws_fortitude_base" key={this.state.sheetClicked.id} defaultValue={this.state.sheetClicked.saving_throws_fortitude_base} onChange={this.handleOnChange} /></span>
-                                      <span className="sheet-table-data-center">+<input type="text" style={{ width: '35px' }} name="ability_constitution_modifier" key={this.state.sheetClicked.id} defaultValue={this.state.sheetClicked.ability_constitution_modifier} onChange={this.handleOnChange} disabled="true" /></span>
+                                      <span className="sheet-table-data-center">+<input type="text" style={{ width: '35px' }} name="ability_constitution_modifier" key={this.state.sheetClicked.id} defaultValue={this.state.sheetClicked.ability_constitution_modifier} onChange={this.handleOnChange}    /></span>
                                       <span className="sheet-table-data-center">+<input type="text" style={{ width: '35px' }} name="saving_throws_fortitude_others" key={this.state.sheetClicked.id} defaultValue={this.state.sheetClicked.saving_throws_fortitude_others} onChange={this.handleOnChange} /></span>
                                       <span className="sheet-table-data-center">+<input type="text" style={{ width: '35px' }} name="saving_throws_fortitude_temporary" key={this.state.sheetClicked.id} defaultValue={this.state.sheetClicked.saving_throws_fortitude_temporary} onChange={this.handleOnChange} /></span>
                                     </div>
                                     <div className="sheet-table-row" style={{ fontSize: '1em' }}>
                                       <span className="sheet-table-row-name" style={{ width: '60px' }}><span data-i18n="reflex">Reflex</span><br /><div style={{ fontSize: '0.65em' }}>(<span data-i18n="dexterity">Dexterity</span>)</div></span>
-                                      <span className="sheet-table-data-center"><input type="text" style={{ width: '35px' }} name="saving_throws_reflex_tota" key={this.state.sheetClicked.id} defaultValue={this.state.sheetClicked.saving_throws_reflex_tota} onChange={this.handleOnChange} disabled="true" /></span>
+                                      <span className="sheet-table-data-center"><input type="text" style={{ width: '35px' }} name="saving_throws_reflex_tota" key={this.state.sheetClicked.id} defaultValue={this.state.sheetClicked.saving_throws_reflex_tota} onChange={this.handleOnChange}    /></span>
                                       <span className="sheet-table-data-center">=<input type="text" style={{ width: '35px' }} name="saving_throws_reflex_base" key={this.state.sheetClicked.id} defaultValue={this.state.sheetClicked.saving_throws_reflex_base} onChange={this.handleOnChange} /></span>
-                                      <span className="sheet-table-data-center">+<input type="text" style={{ width: '35px' }} name="ability_dexterity_modifier" key={this.state.sheetClicked.id} defaultValue={this.state.sheetClicked.ability_dexterity_modifier} onChange={this.handleOnChange} disabled="true" /></span>
+                                      <span className="sheet-table-data-center">+<input type="text" style={{ width: '35px' }} name="ability_dexterity_modifier" key={this.state.sheetClicked.id} defaultValue={this.state.sheetClicked.ability_dexterity_modifier} onChange={this.handleOnChange}    /></span>
                                       <span className="sheet-table-data-center">+<input type="text" style={{ width: '35px' }} name="saving_throws_reflex_other" key={this.state.sheetClicked.id} defaultValue={this.state.sheetClicked.saving_throws_reflex_other} onChange={this.handleOnChange} /></span>
                                       <span className="sheet-table-data-center">+<input type="text" style={{ width: '35px' }} name="saving_throws_reflex_temporary" key={this.state.sheetClicked.id} defaultValue={this.state.sheetClicked.saving_throws_reflex_temporary} onChange={this.handleOnChange} /></span>
                                     </div>
                                     <div className="sheet-table-row">
                                       <span className="sheet-table-row-name" style={{ width: '60px' }}><span data-i18n="will">Will</span><br /><div style={{ fontSize: '0.65em' }}>(<span data-i18n="wisdom">Wisdom</span>)</div></span>
-                                      <span className="sheet-table-data-center"><input type="text" style={{ width: '35px' }} name="saving_throws_will_total" key={this.state.sheetClicked.id} defaultValue={this.state.sheetClicked.saving_throws_will_total} onChange={this.handleOnChange} disabled="true" /></span>
+                                      <span className="sheet-table-data-center"><input type="text" style={{ width: '35px' }} name="saving_throws_will_total" key={this.state.sheetClicked.id} defaultValue={this.state.sheetClicked.saving_throws_will_total} onChange={this.handleOnChange}    /></span>
                                       <span className="sheet-table-data-center">=<input type="text" style={{ width: '35px' }} name="saving_throws_will_base" key={this.state.sheetClicked.id} defaultValue={this.state.sheetClicked.saving_throws_will_base} onChange={this.handleOnChange} /></span>
-                                      <span className="sheet-table-data-center">+<input type="text" style={{ width: '35px' }} name="ability_wisdom_modifier" key={this.state.sheetClicked.id} defaultValue={this.state.sheetClicked.ability_wisdom_modifier} onChange={this.handleOnChange} disabled="true" /></span>
+                                      <span className="sheet-table-data-center">+<input type="text" style={{ width: '35px' }} name="ability_wisdom_modifier" key={this.state.sheetClicked.id} defaultValue={this.state.sheetClicked.ability_wisdom_modifier} onChange={this.handleOnChange}    /></span>
                                       <span className="sheet-table-data-center">+<input type="text" style={{ width: '35px' }} name="saving_throws_will_others" key={this.state.sheetClicked.id} defaultValue={this.state.sheetClicked.saving_throws_will_others} onChange={this.handleOnChange} /></span>
                                       <span className="sheet-table-data-center">+<input type="text" style={{ width: '35px' }} name="saving_throws_will_temporary" key={this.state.sheetClicked.id} defaultValue={this.state.sheetClicked.saving_throws_will_temporary} onChange={this.handleOnChange} /></span>
                                     </div>
@@ -497,9 +496,13 @@ export default class Sheet extends Component {
                                     <td style={{ textAlign: 'left' }}><input className="sheet-inputbox" type="text" name="battle_spell_resistance" key={this.state.sheetClicked.id} defaultValue={this.state.sheetClicked.battle_spell_resistance} onChange={this.handleOnChange} style={{ height: '24px', width: '50px' }} /></td>
                                     <td> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </td>
                                     <td className="sheet-statlabel-big" style={{ width: 'auto' }}>
-                                      <div data-i18n="arcane-spell-failure" style={{ marginRight: "4px" }}>Spell</div>
+                                      <div data-i18n="arcane-spell-failure" style={{ marginRight: "4px" }}>Spell Failuer</div>
                                     </td>
-                                    <td><input className="sheet-inputbox" type="text" name="attr_arcanespellfailure" key={this.state.sheetClicked.id} defaultValue={this.state.sheetClicked.magic_arcane_spell_failure} onChange={this.magic_arcane_spell_failure} style={{ height: '24px', width: '50px' }} /></td>
+                                    <td><input className="sheet-inputbox" type="text" name="magic_arcane_spell_failure" key={this.state.sheetClicked.id} defaultValue={this.state.sheetClicked.magic_arcane_spell_failure} onChange={this.handleOnChange} style={{ height: '24px', width: '50px' }} /></td>
+                                    <div className="sheet-table-row">
+                                      <td className="sheet-statlabel-big" style={{ width: '80px' }}><span data-i18n="base-attack">        </span></td>
+                                      
+                                    </div>
                                   </tr>
                                   </tbody></table>
                                 <br />
@@ -515,7 +518,7 @@ export default class Sheet extends Component {
                                     <input type="checkbox" className="sheet-pc-baseattackmacros-show sheet-arrow" name="attr_baseattackmacros-show" key={this.state.sheetClicked.id} defaultValue={1} />{/*span style="text-align: left;"></span*/}
                                     <div className="sheet-table-row">
                                       <td className="sheet-statlabel-big" style={{ width: '80px' }}><span data-i18n="base-attack">Grapple</span></td>
-                                      <span className="sheet-table-data-center"><input className="sheet-inputbox" type="text" style={{ width: '45px' }} name="battle_grapple_total" key={this.state.sheetClicked.id} defaultValue={this.state.sheetClicked.battle_grapple_total} onChange={this.handleOnChange} disabled="true" /></span>
+                                      <span className="sheet-table-data-center"><input className="sheet-inputbox" type="text" style={{ width: '45px' }} name="battle_grapple_total" key={this.state.sheetClicked.id} defaultValue={this.state.sheetClicked.battle_grapple_total} onChange={this.handleOnChange}    /></span>
                                     </div>
                                     <div className="sheet-pc-baseattackmacros">
                                       <span className="sheet-table-data-center-sm"><textarea rows={1} cols={50} style={{ width: '175px', height: '20px' }} name="attr_grapplenote" placeholder="Note" data-i18n-placeholder="note" key={this.state.sheetClicked.id} defaultValue={""} /></span>
@@ -528,14 +531,15 @@ export default class Sheet extends Component {
                               </td>
                             </tr>
                             </tbody></table>
-                        </div>
+                        </div>                        
                       </td>
-                      <td className="sheet-table-data-left">
+                      
+                      <td className="sheet-table-data-left" >
                         <div className="sheet-table-data-center" style={{ verticalAlign: 'top' }}>
                           <div style={{ float: 'left' }}>
                             <div style={{ display: 'table', width: '39%', float: 'left' }}>
                               <div className="sheet-table-row">
-                                <span className="sheet-table-data-center"><span data-i18n="languages">Languages</span><br /><textarea rows={2} cols={55} style={{ width: '380px' }} name="languages"
+                                <span className="sheet-table-data-center"><span data-i18n="languages">Languages</span><br /><textarea rows={2} cols={55} style={{ width: '380px' }} name="information_languages"
                                   key={this.state.sheetClicked.id} defaultValue={this.state.sheetClicked.information_languages} onChange={this.handleOnChange} /></span>
                               </div>
                               <div className="sheet-table-row">

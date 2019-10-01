@@ -427,7 +427,7 @@ export default class SideMenu extends Component {
                   <li className="header-menu">
 
                     <div className="d-flex">
-                      <span>My Bestiarys</span>
+                      <span>My Bestiaries</span>
 
                       <button type="button" className="btn btn-sm mb-n2 ml-auto bestiary-add-icon" style={{ marginRight: "38px", marginTop: "21px" }} onClick={(() => this.createModal(this.state.userOnline, "bestiary"))} >
                         <FontAwesomeIcon className="mb-3 ml-n1" icon={faPlus} size="xs"/>
