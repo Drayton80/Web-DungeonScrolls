@@ -133,7 +133,7 @@ class ChapterDetail(APIView):
     # Update a Chapter:
     def put(self, request, pk):
         chapter = self.get_object(pk)
-        serializer = BestiarySerializer(chapter, data=request.data)
+        serializer = ChapterSerializer(chapter, data=request.data)
 
         if serializer.is_valid():
             serializer.save()

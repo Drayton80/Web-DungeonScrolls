@@ -21,7 +21,8 @@ const djangoData = $("#User").data();
 class App extends Component {
 	state = {
 		user: [],
-		fichas: []
+		fichas: [],
+		
 	};
 
 	componentDidMount() {
@@ -29,27 +30,18 @@ class App extends Component {
 			.get(`http://127.0.0.1:8000/rest/api/get-user/${djangoData.other}/`)
 			.then(res => {
 				const user = res.data;
-				this.setState({ user: user });
+				this.setState({ user: user });				
 				//console.log(res.data)
 			});
 	}
 
 	render() {
-		return (
-			<Router>
+		return (			
 				<div className="App">
 					<div>
-						{(() => {
-							console.log(this.state.user)
-							if (this.state.user == "") {
-								return "Error: Unregistered user";
-							} else {
-								return <SideMenu user={this.state.user} />;
-							}
-						})()}
+						<SideMenu user={this.state.user} />						
 					</div>
-				</div>
-			</Router>
+				</div>			
 		);
 	}
 }

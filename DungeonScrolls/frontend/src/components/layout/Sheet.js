@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import './Sheet.css';
 import axios from "axios";
 import Modal from 'react-responsive-modal';
-import { Link } from 'react-router-dom'
+
 
 export default class Sheet extends Component {
 
@@ -18,10 +18,16 @@ export default class Sheet extends Component {
   }
 
   updateSheet() {
-      //console.log(this.state.sheetClicked)
+      console.log(this.state.sheetClicked)
       axios.put(`http://127.0.0.1:8000/rest/api/sheet-dnd35/${this.state.sheetClicked.id}/`, this.state.sheetClicked)
-            .then((response) => {          
-              
+            .then((response) => {  
+            axios
+              .get(`http://127.0.0.1:8000/rest/api/get-sheet-dnd35/${this.state.sheetClicked.id}/`)
+              .then(res => {
+                const sheetClicked = res.data;
+                this.setState({ sheetClicked: sheetClicked });
+                //console.log(sheetClicked)
+              })                      
             })
   }
 
@@ -87,7 +93,7 @@ export default class Sheet extends Component {
       .then(res => {
         const sheetClicked = res.data;
         this.setState({ sheetClicked: sheetClicked });
-        //console.log(sheetClicked)
+        console.log(sheetClicked)
       })
   }
 
@@ -109,7 +115,8 @@ export default class Sheet extends Component {
 
   handleOnChange = (e) => {
     
-    var { name, value } = e.target;    
+    var { name, value } = e.target;
+    //value = parseInt(value)
     if (name == "inputNameShared") {      
       this.setState({ inputNameValue: value })
     }
