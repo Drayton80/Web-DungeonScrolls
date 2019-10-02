@@ -7,7 +7,7 @@
 
 
 {% block side-navbar-title %}
-Settings
+Tools
 {% endblock side-navbar-title %}
 
 
@@ -19,7 +19,7 @@ Settings
 <li>
   <a href="{% url 'reactEnter' %}">
     <i class="fas fa-book"></i>
-    <span>Bestiaries</span>
+    <span>Bestiary Library</span>
   </a>
 </li>
 {% endif %}
@@ -57,7 +57,7 @@ Settings
     font-family: "Open Sans";
     font-size: 14px;
     font-weight: 400;
-    background-color: #ececec;
+    background-color: white;
     color: #102c58;
   }
 
@@ -126,7 +126,7 @@ Settings
 
 <!-- Services -->
 <div class="container-fluid mt-5" style="height: 100%; padding-top: 7vh; background-color: white;">
-  <div class="mr-auto ml-auto" style="width: 60%; padding-left: 50px;">
+  <div class="mr-auto ml-auto" style="width: 60%; padding-left: 50px; background-color: white;">
     <main class="l-main">
       <div class="content-wrapper content-wrapper--with-bg">
 
@@ -145,7 +145,7 @@ Settings
                     <input type="text" class="form-control" placeholder="Username" value="{{ user.get_username }}"
                       id="changeUserNameInput" />
                     <span class="input-group-btn ml-4 mr-4" style="width: 30%;">
-                      <button class="btn btn-primary" type="button" style="width: 100%;"
+                      <button class="btn btn-secondary" type="button" style="width: 100%;"
                         onClick="changeUserName()">Change Username</button>
                     </span>
                   </div>
@@ -163,7 +163,7 @@ Settings
                       id="changeLNameInput" />
 
                     <span class="input-group-btn ml-4 mr-4" style="width: 30%;">
-                      <button class="btn btn-primary" type="button" style="width: 100%;"
+                      <button class="btn btn-secondary" type="button" style="width: 100%;"
                         onClick="changeFandLName()">Change Name</button>
                     </span>
                   </div>
@@ -177,7 +177,8 @@ Settings
                     <input type="text" class="form-control" placeholder="E-mail" value="{{ user.email }}"
                       id="changeEmailInput" />
                     <span class="input-group-btn ml-4 mr-4" style="width: 30%;">
-                      <button class="btn btn-primary" type="button" style="width: 100%;" onClick="changeEmail()">Change
+                      <button class="btn btn-secondary" type="button" style="width: 100%;"
+                        onClick="changeEmail()">Change
                         E-mail</button>
                     </span>
                   </div>
@@ -199,7 +200,8 @@ Settings
                   <input type="password" class="form-control" placeholder="Enter new Password"
                     id="changeNewPasswordInput" autocomplete="new-password" />
                   <span class="input-group-btn ml-4 mr-4" style="width: 30%;">
-                    <button class="btn btn-primary" type="button" style="width: 100%;" onClick="changePassword()">Change
+                    <button class="btn btn-secondary" type="button" style="width: 100%;"
+                      onClick="changePassword()">Change
                       Password</button>
                   </span>
                 </div>
@@ -367,7 +369,8 @@ Settings
 
                 </script>
 
-              </div>
-              <div>
-                
-                {% endblock page-content %}
+    </main>
+  </div>
+</div>
+
+{% endblock page-content %}
