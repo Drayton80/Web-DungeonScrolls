@@ -42,7 +42,7 @@
     "axios": "^0.19.0",
     "bootstrap": "^4.3.1",
     "css-loader": "^3.2.0",
-    "jquery": "^3.4.1",
+    "jquery": "^3.5.0",
     "octicons-react": "^0.18.9",
     "prop-types": "^15.7.2",
     "react": "^16.9.0",
