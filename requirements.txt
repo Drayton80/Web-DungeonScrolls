@@ -2,6 +2,6 @@ Django==2.2.1
 django-crispy-forms==1.7.2
 django-registration-redux==2.5
 django-rest-framework
-numpy==1.16.2
+numpy==1.22.0
 pandas==0.24.2
 libsass==0.19.2
